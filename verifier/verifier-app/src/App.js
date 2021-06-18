@@ -1,21 +1,26 @@
 import './App.css';
 import React from "react";
-
+import VerifyAge from './Pages/VerifyAge';
+import Verified from './Pages/Verified';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route
+} from "react-router-dom";
 
 function App() {
-
-    function verifyAge() {
-        fetch('/api/hello')
-            .then(response=>response.text())
-            .then(response => console.log(response))
-    }
 
 
     return (
         <div className="App">
-            <p>You must be over 18 to continue</p>
-            <button onClick={verifyAge}>Verify age</button>
+            <Router>
+                <Switch>
+                    <Route exact path='/' component={VerifyAge}/>
+                    <Route exact path='/verified' component={Verified}/>
+                </Switch>
+            </Router>
         </div>
+
     );
 }
 
