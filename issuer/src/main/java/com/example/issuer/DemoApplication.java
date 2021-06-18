@@ -26,6 +26,10 @@ public class DemoApplication {
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        KeySaver keySaver = new KeySaver(name, "test");
+        JsonHandler jsonHandler = new JsonHandler();
+        jsonHandler.saveKeysaverToJson(keySaver);
+
         return String.format("Hello %s!", name);
 
     }
