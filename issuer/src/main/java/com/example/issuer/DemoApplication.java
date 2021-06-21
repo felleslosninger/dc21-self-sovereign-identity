@@ -26,7 +26,8 @@ public class DemoApplication {
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        KeySaver keySaver = new KeySaver(name, "test");
+        Credential credential = new Credential(name);
+        KeySaver keySaver = new KeySaver(credential);
         JsonHandler jsonHandler = new JsonHandler();
         jsonHandler.saveKeysaverToJson(keySaver);
 
@@ -50,7 +51,7 @@ public class DemoApplication {
     @GetMapping("/fileTest")
     public String fileTest(@RequestParam(value = "f", defaultValue = "yo") String f) {
         JsonHandler jh = new JsonHandler();
-        KeySaver keySaver = new KeySaver(f, "Fortune 500");
+        KeySaver keySaver = new KeySaver(new Credential(f));
         jh.saveToFile(keySaver);
         jh.readFile();
         return String.format("%s!, what's up dawg", f);
