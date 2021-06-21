@@ -13,7 +13,7 @@ public class KeySaver {
         try {
             KeyGenerator keyGenerator = new KeyGenerator();
             this.keyGenerator = keyGenerator;
-            this.pk = keyGenerator.getPrivateKey();
+            this.pk = keyGenerator.getPublicKey();
         } catch (NoSuchAlgorithmException e) {
             System.out.println("There was a problem creating keys");
         }

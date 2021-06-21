@@ -2,6 +2,8 @@ package com.example.issuer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Key;
+import java.security.PublicKey;
 import java.util.Map;
 
 public class JsonHandler {
@@ -68,9 +71,10 @@ public class JsonHandler {
     // Save json map to json file
     public void saveToFile(KeySaver keySaver) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Map<String, String> map = readFile();
+        Map<String, Object> map = readFile();
 
-        map.put(keySaver.getId().stringifier(), keySaver.getPk().toString());
+        map.put(keySaver.getId().stringifier(), keySaver.getKeyGenerator().generateJWK());
+
         try {
             //file = new FileWriter("C:\\Users\\camp-mib\\didir-ssi-project\\VDR\\issuerpk.json");
             file = new FileWriter("src/main/resources/IssuerPK.json");
@@ -82,8 +86,18 @@ public class JsonHandler {
         }
     }
 
+    public void testKeyFromFile(KeySaver keySaver) {
+        Map<String, Object> map = readFile();
+        map.get(keySaver.getId().stringifier());
+        System.out.println(map.get(keySaver.getId().stringifier())==keySaver.getPk());
+        System.out.println(keySaver.getId().stringifier());
+        System.out.println("keyThing");
+        System.out.println(keySaver.getPk());
+
+    }
+
     // Read json object as a map
-    public Map<String, String> readFile() {
+    private Map<String, Object> readFile() {
         try {
             // Create new Gson instance
             Gson gson = new Gson();
@@ -91,7 +105,7 @@ public class JsonHandler {
             //Reader reader = Files.newBufferedReader(Paths.get("C:\\Users\\camp-mib\\didir-ssi-project\\VDR\\issuerpk.json"));
             Reader reader = Files.newBufferedReader(Paths.get("src/main/resources/IssuerPK.json"));
             // file only has two values, equal to a map.
-            Map<String, String> map = gson.fromJson(reader, Map.class);
+            Map<String, Object> map = gson.fromJson(reader, Map.class);
 
             // Closing reader
             reader.close();

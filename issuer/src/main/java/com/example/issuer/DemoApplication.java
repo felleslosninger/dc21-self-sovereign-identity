@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -49,12 +50,13 @@ public class DemoApplication {
     }
 
     @GetMapping("/fileTest")
-    public String fileTest(@RequestParam(value = "f", defaultValue = "yo") String f) {
-        JsonHandler jh = new JsonHandler();
+    public String fileTest(@RequestParam(value = "f", defaultValue = "yo") String f) throws KeyStoreException {
         KeySaver keySaver = new KeySaver(new Credential(f));
+        JsonHandler jh = new JsonHandler();
         jh.saveToFile(keySaver);
-        jh.readFile();
+        //jh.testKeyFromFile(keySaver);
         return String.format("%s!, what's up dawg", f);
+
     }
 
 
