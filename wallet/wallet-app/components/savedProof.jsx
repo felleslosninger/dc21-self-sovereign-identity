@@ -4,7 +4,7 @@ import { SafeAreaView, Text, FlatList, StyleSheet } from "react-native";
 
 export default function savedProof(){
 
-    const DATA = [
+    const proofs = [
         {
             id: Math.random().toString(), 
             proof: "over-18",
@@ -34,7 +34,7 @@ export default function savedProof(){
         <SafeAreaView style = {styles.container}>
             <FlatList
                 keyExtractor = {item => item.id}
-                data = {DATA}
+                data = {proofs}
                 renderItem = {({ item }) => (
                     <Text style={styles.item}> {item.proof}</Text>
                 )}
