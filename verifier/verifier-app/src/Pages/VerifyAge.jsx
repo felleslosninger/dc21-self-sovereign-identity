@@ -1,41 +1,32 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React from "react";
+import {Link, useHistory} from "react-router-dom";
 
 function VerifyAge() {
 
 
-    let [path, setPath] = useState('')
+    let history = useHistory()
 
-
-    function verifyAge() {
-        /* fetch('/api/hello')
-             .then(response=>response.text())
-             .then(response => console.log(response))*/
-
-        let response = fetch('/api/verify')
+    async function checkAge() {
+        let response = await fetch('/api/verify')
             .then(response => response.text())
+            //.catch(err => console.log('There was an error:' + err))
         console.log(response)
 
-        response ? setPath('/verified') : setPath('/notVerified')
-
-       /* if (response) {
-            setPath('/verified')
-            console.log("hei")
+        if (response === 'false') {
+            console.log(response)
+            history.push('/notVerified')
         } else {
-            setPath('/notVerified')
-            console.log('hallo')
-        }*/
-
-
-
+            history.push('/verified')
+            console.log('hei')
+            console.log(response)
+        }
     }
 
 
     return (
         <div className="VerifyAge">
             <p>You must be over 18 to continue</p>
-            {/*<button onClick={verifyAge}>Verify age</button>*/}
-            <Link to={path} onClick={verifyAge}>Verify age</Link>
+            <Link to={history} onClick={checkAge}>Verify age</Link>
         </div>
     );
 }
