@@ -1,9 +1,16 @@
 package com.example.issuer;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class KeyGenerator {
 
@@ -61,6 +68,17 @@ public class KeyGenerator {
 
 
         return total;
+    }
+
+    public String generateJWK() {
+        JWK jwk = new RSAKey.Builder((RSAPublicKey)keyPair.getPublic())
+                .privateKey((RSAPrivateKey)keyPair.getPrivate())
+                .keyUse(KeyUse.SIGNATURE)
+                .keyID(UUID.randomUUID().toString())
+                .build();
+        return jwk.toJSONString();
+
+
     }
 
 }

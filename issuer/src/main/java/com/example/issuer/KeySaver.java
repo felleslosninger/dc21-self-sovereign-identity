@@ -1,27 +1,45 @@
 package com.example.issuer;
 
-public class KeySaver {
-    public String id;
-    public String pk;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
-    public KeySaver(String id, String pk) {
+public class KeySaver {
+    private Credential id;
+    private Key pk;
+    private KeyGenerator keyGenerator;
+
+    public KeySaver(Credential id) {
         this.id = id;
-        this.pk = pk;
+        try {
+            KeyGenerator keyGenerator = new KeyGenerator();
+            this.keyGenerator = keyGenerator;
+            this.pk = keyGenerator.getPublicKey();
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("There was a problem creating keys");
+        }
     }
 
-    public String getId() {
+    public Credential getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Credential id) {
         this.id = id;
     }
 
-    public String getPk() {
+    public Key getPk() {
         return pk;
     }
 
-    public void setPk(String pk) {
+    public void setPk(Key pk) {
         this.pk = pk;
+    }
+
+    public void setKeyGenerator(KeyGenerator keyGenerator) {
+        this.keyGenerator = keyGenerator;
+    }
+
+    public KeyGenerator getKeyGenerator() {
+        return keyGenerator;
     }
 }
