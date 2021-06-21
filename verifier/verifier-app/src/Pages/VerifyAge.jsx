@@ -8,16 +8,15 @@ function VerifyAge() {
 
     async function checkAge() {
         let response = await fetch('/api/verify')
-            .then(response => response.text())
+            .then(response => response.json())
             //.catch(err => console.log('There was an error:' + err))
         console.log(response)
 
-        if (response === 'false') {
+        if (response === false) {
             console.log(response)
             history.push('/notVerified')
         } else {
             history.push('/verified')
-            console.log('hei')
             console.log(response)
         }
     }
