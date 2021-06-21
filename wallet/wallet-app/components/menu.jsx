@@ -16,7 +16,7 @@ export default function MenuButtons() {
     <TouchableOpacity
             style={styles.button}
             onPress={click}>
-            <Text>Etterspørsler</Text>
+            <Text>Oversikt</Text>
 
       </TouchableOpacity>
       <TouchableOpacity
@@ -28,7 +28,7 @@ export default function MenuButtons() {
       <TouchableOpacity
             style={styles.buttonTre}
             onPress={click}>
-            <Text>Oversikt</Text>
+            <Text>Etterspørsel</Text>
 
       </TouchableOpacity>
 
