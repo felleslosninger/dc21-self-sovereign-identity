@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style>Lommeboka!</Text>
+      <Text>Lommeboka!</Text>
       <StatusBar style="auto" />
     </View>
   );
