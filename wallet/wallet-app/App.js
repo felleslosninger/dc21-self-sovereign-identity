@@ -5,6 +5,7 @@ import { StyleSheet, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SearchFrame, ProfileFrame, RequestsFrame } from './components/frames/dummy';
+import MenuButtons from './components/menu';
 
 
 export default function App() {
@@ -19,13 +20,13 @@ export default function App() {
         <Stack.Screen name="Requests" component={RequestsFrame}/>
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2FFF12',
+    backgroundColor: '#87D7BF',
     alignItems: 'center',
     justifyContent: 'center',
   },
