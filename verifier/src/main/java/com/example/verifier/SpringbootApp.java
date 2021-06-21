@@ -20,5 +20,11 @@ public class SpringbootApp {
 		return String.format("Hello %s!", name);
 	}
 
+
+	@GetMapping("/api/verify")
+	public boolean verify() {
+		return true;
+	}
+
 }
             
