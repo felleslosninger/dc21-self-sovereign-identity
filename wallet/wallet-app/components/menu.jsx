@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100,
+        height:50
         
     },
     buttonTo: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100
+        height:50
 
     },
     buttonTre: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100
+        height:50
     }
 
 
