@@ -47,21 +47,27 @@ public class DemoApplication {
 
     }
 
+    @GetMapping("/fileTest")
+    public String fileTest(@RequestParam(value = "f", defaultValue = "yo") String f) {
+        JsonHandler jh = new JsonHandler();
+        KeySaver keySaver = new KeySaver(f, "Fortune 500");
+        jh.saveToFile(keySaver);
+        jh.readFile();
+        return String.format("%s!, what's up dawg", f);
+    }
+
 
     public boolean decryptSignature(byte[] signature, KeyGenerator keyGenerator, Signing signing) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-        byte[] encyptedMessageHash = signature;
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, keyGenerator.getPublicKey());
-        byte[] decryptedMessageHash = cipher.doFinal(encyptedMessageHash);
+        byte[] decryptedMessageHash = cipher.doFinal(signature);
 
         byte[] messageBytes = signing.credential.stringifier().getBytes();
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] messageHash = md.digest(messageBytes);
 
-        boolean isCorrect = Arrays.equals(decryptedMessageHash, messageHash);
-
-        return isCorrect;
+        return Arrays.equals(decryptedMessageHash, messageHash);
     }
 
 }
