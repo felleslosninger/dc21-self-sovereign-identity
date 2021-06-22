@@ -43,9 +43,10 @@ public class DemoApplication {
     @GetMapping("/keys")
     public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         KeyGenerator keyGen = new KeyGenerator();
-        Signing signing = new Signing();
         Credential credential = new Credential("Digdir", "Over 18 år");
-        byte[] signature = signing.sign(keyGen.getPrivateKey(), credential);
+        Signing signing = new Signing(keyGen.getPrivateKey(), credential);
+
+        byte[] signature = signing.getSignature();
         boolean res = decryptSignature(signature, keyGen.getPublicKey(), credential);
 
         //return String.format("Public Key: %s/n Private key: %s",keyGen.getPublicKey(), keyGen.getPrivateKey());
@@ -55,7 +56,7 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/key/{id}")
-    public String api(@PathVariable String id) {
+    public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
            String publicKeyString = fileHandler.getPublicKeyAsString(id);
@@ -64,6 +65,19 @@ public class DemoApplication {
             System.out.println("No key found.");
             return "No key found with this id";
         }
+    }
+
+    @GetMapping("/api/getCredential/{message}")
+    public String getCredential(@PathVariable String message) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Credential credential = new Credential("Digdir", message);
+        KeyGenerator keyGen = new KeyGenerator();
+        Signing signing = new Signing(keyGen.getPrivateKey(), credential);
+        FileHandler fileHandler = new FileHandler();
+        PublicKey publicKey = keyGen.getPublicKey();
+        fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
+        String signedMessage = signing.getSignatureAsString();
+
+        return signedMessage + "  |  " + credential.stringifier();
     }
 
 
@@ -75,11 +89,14 @@ public class DemoApplication {
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
         byte[] decryptedMessageHash = cipher.doFinal(signature);
 
+        /*
         byte[] messageBytes = message.stringifier().getBytes();
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] messageHash = md.digest(messageBytes);
+         */
 
-        return Arrays.equals(decryptedMessageHash, messageHash);
+        System.out.println(new String(message.stringifier().getBytes()));
+        return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
     }
 
 }

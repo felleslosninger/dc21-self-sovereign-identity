@@ -33,4 +33,12 @@ public class Credential {
 
         return jsonString;
     }
+
+    public String simpleStringifier(){
+        return message;
+    }
+
+    public String getIssuerID() {
+        return issuerID;
+    }
 }
