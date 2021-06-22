@@ -3,7 +3,6 @@ import {Link, useHistory} from "react-router-dom";
 
 function VerifyAge() {
 
-
     let history = useHistory()
 
     async function checkAge() {
@@ -21,11 +20,10 @@ function VerifyAge() {
         }
     }
 
-
     return (
         <div className="VerifyAge">
             <p>You must be over 18 to continue</p>
-            <Link to={history} onClick={checkAge}>Verify age</Link>
+            <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
         </div>
     );
 }
