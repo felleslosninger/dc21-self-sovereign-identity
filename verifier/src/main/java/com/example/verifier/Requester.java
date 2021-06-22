@@ -30,7 +30,7 @@ public class Requester {
 
 
     public Requester() throws URISyntaxException {
-        this.endpointBaseUri = new URI("http://localhost:8080/");
+        this.endpointBaseUri = new URI("http://localhost:8083/api/key/");
         this.objectMapper = new ObjectMapper();
 
     }
@@ -91,6 +91,6 @@ public class Requester {
     public static void main(String[] args) throws URISyntaxException {
         Requester r = new Requester();
 
-        System.out.println(r.getKeyByID("id1"));
+        System.out.println(r.getKeyByID("bb9c615c-643d-4f28-ac74-2b90c8b8727c"));
     }
 }
