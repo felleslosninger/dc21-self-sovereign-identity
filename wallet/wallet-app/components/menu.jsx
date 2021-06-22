@@ -1,13 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, Button, Alert,TouchableOpacity} from "react-native";
+import { useNavigation } from "@react-navigation/core";
 
 const Separator = () => (
     <View style={styleSheets.separator} />
 );
 
-export default function MenuButtons() {
-    
-    const click = () => alert('Pressed')
+export default function Menu() {
+
+    const navigation = useNavigation();
 
     return(
     <View style={styles.container}>
@@ -15,20 +16,20 @@ export default function MenuButtons() {
 
     <TouchableOpacity
             style={styles.button}
-            onPress={click}>
+            onPress={() => navigation.navigate('Oversikt')}>
             <Text>Oversikt</Text>
 
       </TouchableOpacity>
       <TouchableOpacity
             style={styles.buttonTo}
-            onPress={click}>
+            onPress={() => navigation.navigate('Forespørsler')}>
             <Text>Forespørsler</Text>
 
       </TouchableOpacity>
       <TouchableOpacity
             style={styles.buttonTre}
-            onPress={click}>
-            <Text>Etterspørsel</Text>
+            onPress={() => navigation.navigate('Aktivitet')}>
+            <Text>Notifikasjoner</Text>
 
       </TouchableOpacity>
 
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100,
+        height:50
         
     },
     buttonTo: {
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100
+        height:50
 
     },
     buttonTre: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDE6EA",
         padding: 10,
         width:100,
-        hight:100
+        height:50
     }
 
 

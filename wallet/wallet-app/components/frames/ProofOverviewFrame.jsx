@@ -1,8 +1,9 @@
 import React from "react";
 
 import { SafeAreaView, Text, FlatList, StyleSheet } from "react-native";
+import Menu from "../Menu";
 
-export default function savedProof(){
+export default function ProofOverviewFrame(){
 
     const proofs = [
         {
@@ -27,6 +28,7 @@ export default function savedProof(){
             marginVertical: 3,
             marginHorizontal: 16,
             borderRadius: 4,
+            alignItems: 'center',
         }
     });
 
@@ -39,6 +41,7 @@ export default function savedProof(){
                     <Text style={styles.item}> {item.proof}</Text>
                 )}
             />
+            <Menu></Menu>
         </SafeAreaView>
     );
 
