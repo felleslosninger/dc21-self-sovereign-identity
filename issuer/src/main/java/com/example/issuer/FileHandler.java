@@ -20,7 +20,7 @@ public class FileHandler {
     private String path = "src/main/resources/testFile.json";
     private Writer file;
 
-    public void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
+    private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
         Gson gson = new Gson();
 
         HashMap<String, byte[]> map = new HashMap<>();
@@ -47,7 +47,7 @@ public class FileHandler {
         }
     }
 
-    public HashMap<String, PublicKey> loadFromFile() {
+    private HashMap<String, PublicKey> loadFromFile() {
         try {
             InputStream inputStream = new FileInputStream(path);
             Reader fileReader = new InputStreamReader(inputStream, "UTF-8");
@@ -72,14 +72,39 @@ public class FileHandler {
 
     }
 
+    public PublicKey getPublicKey(String id){
+        HashMap<String, PublicKey> map = loadFromFile();
+        return map.get(id);
+    }
+
+    public String getPublicKeyAsString(String id){
+        PublicKey pk = getPublicKey(id);
+        byte[] jsonPk = pk.getEncoded();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(jsonPk);
+        return jsonString;
+    }
+
+    public void addPublicKey(String id, PublicKey pk){
+        HashMap<String, PublicKey> map = loadFromFile();
+        map.put(id, pk);
+        saveToFile(map);
+    }
+
     public static void main(String[] args) throws NoSuchAlgorithmException {
         KeyPairGenerator kpg1 = KeyPairGenerator.getInstance("RSA");
+        /*
         HashMap<String, PublicKey> map = new HashMap<>();
         map.put("id1", kpg1.generateKeyPair().getPublic());
         map.put("id2", kpg1.generateKeyPair().getPublic());
 
+         */
+
         FileHandler fh = new FileHandler();
-        fh.loadFromFile();
+        HashMap<String, PublicKey> map = new HashMap<>();
+        map =  fh.loadFromFile();
+        map.put("id1", kpg1.generateKeyPair().getPublic());
+
         fh.saveToFile(map);
         HashMap<String, PublicKey> newMap = fh.loadFromFile();
         System.out.println(newMap.get("id1").getClass());
