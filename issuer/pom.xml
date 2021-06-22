@@ -8,13 +8,13 @@
         <version>2.5.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+
     <artifactId>issuer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Issuer</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Demo project for DigDir</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
     </properties>
     <dependencies>
         <dependency>
