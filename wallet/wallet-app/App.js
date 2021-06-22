@@ -4,8 +4,10 @@ import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SearchFrame, ProfileFrame, RequestsFrame } from './components/frames/dummy';
-import MenuButtons from './components/menu';
+import { SearchFrame, ProfileFrame } from './components/frames/dummy';
+import RequestFrame from './components/frames/RequestFrame';
+import ActivityFrame from './components/frames/ActivityFrame';
+import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 
 
 export default function App() {
@@ -15,9 +17,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Search" component={SearchFrame}/>
-        <Stack.Screen name="Profile" component={ProfileFrame} />
-        <Stack.Screen name="Requests" component={RequestsFrame}/>
+        {/*<Stack.Screen name="Search" component={SearchFrame}/>
+        <Stack.Screen name="Profile" component={ProfileFrame} />*/}
+        <Stack.Screen name="Oversikt" component={ProofOverviewFrame}/>
+        <Stack.Screen name="Forespørsler" component={RequestFrame}/>
+        <Stack.Screen name="Aktivitet" component={ActivityFrame}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -2,8 +2,9 @@ import React, {useState} from "react";
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import {Picker} from "@react-native-picker/picker";
+import Menu from "../Menu";
 
-export default function requestFrame(){
+export default function RequestFrame(){
 
     const [selectedValue, setSelectedValue] = useState("ntnu");
     const [text, onChangeText] = useState(null);
@@ -89,6 +90,7 @@ export default function requestFrame(){
                     <Text style = {styles.buttonText}>Send forespørsel</Text>
                 </SafeAreaView>
             </TouchableOpacity>
+            <Menu></Menu>
         </SafeAreaView>
     );
 

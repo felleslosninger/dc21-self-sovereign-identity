@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button} from 'react-native';
 
-export default function Knapp() {
+export default function ConsentButton() {
     const [toggle, setToggle] = useState(false);
      
        return (
@@ -12,8 +12,7 @@ export default function Knapp() {
                 title = {toggle ? 'Trekke tilbake' : "Godta"}
                 color="#f1940f"
                 onPress={() => setToggle(!toggle) }
-                />  
-            
+                />
         </View> 
     )
 }
