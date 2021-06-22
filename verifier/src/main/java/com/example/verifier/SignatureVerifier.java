@@ -6,16 +6,13 @@ import java.security.*;
 
 public class SignatureVerifier {
 
-    private Signing signing;
+
     public PublicKey mockPublicKeyIssuer;
     public byte[] mockCipherText;
 
-     public SignatureVerifier(Signing signing) {
-         this.signing = signing;
-     }
 
     public boolean verifySignature(byte[] input, byte[] signatureToVerify, PublicKey key) throws Exception {
-        Signature signature = Signature.getInstance(signing.getSIGNING_ALGORITHM());
+        Signature signature = Signature.getInstance(Signing.SIGNING_ALGORITHM);
         signature.initVerify(key);
         signature.update(input);
         return signature.verify(signatureToVerify);
@@ -32,21 +29,21 @@ public class SignatureVerifier {
         byte[] cipherText = crypt.encrypt(content,pair.getPrivate());
         mockCipherText = cipherText;
 
-        Signing signing = new Signing("SHA256withRSA");
+        Signing signing = new Signing();
         byte[] signature= signing.sign(cipherText, pair.getPrivate());
 
         //wallet
         AsymmetricKeyGenerator akg2 = new AsymmetricKeyGenerator("RSA");
         KeyPair pair2 = akg.generateKeyPair();
-        Signing signing2 = new Signing("SHA256withRSA");
+        Signing signing2 = new Signing();
         byte[] signature2 = signing2.sign(signature, pair2.getPrivate());
 
         //verify wallet
-        SignatureVerifier sv2 = new SignatureVerifier(signing2);
+        SignatureVerifier sv2 = new SignatureVerifier();
         boolean verifyWallet = sv2.verifySignature(signature, signature2,pair2.getPublic());
 
         //verify issuer
-        SignatureVerifier sv = new SignatureVerifier(signing);
+        SignatureVerifier sv = new SignatureVerifier();
         boolean verifyIssuer = sv.verifySignature(cipherText, signature, pair.getPublic());
 
 
@@ -58,25 +55,25 @@ public class SignatureVerifier {
     public static void main(String[] args) throws Exception {
         String input = "input testing";
         Cryptography crypt = new Cryptography("RSA");
-        KeyPair cryptPair = new AsymmetricKeyGenerator("RSA").generateKeyPair();
+        KeyPair cryptPair =crypt.getGenerator().generateKeyPair();
 
         byte[] cipher = crypt.encrypt(input, cryptPair.getPrivate());
 
         KeyPair pair = new AsymmetricKeyGenerator("RSA").generateKeyPair();
-        Signing signing = new Signing("SHA256withRSA");
+        Signing signing = new Signing();
         byte[] signature = signing
-                .sign(input.getBytes(), pair.getPrivate());
+                .sign(cipher, pair.getPrivate());
 
         System.out.println(
                 "Signature Value:\n "
                         + DatatypeConverter
                         .printHexBinary(signature));
 
-        SignatureVerifier sv = new SignatureVerifier(signing);
+        SignatureVerifier sv = new SignatureVerifier();
         System.out.println(
                 "Verification: "
                         + sv.verifySignature(
-                        input.getBytes(),
+                        cipher,
                         signature, pair.getPublic()));
 
         String decrypted = crypt.decrypt(cipher, cryptPair.getPublic());

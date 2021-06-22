@@ -7,12 +7,8 @@ public class Signing {
 
 
 
-    private  final String SIGNING_ALGORITHM;
+    public static final String SIGNING_ALGORITHM = "SHA256withRSA";
 
-
-    public Signing(String algorithm) {
-        this.SIGNING_ALGORITHM = algorithm;
-    }
 
     public byte[] sign(byte[] input, PrivateKey privateKey) throws Exception {
         Signature signature = Signature.getInstance(SIGNING_ALGORITHM);

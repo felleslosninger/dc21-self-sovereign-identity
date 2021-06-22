@@ -49,5 +49,7 @@ public class Cryptography {
                         + decryptedText);
     }
 
-
+    public AsymmetricKeyGenerator getGenerator() {
+        return generator;
+    }
 }
