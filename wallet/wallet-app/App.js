@@ -1,18 +1,30 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
-import MenuButtons from './components/menu';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SearchFrame, ProfileFrame } from './components/frames/dummy';
+import RequestFrame from './components/frames/RequestFrame';
+import ActivityFrame from './components/frames/ActivityFrame';
+import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 
 
 export default function App() {
 
+  const Stack = createStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <Text>Lommeboka!</Text>
-      <StatusBar style="auto" />
-      <MenuButtons/>
-    </View>
-  );
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/*<Stack.Screen name="Search" component={SearchFrame}/>
+        <Stack.Screen name="Profile" component={ProfileFrame} />*/}
+        <Stack.Screen name="Oversikt" component={ProofOverviewFrame}/>
+        <Stack.Screen name="Forespørsler" component={RequestFrame}/>
+        <Stack.Screen name="Aktivitet" component={ActivityFrame}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -23,5 +35,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
