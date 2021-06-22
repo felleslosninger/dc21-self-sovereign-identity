@@ -27,6 +27,7 @@ export default function savedProof(){
             marginVertical: 3,
             marginHorizontal: 16,
             borderRadius: 4,
+            alingItems: 'center',
         }
     });
 
