@@ -1,83 +1,46 @@
 package com.example.verifier;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.util.Arrays;
 
 public class SignatureVerifier {
 
+/*    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-    public PublicKey mockPublicKeyIssuer;
-    public byte[] mockCipherText;
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] decryptedMessageHash = cipher.doFinal(signature);
 
+        System.out.println(new String(message.stringifier().getBytes()));
+        return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
+    }*/
 
-    public boolean verifySignature(byte[] input, byte[] signatureToVerify, PublicKey key) throws Exception {
+    public boolean verifySignature(Credential message, byte[] signatureToVerify, PublicKey key) throws Exception {
         Signature signature = Signature.getInstance(Signing.SIGNING_ALGORITHM);
         signature.initVerify(key);
-        signature.update(input);
+        signature.update(message.stringifier().getBytes(StandardCharsets.UTF_8));
         return signature.verify(signatureToVerify);
     }
 
-    public boolean mockVerify() throws Exception {
-         String content = "true";
-
-         //issuer
-        AsymmetricKeyGenerator akg = new AsymmetricKeyGenerator("RSA");
-        KeyPair pair = akg.generateKeyPair();
-        mockPublicKeyIssuer = pair.getPublic();
-        Cryptography crypt = new Cryptography("RSA");
-        byte[] cipherText = crypt.encrypt(content,pair.getPrivate());
-        mockCipherText = cipherText;
-
-        Signing signing = new Signing();
-        byte[] signature= signing.sign(cipherText, pair.getPrivate());
-
-        //wallet
-        AsymmetricKeyGenerator akg2 = new AsymmetricKeyGenerator("RSA");
-        KeyPair pair2 = akg.generateKeyPair();
-        Signing signing2 = new Signing();
-        byte[] signature2 = signing2.sign(signature, pair2.getPrivate());
-
-        //verify wallet
-        SignatureVerifier sv2 = new SignatureVerifier();
-        boolean verifyWallet = sv2.verifySignature(signature, signature2,pair2.getPublic());
-
-        //verify issuer
-        SignatureVerifier sv = new SignatureVerifier();
-        boolean verifyIssuer = sv.verifySignature(cipherText, signature, pair.getPublic());
-
-
-
-        return verifyIssuer && verifyWallet;
-    }
-
-
     public static void main(String[] args) throws Exception {
-        String input = "input testing";
-        Cryptography crypt = new Cryptography("RSA");
-        KeyPair cryptPair =crypt.getGenerator().generateKeyPair();
+        SignatureVerifier sv= new SignatureVerifier();
+        KeyGenerator keyGen = new KeyGenerator();
+        Credential cred = new Credential("Digdir","over_18");
+        Signing s = new Signing(keyGen.getPrivateKey(), cred);
 
-        byte[] cipher = crypt.encrypt(input, cryptPair.getPrivate());
+        System.out.println(sv.verifySignature(cred, s.getSignature(), keyGen.getPublicKey()));
 
-        KeyPair pair = new AsymmetricKeyGenerator("RSA").generateKeyPair();
-        Signing signing = new Signing();
-        byte[] signature = signing
-                .sign(cipher, pair.getPrivate());
 
-        System.out.println(
-                "Signature Value:\n "
-                        + DatatypeConverter
-                        .printHexBinary(signature));
-
-        SignatureVerifier sv = new SignatureVerifier();
-        System.out.println(
-                "Verification: "
-                        + sv.verifySignature(
-                        cipher,
-                        signature, pair.getPublic()));
-
-        String decrypted = crypt.decrypt(cipher, cryptPair.getPublic());
-        System.out.println(decrypted);
     }
+
+
+
+
 
 }

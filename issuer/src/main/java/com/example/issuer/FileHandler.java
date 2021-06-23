@@ -73,8 +73,10 @@ public class FileHandler {
     }
 
     public PublicKey getPublicKey(String id){
-        HashMap<String, PublicKey> map = loadFromFile();
-        return map.get(id);
+        if (!loadFromFile().containsKey(id)) {
+            throw new IllegalArgumentException("No such id"); // cannot trust issuer ?
+        }
+        return loadFromFile().get(id);
     }
 
     public String getPublicKeyAsString(String id){
@@ -86,9 +88,22 @@ public class FileHandler {
     }
 
     public void addPublicKey(String id, PublicKey pk){
+        if(loadFromFile().containsKey(id)) {
+            throw new IllegalArgumentException("id already exists");
+        }
         HashMap<String, PublicKey> map = loadFromFile();
         map.put(id, pk);
         saveToFile(map);
+    }
+
+    public void removeKeyByID(String id) {
+        if(!loadFromFile().containsKey(id)) {
+            throw new IllegalArgumentException("no such id, cannot remove");
+        }
+        HashMap<String, PublicKey> map = loadFromFile();
+        map.remove(id);
+        saveToFile(map);
+
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {

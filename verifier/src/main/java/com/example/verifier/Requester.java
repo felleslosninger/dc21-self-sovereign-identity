@@ -1,16 +1,10 @@
 package com.example.verifier;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties;
 
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,6 +33,8 @@ public class Requester {
         this.objectMapper = new ObjectMapper();
 
     }
+
+
 
     private String uriParam(String s) {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
@@ -112,21 +108,7 @@ public class Requester {
         return list;
     }
 
-    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, publicKey);
-        byte[] decryptedMessageHash = cipher.doFinal(signature);
-
-        /*
-        byte[] messageBytes = message.stringifier().getBytes();
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] messageHash = md.digest(messageBytes);
-         */
-
-        System.out.println(new String(message.stringifier().getBytes()));
-        return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
-    }
 
 
 
@@ -144,8 +126,11 @@ public class Requester {
         PublicKey key = r.getKeyByID((String) list.get(0));
         System.out.println(key);
 
-        FileHandler fh = new FileHandler();
-        System.out.println(r.decryptSignature((byte[]) list.get(2), key, (Credential) list.get(1)));
+        SignatureVerifier sv = new SignatureVerifier();
+
+        Credential credential = (Credential) list.get(1);
+
+       // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
 
     }
 

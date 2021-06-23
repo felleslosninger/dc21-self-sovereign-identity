@@ -1,23 +1,39 @@
 package com.example.verifier;
 
-import java.security.PrivateKey;
-import java.security.Signature;
+import com.google.gson.Gson;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
 
 public class Signing {
-
-
-
     public static final String SIGNING_ALGORITHM = "SHA256withRSA";
 
+    private byte[] signature;
 
-    public byte[] sign(byte[] input, PrivateKey privateKey) throws Exception {
+
+    public Signing(PrivateKey privateKey, Credential message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException {
+
+
         Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
         signature.initSign(privateKey);
-        signature.update(input);
-        return signature.sign();
+        signature.update(message.stringifier().getBytes(StandardCharsets.UTF_8));
+        this.signature = signature.sign();
     }
 
-    public String getSIGNING_ALGORITHM() {
-        return SIGNING_ALGORITHM;
+
+    public byte[] getSignature() {
+        return signature;
     }
+
+    public String getSignatureAsString() {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(this.signature);
+        return jsonString;
+    }
+
+
 }

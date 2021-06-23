@@ -44,7 +44,7 @@ public class DemoApplication {
     }
 
     @GetMapping("/keys")
-    public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
         Signing signing = new Signing(keyGen.getPrivateKey(), credential);
