@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button} from 'react-native';
+import Switch from 'react-switch';
+
 
 export default function Knapp() {
     //const [toggle, setToggle] = useState(false);
@@ -12,7 +14,9 @@ export default function Knapp() {
             <Switch
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                 thumbColor={isAccepted ? "#f5dd4b" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
+                onChange={toggleSwitch}
                 value={isAccepted}
             />
             {/*<Text>Du har {toggle ? 'nå' : 'ikke'} delt beviset</Text>
