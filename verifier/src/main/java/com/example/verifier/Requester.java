@@ -40,6 +40,8 @@ public class Requester {
 
     }
 
+
+
     private String uriParam(String s) {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
@@ -112,21 +114,7 @@ public class Requester {
         return list;
     }
 
-    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, publicKey);
-        byte[] decryptedMessageHash = cipher.doFinal(signature);
-
-        /*
-        byte[] messageBytes = message.stringifier().getBytes();
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] messageHash = md.digest(messageBytes);
-         */
-
-        System.out.println(new String(message.stringifier().getBytes()));
-        return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
-    }
 
 
 
@@ -144,8 +132,9 @@ public class Requester {
         PublicKey key = r.getKeyByID((String) list.get(0));
         System.out.println(key);
 
-        FileHandler fh = new FileHandler();
-        System.out.println(r.decryptSignature((byte[]) list.get(2), key, (Credential) list.get(1)));
+        SignatureVerifier sv = new SignatureVerifier();
+
+        System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), (Credential) list.get(1)));
 
     }
 

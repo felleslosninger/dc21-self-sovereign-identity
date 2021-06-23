@@ -1,23 +1,42 @@
 package com.example.verifier;
 
+import com.google.gson.Gson;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.Signature;
 
 public class Signing {
+    private byte[] signature;
 
+    public Signing(PrivateKey privateKey, Credential message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        byte[] messageBytes = message.stringifier().getBytes();
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] messageHash = md.digest(messageBytes);
 
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        //byte[] digitalSignature = cipher.doFinal(messageHash);
+        byte[] digitalSignature = cipher.doFinal(messageBytes);
 
-    public static final String SIGNING_ALGORITHM = "SHA256withRSA";
-
-
-    public byte[] sign(byte[] input, PrivateKey privateKey) throws Exception {
-        Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
-        signature.initSign(privateKey);
-        signature.update(input);
-        return signature.sign();
+        this.signature = digitalSignature;
     }
 
-    public String getSIGNING_ALGORITHM() {
-        return SIGNING_ALGORITHM;
+    public byte[] getSignature(){
+        return this.signature;
     }
+
+
+    public String getSignatureAsString() {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(this.signature);
+        return jsonString;
+    }
+
+
 }
