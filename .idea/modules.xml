@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/verifier/demo.iml" filepath="$PROJECT_DIR$/verifier/demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/digidirCamp2021.iml" filepath="$PROJECT_DIR$/.idea/digidirCamp2021.iml" />
       <module fileurl="file://$PROJECT_DIR$/issuer/issuer.iml" filepath="$PROJECT_DIR$/issuer/issuer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/parent.iml" filepath="$PROJECT_DIR$/parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/verifier/verifier.iml" filepath="$PROJECT_DIR$/verifier/verifier.iml" />
     </modules>
   </component>
 </project>

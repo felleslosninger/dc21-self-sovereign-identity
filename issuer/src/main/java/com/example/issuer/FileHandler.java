@@ -20,6 +20,8 @@ public class FileHandler {
     private String path = "src/main/resources/testFile.json";
     private Writer file;
 
+
+
     private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
         Gson gson = new Gson();
 
@@ -109,6 +111,10 @@ public class FileHandler {
         HashMap<String, PublicKey> newMap = fh.loadFromFile();
         System.out.println(newMap.get("id1").getClass());
 
+    }
+
+    public void setPath(String path){
+        this.path = path;
     }
 
 }
