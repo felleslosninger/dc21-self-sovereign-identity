@@ -4,7 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties;
 
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,14 +20,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.*;
 
 public class Requester {
 
@@ -29,8 +34,8 @@ public class Requester {
     private ObjectMapper objectMapper;
 
 
-    public Requester() throws URISyntaxException {
-        this.endpointBaseUri = new URI("http://localhost:8083/api/key/");
+    public Requester(String uri) throws URISyntaxException {
+        this.endpointBaseUri = new URI(uri);
         this.objectMapper = new ObjectMapper();
 
     }
@@ -58,6 +63,7 @@ public class Requester {
                 Gson gson = new Gson();
                 byte[] bytes = gson.fromJson(responseString, byte[].class);
 
+
                 publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
 
             } catch (IOException | InterruptedException | NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -69,28 +75,79 @@ public class Requester {
 
 
 
-    private static String[] convertToStrings(byte[][] byteStrings) {
-        String[] data = new String[byteStrings.length];
-        for (int i = 0; i < byteStrings.length; i++) {
-            data[i] = new String(byteStrings[i], Charset.defaultCharset());
 
+
+    public List<Object> getCredentialInfo() {
+        String id = "";
+        byte[] signature = null;
+        Credential credential = null;
+        HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
+        System.out.println(request);
+
+        try {
+            final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            String responseString = response.body();
+            System.out.println("getIDfromCredential() response: " + responseString);
+
+            String[] split = responseString.split("  |  ");
+
+
+            Gson gson = new Gson();
+            signature = gson.fromJson(split[0], byte[].class);
+
+            List<String> credentialCollection = gson.fromJson(split[2], List.class);
+            String subject = credentialCollection.get(0);
+            String message = credentialCollection.get(1);
+            id= credentialCollection.get(2);
+            credential = new Credential(subject, message, id);
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return data;
+        List<Object> list = new ArrayList<>();
+        list.add(id);
+        list.add(credential);
+        list.add(signature);
+        return list;
+    }
+
+    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        byte[] decryptedMessageHash = cipher.doFinal(signature);
+
+        /*
+        byte[] messageBytes = message.stringifier().getBytes();
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] messageHash = md.digest(messageBytes);
+         */
+
+        System.out.println(new String(message.stringifier().getBytes()));
+        return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
     }
 
 
-    private static byte[][] convertToBytes(String[] strings) {
-        byte[][] data = new byte[strings.length][];
-        for (int i = 0; i < strings.length; i++) {
-            String string = strings[i];
-            data[i] = string.getBytes(Charset.defaultCharset()); // you can chose charset
-        }
-        return data;
-    }
 
-    public static void main(String[] args) throws URISyntaxException {
-        Requester r = new Requester();
+    public static void main(String[] args) throws Exception {
+        Requester r = new Requester("http://localhost:8083/api/key/");
 
         System.out.println(r.getKeyByID("bb9c615c-643d-4f28-ac74-2b90c8b8727c"));
+
+        Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
+
+        System.out.println(r2.getCredentialInfo());
+
+        List<Object> list = r2.getCredentialInfo();
+
+        PublicKey key = r.getKeyByID((String) list.get(0));
+        System.out.println(key);
+
+        FileHandler fh = new FileHandler();
+        System.out.println(r.decryptSignature((byte[]) list.get(2), key, (Credential) list.get(1)));
+
     }
+
+
 }
