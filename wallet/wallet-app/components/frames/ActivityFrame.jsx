@@ -4,10 +4,10 @@ import ConsentButton from '../ConsentButton';
 import Menu from '../Menu';
 
 export default function ActivityFrame() {
-    return(
-        <SafeAreaView>
-            <ConsentButton></ConsentButton>
-            <Menu></Menu>
-        </SafeAreaView>
-    )
+  return (
+    <SafeAreaView>
+      <ConsentButton></ConsentButton>
+      <Menu></Menu>
+    </SafeAreaView>
+  );
 }
