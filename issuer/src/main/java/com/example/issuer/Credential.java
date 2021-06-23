@@ -22,6 +22,12 @@ public class Credential {
         this.issuerID = UUID.randomUUID().toString();
     }
 
+    public Credential(String subject, String message, String issuerID) {
+        this.subject = subject;
+        this.message = message;
+        this.issuerID = issuerID;
+    }
+
     public String stringifier(){
         Gson gson = new Gson();
         Collection<String> collection = new ArrayList<>();

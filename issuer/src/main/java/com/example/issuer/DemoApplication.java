@@ -41,7 +41,7 @@ public class DemoApplication {
     }
 
     @GetMapping("/keys")
-    public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
         Signing signing = new Signing(keyGen.getPrivateKey(), credential);
@@ -68,7 +68,7 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/getCredential/{message}")
-    public String getCredential(@PathVariable String message) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String getCredential(@PathVariable String message) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         Credential credential = new Credential("Digdir", message);
         KeyGenerator keyGen = new KeyGenerator();
         Signing signing = new Signing(keyGen.getPrivateKey(), credential);

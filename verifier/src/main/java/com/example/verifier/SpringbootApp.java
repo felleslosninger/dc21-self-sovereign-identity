@@ -39,15 +39,12 @@ public class SpringbootApp {
 
 
 	@GetMapping("/api/verify")
-	public boolean verify() throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, InvalidKeyException {
+	public boolean verify() throws Exception {
 
 		List<Object> list = credentialReq.getCredentialInfo();
 		PublicKey key = keyReq.getKeyByID((String) list.get(0));
-		try {
-			return sv.decryptSignature((byte[]) list.get(2), key, (Credential) list.get(1));
-		} catch (BadPaddingException e) {
-			return false;
-		}
+
+		return sv.verifySignature((Credential) list.get(1), (byte[]) list.get(2), new AsymmetricKeyGenerator("RSA").generateKeyPair().getPublic());
 	}
 
 

@@ -1,16 +1,10 @@
 package com.example.verifier;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties;
 
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -134,7 +128,9 @@ public class Requester {
 
         SignatureVerifier sv = new SignatureVerifier();
 
-        System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), (Credential) list.get(1)));
+        Credential credential = (Credential) list.get(1);
+
+       // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
 
     }
 
