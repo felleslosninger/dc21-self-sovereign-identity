@@ -4,7 +4,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SearchFrame, ProfileFrame } from './components/frames/dummy';
 import RequestFrame from './components/frames/RequestFrame';
 import ActivityFrame from './components/frames/ActivityFrame';
 import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
