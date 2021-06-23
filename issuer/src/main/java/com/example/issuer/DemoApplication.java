@@ -3,6 +3,9 @@ package com.example.issuer;
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,8 +62,7 @@ public class DemoApplication {
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
-           String publicKeyString = fileHandler.getPublicKeyAsString(id);
-           return publicKeyString;
+            return fileHandler.getPublicKeyAsString(id);
         }catch (Exception e){
             System.out.println("No key found.");
             return "No key found with this id";
@@ -68,16 +70,29 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/getCredential/{message}")
-    public String getCredential(@PathVariable String message) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
+    public ResponseEntity<String> getCredential(@PathVariable String message) {
+        HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
         Credential credential = new Credential("Digdir", message);
-        KeyGenerator keyGen = new KeyGenerator();
-        Signing signing = new Signing(keyGen.getPrivateKey(), credential);
+        KeyGenerator keyGen = null;
+        Signing signing = null;
+        try {
+            keyGen = new KeyGenerator();
+            signing = new Signing(keyGen.getPrivateKey(), credential);
+        } catch (Exception e) {
+            System.out.println("something wong");
+        }
+
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
         String signedMessage = signing.getSignatureAsString();
 
-        return signedMessage + "  |  " + credential.stringifier();
+        //return signedMessage + "  |  " + credential.stringifier();
+
+        responseHeaders.set("Hva-som-helst", "200");
+
+        return ResponseEntity.ok().headers(responseHeaders).body(signedMessage + " | " + credential.stringifier());
+        //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 
 
