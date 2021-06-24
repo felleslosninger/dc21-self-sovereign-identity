@@ -24,7 +24,7 @@ public class SpringbootApp {
 	private Requester credentialReq = new Requester("http://localhost:8083/api/getCredential/");
 	private Requester keyReq = new Requester("http://localhost:8083/api/key/");
 	private SignatureVerifier sv = new SignatureVerifier();
-	private Credential cred;
+	private boolean verified =false;
 
 	public SpringbootApp() throws URISyntaxException {
 	}
@@ -41,13 +41,20 @@ public class SpringbootApp {
 
 
 	@GetMapping("/api/verify/{credential}")
-	public boolean verify(@PathVariable String credential) throws Exception {
+	public boolean verifyCredential(@PathVariable String credential) throws Exception {
 
 		List<Object> list = credentialReq.stringToCredentialInfo(credential);
 		PublicKey key = keyReq.getKeyByID((String) list.get(0));
 
+		boolean verified = sv.verifySignature((Credential) list.get(1), (byte[]) list.get(2), key);
+		System.out.println(verified);
+		this.verified = verified;
+		return verified;
+	}
 
-		return sv.verifySignature((Credential) list.get(1), (byte[]) list.get(2), new AsymmetricKeyGenerator("RSA").generateKeyPair().getPublic());
+	@GetMapping("/api/verify")
+	public boolean checkVerify() {
+		return this.verified;
 	}
 
 
