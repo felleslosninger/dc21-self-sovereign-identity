@@ -1,7 +1,9 @@
 com\example\verifier\SignatureVerifier.class
+com\example\verifier\VerifySignatureFromApiApplication.class
 com\example\verifier\FileHandler$1.class
 com\example\verifier\Requester.class
 com\example\verifier\TestApplication.class
+com\example\verifier\Credential.class
 com\example\verifier\FileHandler.class
 com\example\verifier\AsymmetricKeyGenerator.class
 com\example\verifier\Signing.class

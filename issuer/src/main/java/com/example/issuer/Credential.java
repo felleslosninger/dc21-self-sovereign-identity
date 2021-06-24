@@ -17,7 +17,7 @@ public class Credential {
 
 
     public Credential(String subject, String message) {
-        this.subject = subject+ UUID.randomUUID();
+        this.subject = subject;
         this.message = message;
         this.issuerID = UUID.randomUUID().toString();
     }
@@ -47,4 +47,5 @@ public class Credential {
     public String getIssuerID() {
         return issuerID;
     }
+
 }
