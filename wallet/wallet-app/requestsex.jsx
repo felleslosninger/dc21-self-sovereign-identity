@@ -2,23 +2,22 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Button} from 'react-native';
 
 export default function TheRequests(){
-    let url='/api/getCredential/'
-    const [response, setResponse] = useState('123');
-    const [statement, setStatement] = useState('123hei');
+    let url='http://localhost:8083/api/getCredential/';
+    let statement = "123hei";
+    
+    const [text, setText] = useState("Hent bevis først.");
 
     async function sendRequest() {
-        const requestOptions = {
+        /*const requestOptions = {
             method: 'GET',
             headers: {'Conent-Type': 'text/html',
                     "access-control-allow-origin" : "*"},
-            /*body: JSON.stringify({value: statement})*/
-    };
-    let response = await fetch(url + statement, requestOptions);
-    console.log(response)
-    let parsedResponse = JSON.parse(response);
-    JSON.stringify
-    setResponse('456');
-
+    };*/
+    let response = await fetch(url + statement);//, requestOptions);
+    let payload = await response.text();
+    console.log(payload);
+    setText(payload);
+   
     };
 
     return (
@@ -28,7 +27,7 @@ export default function TheRequests(){
             onPress={() =>sendRequest()}>
             </Button>
             <Text>
-                {response}
+                {text}
             </Text>
         </View>
     );
