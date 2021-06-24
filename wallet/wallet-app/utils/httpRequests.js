@@ -11,3 +11,9 @@ export async function httpGetCredential(statement) {
   console.log(payload);
   return payload;
 }
+
+export async function httpSendCredential(credential) {
+  let url = 'http://localhost:8080/api/verify/';
+  let response = await fetch(url + credential);
+  console.log(response);
+}
