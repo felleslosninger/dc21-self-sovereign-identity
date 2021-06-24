@@ -105,6 +105,31 @@ public class Requester {
     }
 
 
+    public List<Object> stringToCredentialInfo(String credentialString) {
+        String id = "";
+        byte[] signature = null;
+        Credential credential = null;
+        String[] split = credentialString.split(" | ");
+
+        Gson gson = new Gson();
+        signature = gson.fromJson(split[0], byte[].class);
+
+        List<String> credentialCollection = gson.fromJson(split[2], List.class);
+        String subject = credentialCollection.get(0);
+        String message = credentialCollection.get(1);
+        id= credentialCollection.get(2);
+        credential = new Credential(subject, message, id);
+
+        List<Object> list = new ArrayList<>();
+        list.add(id);
+        list.add(credential);
+        list.add(signature);
+        return list;
+    }
+
+
+
+
 
 
 
