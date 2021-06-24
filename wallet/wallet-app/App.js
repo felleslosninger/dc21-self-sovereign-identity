@@ -2,6 +2,11 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+//import Test from './components/test'
+//import { generateKeyPair, signing } from './utils/signing';
+//import {sign} from './utils.sign';
+//import { signDemo } from './utils/sign' ;
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RequestFrame from './components/frames/RequestFrame';

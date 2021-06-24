@@ -25,7 +25,8 @@
     "react-native-screens": "^3.4.0",
     "react-native-web": "^0.17.0",
     "react-navigation": "^4.4.4",
-    "react-navigation-drawer": "^2.7.1"
+    "react-navigation-drawer": "^2.7.1",
+    "react-switch": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
