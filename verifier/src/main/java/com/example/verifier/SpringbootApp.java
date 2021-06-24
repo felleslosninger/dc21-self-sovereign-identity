@@ -2,10 +2,7 @@
 package com.example.verifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -18,6 +15,7 @@ import java.security.PublicKey;
 import java.util.List;
 
 @SpringBootApplication
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class SpringbootApp {
 
