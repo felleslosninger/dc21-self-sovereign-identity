@@ -3,12 +3,19 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Menu from '../Menu';
+import { httpGetCredential } from '../../utils/httpRequests';
 
 export default function RequestFrame() {
-  const [selectedValue, setSelectedValue] = useState('ntnu');
-  const [text, onChangeText] = useState(null);
+  const [selectedIssuer, setSelectedIssuer] = useState('sv');
+  const [credential, setCredential] = useState('Ingen bevis hentet.');
+  const [statement, setStatement] = useState(null);
+  async function sendCredentialRequest() {
+    let url = 'http://localhost:8083/api/getCredential/';
+    //let statement = 'Gyldig førerkort klasse B.';
 
-  const onPress = () => alert('Pressed button');
+    let verifiedStatement = await httpGetCredential(statement);
+    setCredential(verifiedStatement);
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -62,9 +69,9 @@ export default function RequestFrame() {
         <Text style={styles.text}>Velg utsteder </Text>
 
         <Picker
-          selectedValue={selectedValue}
+          selectedValue={selectedIssuer}
           style={styles.picker}
-          onValueChange={(itemValue) => setSelectedValue(itemValue)}
+          onValueChange={(itemValue) => setSelectedIssuer(itemValue)}
         >
           <Picker.Item label="NTNU" value="ntnu" />
           <Picker.Item label="Statens Vegvesen" value="sv" />
@@ -76,17 +83,20 @@ export default function RequestFrame() {
         <Text style={styles.text}>Ønsket bevis</Text>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
+          onChangeText={setStatement}
+          value={statement}
           placeholder="Bevis"
         ></TextInput>
       </SafeAreaView>
 
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={sendCredentialRequest}>
         <SafeAreaView style={styles.button}>
           <Text style={styles.buttonText}>Send forespørsel</Text>
         </SafeAreaView>
       </TouchableOpacity>
+      <SafeAreaView>
+        <Text>{credential}</Text>
+      </SafeAreaView>
       <Menu></Menu>
     </SafeAreaView>
   );
