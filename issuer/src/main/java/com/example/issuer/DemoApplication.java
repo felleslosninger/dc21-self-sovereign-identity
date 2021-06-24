@@ -78,6 +78,7 @@ public class DemoApplication {
         try {
             keyGen = new KeyGenerator();
             signing = new Signing(keyGen.getPrivateKey(), credential);
+
         } catch (Exception e) {
             System.out.println("something wong");
         }
@@ -94,6 +95,8 @@ public class DemoApplication {
         return ResponseEntity.ok().headers(responseHeaders).body(signedMessage + " | " + credential.stringifier());
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
+
+
 
 
 
