@@ -2,7 +2,7 @@ package com.example.verifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-
+import org.springframework.http.ResponseEntity;
 
 
 import java.io.IOException;
@@ -69,15 +69,12 @@ public class Requester {
         return publicKey;
     }
 
-
-
-
-
     public List<Object> getCredentialInfo() {
         String id = "";
         byte[] signature = null;
         Credential credential = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
+
         System.out.println(request);
 
         try {
@@ -86,8 +83,7 @@ public class Requester {
             String responseString = response.body();
             System.out.println("getIDfromCredential() response: " + responseString);
 
-            String[] split = responseString.split("  |  ");
-
+            String[] split = responseString.split(" | ");
 
             Gson gson = new Gson();
             signature = gson.fromJson(split[0], byte[].class);
