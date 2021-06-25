@@ -13,10 +13,10 @@ export default function Menu() {
         <Text>Oversikt</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonTo} onPress={() => navigation.navigate('Forespørsler')}>
-        <Text>Forespørsler</Text>
+        <Text>Hent bevis</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonTre} onPress={() => navigation.navigate('Aktivitet')}>
-        <Text>Notifikasjoner</Text>
+        <Text>Send bevis</Text>
       </TouchableOpacity>
     </View>
   );

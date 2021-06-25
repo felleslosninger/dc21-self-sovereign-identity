@@ -2,13 +2,13 @@ import React from 'react';
 
 import { SafeAreaView, Text, FlatList, View, StyleSheet } from 'react-native';
 import Menu from '../Menu';
-import { Knapp } from '../ConsentButton';
+import Knapp from '../Knapp';
 
 export default function ProofOverviewFrame() {
   const proofs = [
     {
       id: Math.random().toString(),
-      proof: 'over-18',
+      proof: 'førerkort-klasse-B',
     },
     {
       id: Math.random().toString(),

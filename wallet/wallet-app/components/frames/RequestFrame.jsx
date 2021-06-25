@@ -10,7 +10,7 @@ export default function RequestFrame() {
   const [credential, setCredential] = useState('Ingen bevis hentet.');
   const [statement, setStatement] = useState(null);
   async function sendCredentialRequest() {
-    let url = 'http://localhost:8083/api/getCredential/';
+    //let url = 'http://localhost:8083/api/getCredential/';
     //let statement = 'Gyldig førerkort klasse B.';
 
     let verifiedStatement = await httpGetCredential(statement);
