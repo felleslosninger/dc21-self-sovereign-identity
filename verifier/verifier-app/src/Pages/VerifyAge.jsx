@@ -6,7 +6,7 @@ function VerifyAge() {
     let history = useHistory()
 
     async function checkAge() {
-        let response = await fetch('/api/verify')
+        let response = await fetch('/api/checkVerified')
             .then(response => response.json())
             //.catch(err => console.log('There was an error:' + err))
         console.log(response)
