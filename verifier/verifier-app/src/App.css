@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+}
+
+.btn {
+  background-color: cornflowerblue;
+  text-decoration: none;
+  color: white;
+  padding: 0.5%;
+}
