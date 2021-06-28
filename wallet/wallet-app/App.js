@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RequestFrame from './components/frames/RequestFrame';
 import ActivityFrame from './components/frames/ActivityFrame';
 import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
+import VerifierLogFrame from './components/frames/VerifierLogFrame';
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name="Oversikt" component={ProofOverviewFrame} />
         <Stack.Screen name="Forespørsler" component={RequestFrame} />
         <Stack.Screen name="Aktivitet" component={ActivityFrame} />
+        <Stack.Screen name="Delt med" component={VerifierLogFrame} />
       </Stack.Navigator>
     </NavigationContainer>
   );
