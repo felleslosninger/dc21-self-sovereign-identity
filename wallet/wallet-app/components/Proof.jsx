@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import Knapp from './Knapp';
 import { useNavigation } from '@react-navigation/core';
+
 
 export default function Proof() {
   const navigation = useNavigation();
+
   const proofs = [
     {
       id: Math.random().toString(),
@@ -28,7 +29,7 @@ export default function Proof() {
       marginTop: '12%',
     },
     theProofs: {
-      backgroundColor: 'lightgrey',
+      backgroundColor: '#CDE8C5',
       padding: 10,
       fontSize: 20,
       marginVertical: 3,
@@ -40,10 +41,13 @@ export default function Proof() {
       fontSize: 40,
     },
     proofLog: {
-      fontSize: 20,
-      fontFamily: 'Helvetica',
+      borderRadius: 4,
+      backgroundColor: 'rgb(242, 242, 242)',
+      padding: 10,
+      marginTop: 10,
     },
   });
+
 
   return (
     <FlatList
@@ -56,11 +60,9 @@ export default function Proof() {
           <Text>
             Gyldig fra/til: {item.issuedDate}/{item.expiryDate}
           </Text>
-
           <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med')}>
-            Delt med
+            <Text>Delt med</Text>
           </TouchableOpacity>
-          <Knapp />
         </View>
       )}
     />

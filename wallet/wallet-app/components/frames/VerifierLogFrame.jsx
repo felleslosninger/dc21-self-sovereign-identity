@@ -1,12 +1,24 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import Menu from '../Menu';
+import Verifier from '../Verifier';
 
-export default function VerifierLog() {
+export default function VerifierLogFrame() {
+
+
+
+  const styles = StyleSheet.create({
+    shared: {
+      fontSize: 20,
+    },
+  })
+
+
   return (
     <SafeAreaView>
-      <Text>Du har delt beviset ditt med disse tjenestene.</Text>
+      <Text style={styles.shared}> Du har delt beviset med disse tjenestene.</Text>
+      <Verifier/>
       <Menu />
     </SafeAreaView>
   );
