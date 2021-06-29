@@ -35,6 +35,7 @@ public class SignatureVerifier {
         Signing s = new Signing(keyGen.getPrivateKey(), cred);
 
         System.out.println(sv.verifySignature(cred, s.getSignature(), keyGen.getPublicKey()));
+        System.out.println(keyGen.getPublicKey().getEncoded());
 
 
     }

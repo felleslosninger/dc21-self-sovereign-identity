@@ -89,7 +89,7 @@ public class DemoApplication {
 
         responseHeaders.set("Hva-som-helst", "200");
 
-        return ResponseEntity.ok().headers(responseHeaders).body(signedMessage + " | " + credential.stringifier());
+        return ResponseEntity.ok().headers(responseHeaders).body(credential.stringifier());
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 

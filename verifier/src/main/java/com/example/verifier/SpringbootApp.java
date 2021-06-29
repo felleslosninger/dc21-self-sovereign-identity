@@ -1,5 +1,7 @@
 
 package com.example.verifier;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +10,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +33,8 @@ public class SpringbootApp {
 	private Requester keyReq = new Requester("http://localhost:8083/api/key/");
 	private SignatureVerifier sv = new SignatureVerifier();
 	private boolean verified =false;
+	private PublicKey key = null;
+	private Credential credential = null;
 
 	public SpringbootApp() throws URISyntaxException {
 	}
@@ -45,20 +50,25 @@ public class SpringbootApp {
 	}
 
 
-	@GetMapping("/api/verify/{credential}")
-	public String verifyCredential(@PathVariable String credential) throws Exception {
-		System.out.println("Received");
-		/*
-		List<Object> list = credentialReq.stringToCredentialInfo(credential);
-		PublicKey key = keyReq.getKeyByID((String) list.get(0));
+	@PostMapping("/api/sendCredential")
+	public ResponseEntity sendCredential(@RequestBody String credential) throws Exception {
+		System.out.println("Cred string" + credential);
+		Gson gson = new Gson();
+		Credential cred = gson.fromJson(credential, Credential.class);
+		this.credential = cred;
+		System.out.println(cred.stringifier());
+		return new ResponseEntity<>("credential:" + this.credential.stringifier(),
+				HttpStatus.OK);
+	}
 
-		boolean verified = sv.verifySignature((Credential) list.get(1), (byte[]) list.get(2), key);
-		System.out.println(verified);
-		*/
-		// NOT ACTUALLY VERIFIED
-		System.out.println(credential.getClass());
-		this.verified = true;
-		return "received from wallet";
+
+
+	@PostMapping("/api/postKey")
+	public ResponseEntity postKey(@RequestBody PublicKey key) {
+		this.key = key;
+
+		return new ResponseEntity<>("key:" + key,
+				HttpStatus.OK);
 	}
 
 	@GetMapping("/api/checkVerified")
