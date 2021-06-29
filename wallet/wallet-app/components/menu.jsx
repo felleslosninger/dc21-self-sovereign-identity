@@ -26,9 +26,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end', //'space-between',
     alignItems: 'flex-start',
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
+    position: 'absolute',
+    bottom: 0,
   },
   button: {
     flex: 1,
