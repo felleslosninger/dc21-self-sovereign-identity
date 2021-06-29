@@ -33,7 +33,7 @@ public class SpringbootApp {
 	private Requester keyReq = new Requester("http://localhost:8083/api/key/");
 	private SignatureVerifier sv = new SignatureVerifier();
 	private boolean verified =false;
-	private PublicKey key = null;
+	private String key = null;
 	private Credential credential = null;
 
 	public SpringbootApp() throws URISyntaxException {
@@ -64,11 +64,11 @@ public class SpringbootApp {
 
 
 	@PostMapping("/api/postKey")
-	public ResponseEntity postKey(@RequestBody PublicKey key) {
-		this.key = key;
+	public ResponseEntity postKey(@RequestBody String key) {
 
-		return new ResponseEntity<>("key:" + key,
-				HttpStatus.OK);
+		this.key = key;
+		System.out.println(key);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@GetMapping("/api/checkVerified")
