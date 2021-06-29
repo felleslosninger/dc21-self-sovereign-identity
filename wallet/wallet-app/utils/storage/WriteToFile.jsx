@@ -1,10 +1,11 @@
+//SKAL IKKE BRUKES ENDA
+
 import React, { useState } from 'react';
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Menu from '../Menu';
-import { httpGetCredential } from '../../utils/httpRequests';
-import AsyncStorage from '@react-native-community/async-storage';
+import Menu from '../../components/Menu';
+import * as RNFS from 'react-native-fs';
 
 export default function RequestFrame() {
   const [selectedIssuer, setSelectedIssuer] = useState('sv');
@@ -14,16 +15,21 @@ export default function RequestFrame() {
     //let url = 'http://localhost:8083/api/getCredential/';
     //let statement = 'Gyldig førerkort klasse B.';
 
-    saveProof(statement);
     let verifiedStatement = await httpGetCredential(statement);
     setCredential(verifiedStatement);
   }
 
-  const saveProof = async () => {
-    if (statement) {
-      await AsyncStorage.setItem('key', statement);
-    }
-  };
+  //var RNFS = require('react-native-fs');
+
+  var path = RNFS.ExternalDirectoryPath + 'test.txt';
+
+  RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
+    .then((success) => {
+      console.log('FILE WRITTEN');
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,7 +59,7 @@ export default function RequestFrame() {
         ></TextInput>
       </SafeAreaView>
 
-      <TouchableOpacity onPress={sendCredentialRequest}>
+      <TouchableOpacity onPress={RNFS.writeFile}>
         <SafeAreaView style={styles.button}>
           <Text style={styles.buttonText}>Send forespørsel</Text>
         </SafeAreaView>
