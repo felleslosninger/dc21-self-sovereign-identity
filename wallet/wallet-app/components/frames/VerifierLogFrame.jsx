@@ -4,9 +4,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import Menu from '../Menu';
 import Verifier from '../Verifier';
 
-export default function VerifierLogFrame() {
-
-
+export default function VerifierLogFrame({route}) {
 
   const styles = StyleSheet.create({
     shared: {
@@ -15,10 +13,15 @@ export default function VerifierLogFrame() {
   })
 
 
+  console.log(route.params.item.verifiers)
+
+  console.log(route.params.item.proof)
   return (
     <SafeAreaView>
-      <Text style={styles.shared}> Du har delt beviset med disse tjenestene.</Text>
-      <Verifier/>
+      <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
+      {route.params.item.verifiers.map(
+              (verifier, vid) => <Verifier key={vid} id={vid} name={verifier}/>
+              )}
       <Menu />
     </SafeAreaView>
   );

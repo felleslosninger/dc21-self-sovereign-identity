@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/core';
 export default function Proof() {
   const navigation = useNavigation();
 
+
   const proofs = [
     {
       id: Math.random().toString(),
@@ -13,6 +14,7 @@ export default function Proof() {
       issuer: 'Statens Vegvesen',
       issuedDate: '20.02.21',
       expiryDate: '20.02.24',
+      verifiers:  ['ei teneste', 'ei anna teneste']
     },
     {
       id: Math.random().toString(),
@@ -20,6 +22,7 @@ export default function Proof() {
       issuer: 'NTNU',
       issuedDate: '20.02.21',
       expiryDate: '20.02.24',
+      verifiers: ['ei anna tenesteee', 'ei annaaaa teneste']
     },
   ];
 
@@ -48,6 +51,7 @@ export default function Proof() {
     },
   });
 
+  
 
   return (
     <FlatList
@@ -60,7 +64,7 @@ export default function Proof() {
           <Text>
             Gyldig fra/til: {item.issuedDate}/{item.expiryDate}
           </Text>
-          <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med')}>
+          <TouchableOpacity style={styles.proofLog} onPress={() =>  navigation.navigate('Delt med', {item})}>
             <Text>Delt med</Text>
           </TouchableOpacity>
         </View>

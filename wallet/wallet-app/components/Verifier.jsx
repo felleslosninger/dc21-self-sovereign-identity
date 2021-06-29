@@ -1,19 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import Knapp from './Knapp';
-import { useNavigation } from '@react-navigation/core';
 
-export default function Verifier() {
-  const verifiers = [
-    {
-      id: Math.random().toString(),
-      verifier: 'Ein teneste'
-    },
-    {
-      id: Math.random().toString(),
-      verifier: 'ein anna teneste'
-    },
-  ];
+export default function Verifier(props) {
 
   const styles = StyleSheet.create({
     container: {
@@ -39,15 +28,9 @@ export default function Verifier() {
   });
 
   return (
-    <FlatList
-      keyExtractor={(item) => item.id}
-      data={verifiers}
-      renderItem={({ item }) => (
-        <View style={styles.theProofs}>
-          <Text style={styles.textProofs}> {item.verifier}</Text>
+    <View style={styles.theProofs}>
+          <Text style={styles.textProofs}> {props.name}</Text>
           <Knapp />
-        </View>
-      )}
-    />
+    </View>
   );
 }
