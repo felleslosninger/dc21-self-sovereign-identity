@@ -26,13 +26,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    //justifyContent: 'flex-end', //'space-between',
     alignItems: 'flex-start',
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
+    position: 'absolute',
+    bottom: 0,
   },
   button: {
     flex: 1,
-    justifyContent: 'flex-start',
+    //justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#CDE6EA',
     padding: 10,
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
   },
   buttonTo: {
     flex: 1,
-    justifyContent: 'flex-start',
+    //justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#CDE6EA',
     padding: 10,
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
   },
   buttonTre: {
     flex: 1,
-    justifyContent: 'flex-start',
+    //justifyContent: 'flex-start',
     alignItems: 'flex-end',
     backgroundColor: '#CDE6EA',
     padding: 10,

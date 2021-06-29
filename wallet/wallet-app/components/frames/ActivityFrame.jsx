@@ -5,12 +5,6 @@ import { httpSendCredential } from '../../utils/httpRequests';
 import Menu from '../Menu';
 
 export default function ActivityFrame() {
-  const styles = StyleSheet.create({
-    container: {
-      alignItems: 'center',
-    },
-  });
-
   const [toggle, setToggle] = useState(false);
 
   async function sendCredential() {
@@ -21,7 +15,7 @@ export default function ActivityFrame() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View>
         <Button title="Send bevis til tjeneste X" color="#f1940f" onPress={sendCredential} />
       </View>
@@ -30,3 +24,10 @@ export default function ActivityFrame() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: '10%',
+  },
+});
