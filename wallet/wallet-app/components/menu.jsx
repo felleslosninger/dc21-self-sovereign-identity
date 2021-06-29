@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
 const Separator = () => <View style={styleSheets.separator} />;
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: '#CDE6EA',
+    backgroundColor: '#87D7BF',
     padding: 10,
     width: 100,
     height: 50,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#CDE6EA',
+    backgroundColor: '#87D7BF',
     padding: 10,
     width: 100,
     height: 50,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    backgroundColor: '#CDE6EA',
+    backgroundColor: '#87D7BF',
     padding: 10,
     width: 100,
     height: 50,
