@@ -1,11 +1,18 @@
 import React from 'react';
 
-import { SafeAreaView, Text, FlatList, View, StyleSheet } from 'react-native';
+import { SafeAreaView, Text, FlatList, View, StyleSheet, Button } from 'react-native';
 import Menu from '../Menu';
 import Knapp from '../Knapp';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addCredential,
+  createCredential,
+  deleteCredential,
+  removeCredential,
+} from '../../redux/CredentialSlice';
 
 export default function ProofOverviewFrame() {
-  const proofs = [
+  /*const proofs = [
     {
       id: Math.random().toString(),
       proof: 'førerkort-klasse-B',
@@ -14,7 +21,10 @@ export default function ProofOverviewFrame() {
       id: Math.random().toString(),
       proof: 'er-sykepleier',
     },
-  ];
+  ];*/
+
+  const { cred } = useSelector((state) => state.credentials);
+  const dispatch = useDispatch(); //To call every reducer that we want
 
   const styles = StyleSheet.create({
     container: {
@@ -39,14 +49,16 @@ export default function ProofOverviewFrame() {
     <SafeAreaView style={styles.container}>
       <FlatList
         keyExtractor={(item) => item.id}
-        data={proofs}
+        data={cred}
         renderItem={({ item }) => (
           <View style={styles.theProofs}>
             <Text style={styles.textProofs}> {item.proof}</Text>
             <Knapp></Knapp>
+            <Button title="Remove" onPress={() => dispatch(removeCredential(item.id))} />
           </View>
         )}
       />
+      <Button title="Add" onPress={() => dispatch(addCredential())} />
       <Menu></Menu>
     </SafeAreaView>
   );
