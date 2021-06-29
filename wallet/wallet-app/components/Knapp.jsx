@@ -8,7 +8,6 @@ export default function Knapp() {
     },
   });
 
-  //const [toggle, setToggle] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
   const toggleSwitch = () => setIsAccepted((previousState) => !previousState);
 

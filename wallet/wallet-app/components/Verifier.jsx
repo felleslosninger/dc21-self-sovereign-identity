@@ -1,8 +1,10 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import Knapp from './Knapp';
 
 export default function Verifier(props) {
+
+ 
 
   const styles = StyleSheet.create({
     container: {
@@ -27,9 +29,11 @@ export default function Verifier(props) {
     },
   });
 
+  console.log(props)
+
   return (
     <View style={styles.theProofs}>
-          <Text style={styles.textProofs}> {props.name}</Text>
+          <Text style={styles.textProofs}>{props.name}</Text>
           <Knapp />
     </View>
   );
