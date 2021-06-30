@@ -1,14 +1,11 @@
 import React from "react";
-import {Link, useHistroy} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
 
 function Landing() {
 
-    let history = useHistroy()
+    let history = useHistory();
 
     async function getCredential() {
-        let respone = await fetch('/api/getCredentail/"diploma"')
-            .then(response => response.json())
-
         console.log("Good day kind sir")
     }
 
@@ -21,3 +18,5 @@ function Landing() {
         </div>
     )
 }
+
+export default Landing;
