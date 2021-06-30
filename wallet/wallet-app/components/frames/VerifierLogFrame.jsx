@@ -13,14 +13,11 @@ export default function VerifierLogFrame({route}) {
   })
 
 
-  console.log(route.params.item.verifiers)
-
-  console.log(route.params.item.proof)
   return (
     <SafeAreaView>
       <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
       {route.params.item.verifiers.map(
-              (verifier, vid) => <Verifier key={vid} id={vid} name={verifier}/>
+              (verifier, vid) => <Verifier key={vid} name={verifier}/>
               )}
       <Menu />
     </SafeAreaView>

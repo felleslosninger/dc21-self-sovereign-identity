@@ -1,30 +1,14 @@
-import React, {useState} from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { removeCredential } from '../redux/CredentialSlice';
 
 export default function Proof() {
   const navigation = useNavigation();
 
-
-  const proofs = [
-    {
-      id: Math.random().toString(),
-      proof: 'førerkort-klasse-B',
-      issuer: 'Statens Vegvesen',
-      issuedDate: '20.02.21',
-      expiryDate: '20.02.24',
-      verifiers:  ['ei teneste', 'ei anna teneste']
-    },
-    {
-      id: Math.random().toString(),
-      proof: 'er-sykepleier',
-      issuer: 'NTNU',
-      issuedDate: '20.02.21',
-      expiryDate: '20.02.24',
-      verifiers: ['ei anna tenesteee', 'ei annaaaa teneste']
-    },
-  ];
+  const { cred } = useSelector((state) => state.credentials);
+  const dispatch = useDispatch(); //To call every reducer that we want
 
   const styles = StyleSheet.create({
     container: {
@@ -51,12 +35,10 @@ export default function Proof() {
     },
   });
 
-  
-
   return (
     <FlatList
       keyExtractor={(item) => item.id}
-      data={proofs}
+      data={cred}
       renderItem={({ item }) => (
         <View style={styles.theProofs}>
           <Text style={styles.textProofs}> {item.proof}</Text>
@@ -64,9 +46,18 @@ export default function Proof() {
           <Text>
             Gyldig fra/til: {item.issuedDate}/{item.expiryDate}
           </Text>
-          <TouchableOpacity style={styles.proofLog} onPress={() =>  navigation.navigate('Delt med', {item})}>
+          <TouchableOpacity
+            style={styles.proofLog}
+            onPress={() => navigation.navigate('Delt med', { item })}
+          >
             <Text>Delt med</Text>
           </TouchableOpacity>
+          <Button
+            title="Fjern bevis"
+            onPress={() => {
+              dispatch(removeCredential(item.id));
+            }}
+          />
         </View>
       )}
     />
