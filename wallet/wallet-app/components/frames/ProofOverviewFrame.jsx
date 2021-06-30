@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { SafeAreaView, Text, FlatList, View, StyleSheet, Button } from 'react-native';
+import { SafeAreaView, Text, FlatList, View, StyleSheet } from 'react-native';
 import Menu from '../Menu';
 import Knapp from '../Knapp';
 
@@ -22,7 +22,6 @@ export default function ProofOverviewFrame() {
           if (!proofs.some((item) => item.id == keys[key])) {
             proofs.push({ id: keys[key], proof: value });
           }
-          //setTheProof(value);
         }
         console.log('Proofs:', proofs);
       }
@@ -50,8 +49,6 @@ export default function ProofOverviewFrame() {
     }
   };
 
-  // getProof();
-
   isFocused ? getKeys() && getProof() : null;
 
   // const proofs = [
@@ -78,7 +75,6 @@ export default function ProofOverviewFrame() {
           <View style={styles.theProofs}>
             <Text style={styles.textProofs}> {item.proof}</Text>
             <Knapp></Knapp>
-            {console.log('item', item)}
           </View>
         )}
       />
