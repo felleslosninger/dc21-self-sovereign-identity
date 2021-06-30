@@ -22,7 +22,7 @@ export default function RequestFrame() {
   const saveProof = async () => {
     if (statement) {
       try {
-        await AsyncStorage.setItem(Math.random().toString(10).substring(2), statement);
+        await AsyncStorage.setItem(Math.random().toString(36).substring(2), statement);
       } catch (error) {
         alert(error);
       }
