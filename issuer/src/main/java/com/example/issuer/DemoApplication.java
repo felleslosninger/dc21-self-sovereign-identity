@@ -1,6 +1,7 @@
 package com.example.issuer;
 
 import com.google.gson.Gson;
+import org.json.JSONException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
@@ -25,20 +26,24 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DemoApplication.class);
-        //app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
+        app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
         //SpringApplication.run(DemoApplication.class, args);
         app.run(args);
 
     }
 
-    @GetMapping("/api/hello")
+    @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        Credential credential = new Credential("name", "Over 18 år");
+        KeySaver keySaver = new KeySaver(credential);
+        JsonHandler jsonHandler = new JsonHandler();
+        jsonHandler.saveKeysaverToJson(keySaver);
 
         return String.format("Hello %s!", name);
 
     }
 
-    @GetMapping("/api/keys")
+    @GetMapping("/keys")
     public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
@@ -57,6 +62,7 @@ public class DemoApplication {
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
+            System.out.println(fileHandler.getPublicKeyAsString(id));
             return fileHandler.getPublicKeyAsString(id);
         }catch (Exception e){
             System.out.println("No key found.");
@@ -64,50 +70,33 @@ public class DemoApplication {
         }
     }
 
-    @GetMapping("/api/getCredential/{message}")
-    public ResponseEntity<String> getCredential(@PathVariable String message) {
+    @GetMapping("/api/getCredential/{type}")
+    public ResponseEntity<String> getCredential(@PathVariable String type) throws JSONException {
         HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
-        Credential credential = new Credential("Digdir", message);
+        //Credential credential = new Credential("Digdir", message);
+        VCJson credential = new VCJson("subject", type);
         KeyGenerator keyGen = null;
         Signing signing = null;
         try {
             keyGen = new KeyGenerator();
-            signing = new Signing(keyGen.getPrivateKey(), credential);
-
+            signing = new Signing(keyGen.getPrivateKey(), credential.getPayload());
         } catch (Exception e) {
-            System.out.println("something wong");
+            e.printStackTrace();
         }
 
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
+
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
         String signedMessage = signing.getSignatureAsString();
+        credential.setSignature(signedMessage);
 
         //return signedMessage + "  |  " + credential.stringifier();
 
         responseHeaders.set("Hva-som-helst", "200");
 
-        return ResponseEntity.ok().headers(responseHeaders).body(signedMessage + " | " + credential.stringifier());
+        return ResponseEntity.ok().headers(responseHeaders).body(credential.stringifier());
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/api/testBoolean/{testString}")
-    public boolean testBooleanReact(@PathVariable String testString) {
-
-        if (testString.equals("fisk")) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    private boolean verifySignature(Credential message, byte[] signatureToVerify, PublicKey key) throws Exception {
-        Signature signature = Signature.getInstance(Signing.SIGNING_ALGORITHM);
-        signature.initVerify(key);
-        signature.update(message.stringifier().getBytes(StandardCharsets.UTF_8));
-        return signature.verify(signatureToVerify);
     }
 
 

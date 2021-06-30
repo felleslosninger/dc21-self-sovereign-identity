@@ -1,4 +1,4 @@
-package com.example.issuer;
+package com.example.verifier;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -149,7 +149,6 @@ public class VCJson {
         VCJson vcJson = new VCJson("Martin", "over-18");
         vcJson.setSignature("testSetSignature");
         System.out.println(vcJson.getSignature());
-        System.out.println(vcJson.payload);
         System.out.println(gson.toJson(vcJson.getCredentials()));
     }
 }
