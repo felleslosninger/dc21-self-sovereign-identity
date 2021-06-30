@@ -109,7 +109,6 @@ public class Requester {
 
     public VCJson getCredentialFromIssuer() {
         VCJson vcJson = null;
-        List<String> credString = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
