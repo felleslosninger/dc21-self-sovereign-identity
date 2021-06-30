@@ -30,18 +30,14 @@ public class DemoApplication {
 
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/api/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        Credential credential = new Credential("name", "Over 18 år");
-        KeySaver keySaver = new KeySaver(credential);
-        JsonHandler jsonHandler = new JsonHandler();
-        jsonHandler.saveKeysaverToJson(keySaver);
 
         return String.format("Hello %s!", name);
 
     }
 
-    @GetMapping("/keys")
+    @GetMapping("/api/keys")
     public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
