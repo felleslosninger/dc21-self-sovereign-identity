@@ -12,6 +12,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -90,7 +91,24 @@ public class DemoApplication {
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 
+    @GetMapping("/api/testBoolean/{testString}")
+    public boolean testBooleanReact(@PathVariable String testString) {
 
+        if (testString.equals("fisk")) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    private boolean verifySignature(Credential message, byte[] signatureToVerify, PublicKey key) throws Exception {
+        Signature signature = Signature.getInstance(Signing.SIGNING_ALGORITHM);
+        signature.initVerify(key);
+        signature.update(message.stringifier().getBytes(StandardCharsets.UTF_8));
+        return signature.verify(signatureToVerify);
+    }
 
 
 
