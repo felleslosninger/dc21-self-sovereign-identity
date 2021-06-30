@@ -5,36 +5,69 @@ import Menu from '../Menu';
 import Knapp from '../Knapp';
 
 import AsyncStorage from '@react-native-community/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ProofOverviewFrame() {
-  const [theProof, setTheProof] = useState('');
+  const [proofs, setProofs] = useState([]);
+  const [keys, setKeys] = useState([]);
+
+  const isFocused = useIsFocused();
 
   const getProof = async () => {
     try {
-      const value = await AsyncStorage.getItem('key');
-      if (value !== null) {
-        console.log(value);
-        setTheProof(value);
+      for (let key = 0; key < keys.length; key++) {
+        const value = await AsyncStorage.getItem(keys[key]);
+        if (value !== null) {
+          console.log(value);
+          if (!proofs.some((item) => item.id == keys[key])) {
+            proofs.push({ id: keys[key], proof: value });
+          }
+          //setTheProof(value);
+        }
+        console.log('Proofs:', proofs);
       }
     } catch (error) {
       alert(error);
     }
   };
 
-  const proofs = [
-    {
-      id: Math.random().toString(),
-      proof: 'førerkort-klasse-B',
-    },
-    {
-      id: Math.random().toString(),
-      proof: 'er-sykepleier',
-    },
-    {
-      id: Math.random().toString(),
-      proof: theProof,
-    },
-  ];
+  const getKeys = async () => {
+    try {
+      const theKeys = await AsyncStorage.getAllKeys();
+      console.log(theKeys);
+      if (theKeys !== null) {
+        for (let i = 0; i < theKeys.length; i++) {
+          if (!keys.includes(theKeys[i])) {
+            keys.push(theKeys[i]);
+            console.log(keys);
+          }
+        }
+      }
+      console.log(keys);
+      getProof();
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  // getProof();
+
+  isFocused ? getKeys() && getProof() : null;
+
+  // const proofs = [
+  //   {
+  //     id: Math.random().toString(),
+  //     proof: 'førerkort-klasse-B',
+  //   },
+  //   {
+  //     id: Math.random().toString(),
+  //     proof: 'er-sykepleier',
+  //   },
+  //   {
+  //     id: Math.random().toString(),
+  //     proof: theProof,
+  //   },
+  // ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,10 +78,10 @@ export default function ProofOverviewFrame() {
           <View style={styles.theProofs}>
             <Text style={styles.textProofs}> {item.proof}</Text>
             <Knapp></Knapp>
+            {console.log('item', item)}
           </View>
         )}
       />
-      <Button title="Press" onPress={() => getProof()} />
       <Menu></Menu>
     </SafeAreaView>
   );
