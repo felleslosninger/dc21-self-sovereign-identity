@@ -118,15 +118,11 @@ public class Requester {
             System.out.println("getCredentialFromIssuer() response: " + responseString);
 
             Gson gson = new Gson();
-            credString = gson.fromJson(responseString, List.class);
-
-            System.out.println("credString = " + credString);
-
-            vcJson = new VCJson(credString.get(0), credString.get(1), credString.get(2), credString.get(3));
+            vcJson = gson.fromJson(responseString, VCJson.class);
             System.out.println("vcJson = " + vcJson);
 
 
-        } catch (IOException | InterruptedException | JSONException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         return vcJson;

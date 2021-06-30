@@ -126,13 +126,7 @@ public class VCJson {
 
     public String stringifier() throws JSONException {
         Gson gson = new Gson();
-        List<String> list = new ArrayList<>();
-        list.add(subject);
-        list.add(type);
-        list.add(issuerID);
-        list.add(getSignature());
-
-        String jsonString = gson.toJson(list);
+        String jsonString = gson.toJson(this);
         return jsonString;
     }
 

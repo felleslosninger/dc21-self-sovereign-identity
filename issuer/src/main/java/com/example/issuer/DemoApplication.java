@@ -85,11 +85,8 @@ public class DemoApplication {
 
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
-        System.out.println(publicKey);
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
-        System.out.println(fileHandler.getPublicKey(credential.getIssuerID()));
         String signedMessage = signing.getSignatureAsString();
-        System.out.println(credential.getIssuerID());
         credential.setSignature(signedMessage);
 
         //return signedMessage + "  |  " + credential.stringifier();
