@@ -5,7 +5,13 @@ function Mainpage() {
 
     let history = useHistory();
 
-    //function
+    async function getCredential() {
+         console.log("Good day kind sir")
+         let response = await fetch('/api/getCredential/test')
+             .then(response => response.json())
+
+        console.log(response);
+    }
 
     return (
         <div className="Mainpage">
@@ -17,7 +23,7 @@ function Mainpage() {
             </select>
 
             <br/>
-            <button onClick={} >Søk etter bevis</button>
+            <button onClick={getCredential()} >Søk etter bevis</button>
         </div>
     )
 }
