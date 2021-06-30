@@ -30,6 +30,8 @@ public class Signing {
         this.proofPurpose = "assertionMethod";
     }
 
+
+
     public byte[] getSignature(){
         return this.signature;
     }

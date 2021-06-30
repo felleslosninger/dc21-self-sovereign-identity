@@ -91,4 +91,6 @@ public class VCJson {
         VCJson vcJson = new VCJson("Martin", "over-18");
         System.out.println(gson.toJson(vcJson.getCredentials()));
     }
+
+
 }

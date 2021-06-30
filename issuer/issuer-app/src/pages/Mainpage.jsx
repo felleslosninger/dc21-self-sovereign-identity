@@ -1,8 +1,14 @@
 import React, {useState} from "react";
 import {Link, useHistory} from "react-router-dom"
+import Select from 'react-select';
 
 function Mainpage() {
 
+    const types = [
+        { value: 'over-18', label: 'Over 18' },
+        { value: 'over-20', label: 'Over 20' },
+        { value: 'fødselsattest', label: 'Fødselsattest' }
+    ]
     let history = useHistory();
     let chosenOption;
 
@@ -32,6 +38,17 @@ function Mainpage() {
 
             <br/>
             <button onClick={getCredential} >Søk etter bevis</button>
+
+            <Select
+
+                className="basic-single"
+                classNamePrefix="select"
+                defaultValue={types[0]}
+                name="VCType"
+                options={types}
+
+                onChange = {handleSelectChange}
+            />
         </div>
     )
 }

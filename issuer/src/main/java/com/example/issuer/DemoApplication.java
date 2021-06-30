@@ -25,7 +25,7 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DemoApplication.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
+        //app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
         //SpringApplication.run(DemoApplication.class, args);
         app.run(args);
 
