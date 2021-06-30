@@ -1,31 +1,21 @@
 import React from 'react';
-
 import { SafeAreaView, Text, FlatList, View, StyleSheet, Button } from 'react-native';
 import Menu from '../Menu';
 import Knapp from '../Knapp';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCredential, removeCredential } from '../../redux/CredentialSlice';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import Menu from '../Menu';
+import Proof from '../Proof';
 
 export default function ProofOverviewFrame() {
   const { cred } = useSelector((state) => state.credentials);
   const dispatch = useDispatch(); //To call every reducer that we want
-
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       marginTop: '12%',
-    },
-    theProofs: {
-      backgroundColor: 'lightgrey',
-      padding: 10,
-      fontSize: 20,
-      marginVertical: 3,
-      marginHorizontal: 16,
-      borderRadius: 4,
-      alignItems: 'center',
-    },
-    textProofs: {
-      fontSize: 40,
     },
   });
 
