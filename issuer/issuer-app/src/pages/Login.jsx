@@ -11,7 +11,8 @@ function Login() {
         <div className="Login">
             <p>Innlogging</p>
 
-            <button   >Logg inn med id-porten</button>
+            {/*<button  onClick={} >Logg inn med id-porten</button>*/}
+            <Link to="/Wait" className="btn btn-primary">Logg inn med id-porten</Link>
         </div>
     )
 }

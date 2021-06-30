@@ -7,12 +7,13 @@ import {
     Route
 } from "react-router-dom";
 import Mainpage from "./pages/Mainpage";
+import Login from "./pages/Login";
 function App() {
   return (
       <div className="App">
         <Router>
           <Switch>
-            <Route exact path='/' component={Mainpage}/>
+            <Route exact path='/' component={Login}/>
           </Switch>
         </Router>
       </div>
