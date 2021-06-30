@@ -49,23 +49,23 @@ public class Requester {
 
     public PublicKey getKeyByID(String id) {
         PublicKey publicKey = null;
-            HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
-            System.out.println(request);
+        HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
+        System.out.println(request);
 
-            try {
-                final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
-                        HttpResponse.BodyHandlers.ofString());
-                final String responseString = response.body();
-                System.out.println("getKeyByID() response: " + responseString);
-                Gson gson = new Gson();
-                byte[] bytes = gson.fromJson(responseString, byte[].class);
+        try {
+            final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            final String responseString = response.body();
+            System.out.println("getKeyByID() response: " + responseString);
+            Gson gson = new Gson();
+            byte[] bytes = gson.fromJson(responseString, byte[].class);
 
 
-                publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
+            publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
 
-            } catch (IOException | InterruptedException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (IOException | InterruptedException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
 
         return publicKey;
     }
@@ -76,26 +76,20 @@ public class Requester {
         byte[] signature = null;
         Credential credential = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
-
         System.out.println(request);
-
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             String responseString = response.body();
             System.out.println("getIDfromCredential() response: " + responseString);
-
             String[] split = responseString.split(" | ");
-
             Gson gson = new Gson();
             signature = gson.fromJson(split[0], byte[].class);
-
             List<String> credentialCollection = gson.fromJson(split[2], List.class);
             String subject = credentialCollection.get(0);
             String message = credentialCollection.get(1);
             id= credentialCollection.get(2);
             credential = new Credential(subject, message, id);
-
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -109,6 +103,7 @@ public class Requester {
 
     public VCJson getCredentialFromIssuer() {
         VCJson vcJson = null;
+        List<String> credString = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
@@ -117,11 +112,15 @@ public class Requester {
             System.out.println("getCredentialFromIssuer() response: " + responseString);
 
             Gson gson = new Gson();
-            vcJson = gson.fromJson(responseString, VCJson.class);
+            credString = gson.fromJson(responseString, List.class);
+
+            System.out.println("credString = " + credString);
+
+            vcJson = new VCJson(credString.get(0), credString.get(1), credString.get(2), credString.get(3));
             System.out.println("vcJson = " + vcJson);
 
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | JSONException e) {
             throw new RuntimeException(e);
         }
         return vcJson;
@@ -141,7 +140,7 @@ public class Requester {
 
         Requester r = new Requester("http://localhost:8083/api/key/");
 
-       // System.out.println(r.getKeyByID("bb9c615c-643d-4f28-ac74-2b90c8b8727c"));
+        // System.out.println(r.getKeyByID("bb9c615c-643d-4f28-ac74-2b90c8b8727c"));
 
         Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
 
@@ -154,9 +153,15 @@ public class Requester {
         System.out.println(key);
 
         SignatureVerifier sv = new SignatureVerifier();
+        Gson gson = new Gson();
+        byte[] bytes = gson.fromJson(vcJson.getSignature(), byte[].class);
+        System.out.println(bytes);
+
+boolean verify = sv.verifySignature(vcJson.getPayload(), bytes, key);
+System.out.println(verify);
 
 
-       // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
+        // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
 
     }
 

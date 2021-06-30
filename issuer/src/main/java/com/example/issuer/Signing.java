@@ -17,10 +17,10 @@ public class Signing {
     public static final String SIGNING_ALGORITHM = "SHA256withRSA";
 
 
-    public Signing(PrivateKey privateKey, VCJson message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException, JSONException {
+    public Signing(PrivateKey privateKey, String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException, JSONException {
         Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
         signature.initSign(privateKey);
-        signature.update(message.stringifier().getBytes(StandardCharsets.UTF_8));
+        signature.update(message.getBytes(StandardCharsets.UTF_8));
         this.signature = signature.sign();
     }
 

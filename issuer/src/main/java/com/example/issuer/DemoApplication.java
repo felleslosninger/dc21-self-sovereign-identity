@@ -13,6 +13,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -78,13 +79,14 @@ public class DemoApplication {
         Signing signing = null;
         try {
             keyGen = new KeyGenerator();
-            signing = new Signing(keyGen.getPrivateKey(), credential);
+            signing = new Signing(keyGen.getPrivateKey(), credential.getPayload());
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
 
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
+
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
         String signedMessage = signing.getSignatureAsString();
         credential.setSignature(signedMessage);

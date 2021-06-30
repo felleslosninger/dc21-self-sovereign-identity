@@ -1,4 +1,3 @@
-
 package com.example.issuer;
 
 import com.google.gson.Gson;
@@ -51,6 +50,18 @@ public class VCJson {
         constructVC();
     }
 
+    public VCJson(String subject, String type, String issuerID, String signature) throws JSONException {
+        this.subject = subject;
+        this.type = type;
+        this.issuerID = issuerID;
+        this.payload = new JSONObject();
+        this.credentials = new JSONObject();
+        this.issuanceDate = new Date();
+        // Will expire 2 weeks from issued date.
+        this.expirationDate = new Date(issuanceDate.getTime()+1209600000);
+        constructVC();
+        setSignature(signature);
+    }
 
     private void constructVC() throws JSONException {
         payload.put("id", "www.digdir.no/2021/credentials/v1");
@@ -112,11 +123,21 @@ public class VCJson {
         return credentials.getJSONObject("proof").getString("signature");
     }
 
-    public String stringifier() throws JSONException {
+    public String getPayload() {
         Gson gson = new Gson();
 
+        return gson.toJson(this.payload);
+    }
 
-        String jsonString = gson.toJson(this);
+    public String stringifier() throws JSONException {
+        Gson gson = new Gson();
+        List<String> list = new ArrayList<>();
+        list.add(subject);
+        list.add(type);
+        list.add(issuerID);
+        list.add(getSignature());
+
+        String jsonString = gson.toJson(list);
         return jsonString;
     }
 
@@ -128,6 +149,7 @@ public class VCJson {
         VCJson vcJson = new VCJson("Martin", "over-18");
         vcJson.setSignature("testSetSignature");
         System.out.println(vcJson.getSignature());
+        System.out.println(vcJson.payload);
         System.out.println(gson.toJson(vcJson.getCredentials()));
     }
 }
