@@ -1,6 +1,7 @@
 package com.example.issuer;
 
 import com.google.gson.Gson;
+import org.json.JSONException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +61,7 @@ public class DemoApplication {
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
+            System.out.println(fileHandler.getPublicKeyAsString(id));
             return fileHandler.getPublicKeyAsString(id);
         }catch (Exception e){
             System.out.println("No key found.");
@@ -67,23 +69,28 @@ public class DemoApplication {
         }
     }
 
-    @GetMapping("/api/getCredential/{message}")
-    public ResponseEntity<String> getCredential(@PathVariable String message) {
+    @GetMapping("/api/getCredential/{type}")
+    public ResponseEntity<String> getCredential(@PathVariable String type) throws JSONException {
         HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
-        Credential credential = new Credential("Digdir", message);
+        //Credential credential = new Credential("Digdir", message);
+        VCJson credential = new VCJson("subject", type);
         KeyGenerator keyGen = null;
         Signing signing = null;
         try {
             keyGen = new KeyGenerator();
             signing = new Signing(keyGen.getPrivateKey(), credential);
         } catch (Exception e) {
-            System.out.println("something wong");
+           e.printStackTrace();
         }
 
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
+        System.out.println(publicKey);
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
+        System.out.println(fileHandler.getPublicKey(credential.getIssuerID()));
         String signedMessage = signing.getSignatureAsString();
+        System.out.println(credential.getIssuerID());
+        credential.setSignature(signedMessage);
 
         //return signedMessage + "  |  " + credential.stringifier();
 
