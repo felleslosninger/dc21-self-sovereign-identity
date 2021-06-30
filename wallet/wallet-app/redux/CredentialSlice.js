@@ -16,25 +16,24 @@ export const credentialSlice = createSlice({
   initialState: {
     cred: [
       {
-        id: 0,
+        id: Math.floor(Math.random() * 1000),
         proof: 'førerkort-klasse-B',
       },
       {
-        id: 1,
+        id: Math.floor(Math.random() * 1000),
         proof: 'er-sykepleier',
       },
     ],
   },
   reducers: {
-    addCredential: (state) => {
-      state.cred.push({ id: 2, proof: 'over-18' });
+    addCredential: (state, action) => {
+      state.cred.push(action.payload);
     },
     removeCredential: (state, action) => {
-      console.log(action.payload.id);
-      state.cred.filter((item) => {
-        console.log(item);
-        item.id !== action.payload;
-      });
+      state.cred.splice(
+        state.cred.findIndex((item) => item.id == action.payload),
+        1
+      );
     },
   },
 });
@@ -43,4 +42,4 @@ const { actions, reducer } = credentialSlice;
 
 export const { addCredential, removeCredential } = actions;
 
-export default credentialSlice.reducer;
+export default reducer;

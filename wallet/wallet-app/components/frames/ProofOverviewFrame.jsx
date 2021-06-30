@@ -4,25 +4,9 @@ import { SafeAreaView, Text, FlatList, View, StyleSheet, Button } from 'react-na
 import Menu from '../Menu';
 import Knapp from '../Knapp';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  addCredential,
-  createCredential,
-  deleteCredential,
-  removeCredential,
-} from '../../redux/CredentialSlice';
+import { addCredential, removeCredential } from '../../redux/CredentialSlice';
 
 export default function ProofOverviewFrame() {
-  /*const proofs = [
-    {
-      id: Math.random().toString(),
-      proof: 'førerkort-klasse-B',
-    },
-    {
-      id: Math.random().toString(),
-      proof: 'er-sykepleier',
-    },
-  ];*/
-
   const { cred } = useSelector((state) => state.credentials);
   const dispatch = useDispatch(); //To call every reducer that we want
 
@@ -54,11 +38,21 @@ export default function ProofOverviewFrame() {
           <View style={styles.theProofs}>
             <Text style={styles.textProofs}> {item.proof}</Text>
             <Knapp></Knapp>
-            <Button title="Remove" onPress={() => dispatch(removeCredential(item.id))} />
+            <Button
+              title="Remove"
+              onPress={() => {
+                dispatch(removeCredential(item.id));
+              }}
+            />
           </View>
         )}
       />
-      <Button title="Add" onPress={() => dispatch(addCredential())} />
+      <Button
+        title="Add"
+        onPress={() =>
+          dispatch(addCredential({ id: Math.floor(Math.random() * 1000), proof: 'over-18' }))
+        }
+      />
       <Menu></Menu>
     </SafeAreaView>
   );
