@@ -25,12 +25,13 @@ export default function App() {
         <Stack.Navigator>
           {/*<Stack.Screen name="Search" component={SearchFrame}/>
         <Stack.Screen name="Profile" component={ProfileFrame} />*/}
-        <Stack.Screen name="Oversikt" component={ProofOverviewFrame} />
-        <Stack.Screen name="Forespørsler" component={RequestFrame} />
-        <Stack.Screen name="Aktivitet" component={ActivityFrame} />
-        <Stack.Screen name="Delt med" component={VerifierLogFrame} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="Oversikt" component={ProofOverviewFrame} />
+          <Stack.Screen name="Forespørsler" component={RequestFrame} />
+          <Stack.Screen name="Aktivitet" component={ActivityFrame} />
+          <Stack.Screen name="Delt med" component={VerifierLogFrame} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
