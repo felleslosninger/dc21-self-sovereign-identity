@@ -1,5 +1,6 @@
 import React from "react";
 import {Link, useHistory} from "react-router-dom"
+import QRCode from "react-qr-code";
 
 function Landing() {
 
@@ -21,6 +22,7 @@ function Landing() {
             <p>Is a creepy thing to say in a mickey mouse voice :)</p>
             {/*<Link className={"btn"} to={history} onClick={getCredential}>Lets get yer diploma kid!</Link>*/}
             <button  onClick={getCredential}>Lets get yer diploma kid!, with a button</button>
+            <QRCode value="http://vg.no"/>
 
         </div>
     )

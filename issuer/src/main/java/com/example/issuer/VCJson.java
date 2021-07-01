@@ -150,6 +150,6 @@ public class VCJson {
         vcJson.setSignature("testSetSignature");
         System.out.println(vcJson.getSignature());
         System.out.println(vcJson.payload);
-        System.out.println(gson.toJson(vcJson.getCredentials()));
+        System.out.println(gson.toJson( vcJson.getCredentials()));
     }
 }
