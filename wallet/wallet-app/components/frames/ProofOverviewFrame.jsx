@@ -13,7 +13,7 @@ export default function ProofOverviewFrame() {
 
   const isFocused = useIsFocused();
 
-  const getProof = async () => {
+  const getProofs = async () => {
     try {
       for (let key = 0; key < keys.length; key++) {
         const value = await AsyncStorage.getItem(keys[key]);
@@ -43,13 +43,13 @@ export default function ProofOverviewFrame() {
         }
       }
       console.log(keys);
-      getProof();
+      getProofs();
     } catch (error) {
       alert(error);
     }
   };
 
-  isFocused ? getKeys() && getProof() : null;
+  isFocused ? getKeys() : null;
 
   // const proofs = [
   //   {
