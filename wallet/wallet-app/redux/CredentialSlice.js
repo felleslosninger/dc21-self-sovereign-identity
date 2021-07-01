@@ -16,20 +16,18 @@ export const credentialSlice = createSlice({
   initialState: {
     cred: [
       {
-        id: Math.random().toString(),
+        id: 0,
         proof: 'førerkort-klasse-B',
         issuer: 'Statens Vegvesen',
         issuedDate: '20.02.21',
         expiryDate: '20.02.24',
-        verifiers: ['ei teneste', 'ei anna teneste'],
       },
       {
-        id: Math.random().toString(),
+        id: 1,
         proof: 'er-sykepleier',
         issuer: 'NTNU',
         issuedDate: '20.02.21',
         expiryDate: '20.02.24',
-        verifiers: ['ei anna tenesteee', 'ei annaaaa teneste'],
       },
     ],
   },
