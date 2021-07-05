@@ -1,14 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 import CredentialReducer from './CredentialSlice';
-//import { combineReducers } from 'redux';
+import CredentialShareReducer from './CredentialShareSlice';
 
-/*const reducer = combineReducers({
-  credential: credentialSlice,
-});*/
-const store = configureStore({
-  reducer: {
+const reducer = combineReducers({
     credentials: CredentialReducer,
-  },
+    credentialShares: CredentialShareReducer,
+});
+
+const store = configureStore({
+    reducer,
 });
 
 export default store;
