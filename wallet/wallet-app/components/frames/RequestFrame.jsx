@@ -2,19 +2,27 @@ import React, { useState } from 'react';
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useDispatch } from 'react-redux';
+import JWT from 'jsonwebtoken';
 import Menu from '../Menu';
-import { httpGetCredential } from '../../utils/httpRequests';
+// eslint-disable-next-line no-unused-vars
+import { exampleToken, httpGetCredential } from '../../utils/httpRequests';
+import { addCredential } from '../../redux/CredentialSlice';
 
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('sv');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
     const [statement, setStatement] = useState(null);
-    async function sendCredentialRequest() {
-        // let url = 'http://localhost:8083/api/getCredential/';
-        // let statement = 'Gyldig førerkort klasse B.';
 
-        const verifiedStatement = await httpGetCredential(statement);
-        setCredential(verifiedStatement);
+    const dispatch = useDispatch();
+
+    async function retrieveCredential() {
+        // const token = await httpGetCredential(statement);
+        const token = exampleToken;
+        const retrievedCredential = { ...JWT.decode(token) };
+        console.log(retrievedCredential);
+        dispatch(addCredential(retrievedCredential));
+        setCredential(retrievedCredential);
     }
 
     const styles = StyleSheet.create({
@@ -83,13 +91,13 @@ export default function RequestFrame() {
                 <TextInput style={styles.input} onChangeText={setStatement} value={statement} placeholder="Bevis" />
             </SafeAreaView>
 
-            <TouchableOpacity onPress={sendCredentialRequest}>
+            <TouchableOpacity onPress={() => retrieveCredential()}>
                 <SafeAreaView style={styles.button}>
                     <Text style={styles.buttonText}>Send forespørsel</Text>
                 </SafeAreaView>
             </TouchableOpacity>
             <SafeAreaView>
-                <Text>{credential}</Text>
+                <Text>{credential.vc}</Text>
             </SafeAreaView>
             <Menu />
         </SafeAreaView>
