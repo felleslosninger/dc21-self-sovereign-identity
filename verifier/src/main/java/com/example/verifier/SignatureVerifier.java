@@ -28,6 +28,13 @@ public class SignatureVerifier {
         return signature.verify(signatureToVerify);
     }
 
+    public boolean verifySignature(String message, byte[] signatureToVerify, PublicKey key) throws Exception {
+        Signature signature = Signature.getInstance(Signing.SIGNING_ALGORITHM);
+        signature.initVerify(key);
+        signature.update(message.getBytes(StandardCharsets.UTF_8));
+        return signature.verify(signatureToVerify);
+    }
+
     public static void main(String[] args) throws Exception {
         SignatureVerifier sv= new SignatureVerifier();
         KeyGenerator keyGen = new KeyGenerator();
@@ -35,6 +42,7 @@ public class SignatureVerifier {
         Signing s = new Signing(keyGen.getPrivateKey(), cred);
 
         System.out.println(sv.verifySignature(cred, s.getSignature(), keyGen.getPublicKey()));
+        System.out.println(keyGen.getPublicKey().getEncoded());
 
 
     }

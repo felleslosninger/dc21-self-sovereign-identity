@@ -1,6 +1,7 @@
 package com.example.verifier;
 
 import com.google.gson.Gson;
+import org.json.JSONException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -14,6 +15,12 @@ public class Signing {
 
     private byte[] signature;
 
+    public Signing(PrivateKey privateKey, String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException, JSONException {
+        Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
+        signature.initSign(privateKey);
+        signature.update(message.getBytes(StandardCharsets.UTF_8));
+        this.signature = signature.sign();
+    }
 
     public Signing(PrivateKey privateKey, Credential message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException {
 
