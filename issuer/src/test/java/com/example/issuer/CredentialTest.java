@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CredentialTest {
     static Credential credential;
-    private static String subject = "testSub";
-    private static String message = "testMsg";
+    private static final String subject = "testSub";
+    private static final String message = "testMsg";
 
     @BeforeAll
             static void before(){

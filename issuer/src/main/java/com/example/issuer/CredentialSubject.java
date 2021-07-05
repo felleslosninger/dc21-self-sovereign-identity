@@ -1,34 +1,31 @@
 package com.example.issuer;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
+import java.util.HashMap;
+import java.util.Map;
 
-public class CredentialSubject {
+public record CredentialSubject(String claimType, String type, String name) {
 
-
-    private final String claimType;
-    private final String type;
-    private final String name;
 
     /**
-     *
      * @param claimType =  type of credentialSubject i.e. age, degree
-     * @param type = type of claimType i.e. over-18, over-20
-     * @param name = human-readable name i.e. Over 18, Over 20
+     * @param type      = type of claimType i.e. over-18, over-20
+     * @param name      = human-readable name i.e. Over 18, Over 20
      */
-    public CredentialSubject(String claimType, String type, String name){
-        this.claimType = claimType;
-        this.type = type;
-        this.name = name;
+    public CredentialSubject {
     }
 
 
-    public JSONObject getCredentialSubject() throws JSONException {
+    public Map<String, Object> getCredentialSubjectAsMap() {
+        Map<String, Object> credentialSubject = new HashMap<>();
+        Map<String, String> credentialSubjectType = new HashMap<>();
+        credentialSubjectType.put("type", this.type);
+        credentialSubjectType.put("name", this.name);
 
+        credentialSubject.put(claimType, credentialSubjectType);
 
-        return null;
+        return credentialSubject;
     }
 
 

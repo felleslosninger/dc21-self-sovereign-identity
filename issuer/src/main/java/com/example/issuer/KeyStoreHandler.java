@@ -13,7 +13,7 @@ import java.security.cert.X509Certificate;
 
 public class KeyStoreHandler {
     private KeyStore keyStore;
-    private KeyGenerator kg;
+    private final KeyGenerator kg;
 
     public KeyStoreHandler() throws CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException {
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());

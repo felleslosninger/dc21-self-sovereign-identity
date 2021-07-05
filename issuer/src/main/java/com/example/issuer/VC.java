@@ -1,37 +1,34 @@
 package com.example.issuer;
 
-import com.fasterxml.jackson.core.PrettyPrinter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VC {
-    private ArrayList<String> context;
-    private ArrayList<String> type;
-    private CredentialSubject credentialSubject;
+    private final String[] context;
+    private final String[] type;
+    private final Map<String, Object> credentialSubject;
 
+    public VC(String type, Map<String, Object> credentialSubject){
+        this.context = new String[]{"https://www.w3.org/2018/credentials/v1"};
+        this.type = new String[]{"VerifiableCredential" , type};
+        this.credentialSubject = credentialSubject;
 
-    public VC(ArrayList<String> context, ArrayList<String> type, CredentialSubject credentialSubject){
-        this.context = context;
-        this.type = type;
+    }
+    public VC( Map<String, Object> credentialSubject){
+        this.context = new String[]{"https://www.w3.org/2018/credentials/v1"};
+        this.type = new String[]{"VerifiableCredential"};
         this.credentialSubject = credentialSubject;
 
     }
 
-    public String getVcAsString() throws JSONException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Collection<String> collection = new ArrayList<>();
-        collection.add(context.toString());
-        collection.add(type.toString());
-        collection.add(credentialSubject.getCredentialSubject().toString());
 
-
-        String jsonString = gson.toJson(collection);
-
-        return jsonString;
+    public Map<String, Object> getVCMap(){
+        Map<String,Object> vc = new HashMap<>();
+        vc.put("@context", context);
+        vc.put("type", type);
+        vc.put("credentialSubject", this.credentialSubject);
+        return vc;
     }
+
 
 }
