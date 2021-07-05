@@ -1,4 +1,4 @@
-import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 /*
 const credentialsReducer = createReducer([], (builder) => {
@@ -12,36 +12,36 @@ const credentialsReducer = createReducer([], (builder) => {
 });
 */
 export const credentialSlice = createSlice({
-  name: 'credentials',
-  initialState: {
-    cred: [
-      {
-        id: 0,
-        proof: 'førerkort-klasse-B',
-        issuer: 'Statens Vegvesen',
-        issuedDate: '20.02.21',
-        expiryDate: '20.02.24',
-      },
-      {
-        id: 1,
-        proof: 'er-sykepleier',
-        issuer: 'NTNU',
-        issuedDate: '20.02.21',
-        expiryDate: '20.02.24',
-      },
-    ],
-  },
-  reducers: {
-    addCredential: (state, action) => {
-      state.cred.push(action.payload);
+    name: 'credentials',
+    initialState: {
+        cred: [
+            {
+                id: 0,
+                proof: 'førerkort-klasse-B',
+                issuer: 'Statens Vegvesen',
+                issuedDate: '20.02.21',
+                expiryDate: '20.02.24',
+            },
+            {
+                id: 1,
+                proof: 'er-sykepleier',
+                issuer: 'NTNU',
+                issuedDate: '20.02.21',
+                expiryDate: '20.02.24',
+            },
+        ],
     },
-    removeCredential: (state, action) => {
-      state.cred.splice(
-        state.cred.findIndex((item) => item.id == action.payload),
-        1
-      );
+    reducers: {
+        addCredential: (state, action) => {
+            state.cred.push(action.payload);
+        },
+        removeCredential: (state, action) => {
+            state.cred.splice(
+                state.cred.findIndex((item) => item.id === action.payload),
+                1
+            );
+        },
     },
-  },
 });
 
 const { actions, reducer } = credentialSlice;
