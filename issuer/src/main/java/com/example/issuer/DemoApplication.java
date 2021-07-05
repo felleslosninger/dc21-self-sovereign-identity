@@ -9,6 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -100,6 +103,15 @@ public class DemoApplication {
 
         return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/protectedpage")
+    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+        System.out.println(principal);
+        System.out.println(model);
+       model.addAttribute("fødselsnummer", principal.getClaim("pid"));
+        System.out.println(model);
+        return "index";
     }
 
 
