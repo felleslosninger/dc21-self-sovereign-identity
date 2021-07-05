@@ -116,7 +116,8 @@ public class Requester {
 
             System.out.println("credString = " + credString);
 
-            vcJson = new VCJson(credString.get(0), credString.get(1), credString.get(2), credString.get(3));
+            vcJson = new VCJson(credString.get(0), credString.get(1), credString.get(2), credString.get(3),
+                     gson.fromJson(credString.get(4), Date.class), gson.fromJson(credString.get(5), Date.class));
             System.out.println("vcJson = " + vcJson);
 
 
@@ -157,8 +158,8 @@ public class Requester {
         byte[] bytes = gson.fromJson(vcJson.getSignature(), byte[].class);
         System.out.println(bytes);
 
-boolean verify = sv.verifySignature(vcJson.getPayload(), bytes, key);
-System.out.println(verify);
+        boolean verify = sv.verifySignature(vcJson.getPayload(), bytes, key);
+         System.out.println(verify);
 
 
         // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
