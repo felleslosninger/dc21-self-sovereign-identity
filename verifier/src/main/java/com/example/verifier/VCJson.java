@@ -50,18 +50,19 @@ public class VCJson {
         constructVC();
     }
 
-    public VCJson(String subject, String type, String issuerID, String signature) throws JSONException {
+    public VCJson(String subject, String type, String issuerID, String signature, Date issuanceDate, Date expirationDate) throws JSONException {
         this.subject = subject;
         this.type = type;
         this.issuerID = issuerID;
         this.payload = new JSONObject();
         this.credentials = new JSONObject();
-        this.issuanceDate = new Date();
+        this.issuanceDate = issuanceDate;
         // Will expire 2 weeks from issued date.
-        this.expirationDate = new Date(issuanceDate.getTime()+1209600000);
+        this.expirationDate = expirationDate;
         constructVC();
         setSignature(signature);
     }
+
 
     private void constructVC() throws JSONException {
         payload.put("id", "www.digdir.no/2021/credentials/v1");
@@ -136,6 +137,8 @@ public class VCJson {
         list.add(type);
         list.add(issuerID);
         list.add(getSignature());
+        list.add(gson.toJson(issuanceDate));
+        list.add(gson.toJson(expirationDate));
 
         String jsonString = gson.toJson(list);
         return jsonString;

@@ -1,7 +1,9 @@
 package com.example.issuer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
@@ -90,12 +92,13 @@ public class DemoApplication {
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
         String signedMessage = signing.getSignatureAsString();
         credential.setSignature(signedMessage);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         //return signedMessage + "  |  " + credential.stringifier();
 
         responseHeaders.set("Hva-som-helst", "200");
 
-        return ResponseEntity.ok().headers(responseHeaders).body(credential.stringifier());
+        return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 
