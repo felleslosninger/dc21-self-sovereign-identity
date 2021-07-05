@@ -9,6 +9,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.SignatureException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SigningTest {
 
     @Test
-    void testSignature() throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    void testSignature() throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
         Signing signing = new Signing(keyGen.getPrivateKey(), credential);

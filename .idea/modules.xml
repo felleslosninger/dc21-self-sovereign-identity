@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/issuer/issuer.iml" filepath="$PROJECT_DIR$/issuer/issuer.iml" />
       <module fileurl="file://$PROJECT_DIR$/parent.iml" filepath="$PROJECT_DIR$/parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/verifier/verifier.iml" filepath="$PROJECT_DIR$/verifier/verifier.iml" />
     </modules>
   </component>
 </project>

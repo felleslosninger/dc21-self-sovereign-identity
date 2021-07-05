@@ -1,6 +1,9 @@
 package com.example.issuer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +15,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,6 +64,7 @@ public class DemoApplication {
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
+            System.out.println(fileHandler.getPublicKeyAsString(id));
             return fileHandler.getPublicKeyAsString(id);
         }catch (Exception e){
             System.out.println("No key found.");
@@ -67,29 +72,33 @@ public class DemoApplication {
         }
     }
 
-    @GetMapping("/api/getCredential/{message}")
-    public ResponseEntity<String> getCredential(@PathVariable String message) {
+    @GetMapping("/api/getCredential/{type}")
+    public ResponseEntity<String> getCredential(@PathVariable String type) throws JSONException {
         HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
-        Credential credential = new Credential("Digdir", message);
+        //Credential credential = new Credential("Digdir", message);
+        VCJson credential = new VCJson("subject", type);
         KeyGenerator keyGen = null;
         Signing signing = null;
         try {
             keyGen = new KeyGenerator();
-            signing = new Signing(keyGen.getPrivateKey(), credential);
+            signing = new Signing(keyGen.getPrivateKey(), credential.getPayload());
         } catch (Exception e) {
-            System.out.println("something wong");
+            e.printStackTrace();
         }
 
         FileHandler fileHandler = new FileHandler();
         PublicKey publicKey = keyGen.getPublicKey();
+
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
         String signedMessage = signing.getSignatureAsString();
+        credential.setSignature(signedMessage);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         //return signedMessage + "  |  " + credential.stringifier();
 
         responseHeaders.set("Hva-som-helst", "200");
 
-        return ResponseEntity.ok().headers(responseHeaders).body(signedMessage + " | " + credential.stringifier());
+        return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 
