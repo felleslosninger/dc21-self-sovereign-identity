@@ -13,16 +13,18 @@ import RequestFrame from './components/frames/RequestFrame';
 import ActivityFrame from './components/frames/ActivityFrame';
 import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 import VerifierLogFrame from './components/frames/VerifierLogFrame';
+import Access from './components/frames/Access';
 
 export default function App() {
     const Stack = createStackNavigator();
-
     return (
         <Provider store={store}>
             <NavigationContainer>
-                <Stack.Navigator>
-                    {/* <Stack.Screen name="Search" component={SearchFrame}/>
-        <Stack.Screen name="Profile" component={ProfileFrame} /> */}
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}>
+                    <Stack.Screen name="Tilgang" component={Access} />
                     <Stack.Screen name="Oversikt" component={ProofOverviewFrame} />
                     <Stack.Screen name="Forespørsler" component={RequestFrame} />
                     <Stack.Screen name="Aktivitet" component={ActivityFrame} />
