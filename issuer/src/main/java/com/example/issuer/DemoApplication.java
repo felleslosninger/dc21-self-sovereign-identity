@@ -103,7 +103,6 @@ public class DemoApplication {
         return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
-
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
         System.out.println(principal);
@@ -120,9 +119,6 @@ public class DemoApplication {
         return "code: " +  code +  ", state: " + state;
     }
 
-
-
-
     public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
         Cipher cipher = Cipher.getInstance("RSA");
@@ -138,5 +134,6 @@ public class DemoApplication {
         System.out.println(new String(message.stringifier().getBytes()));
         return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
     }
+
 
 }

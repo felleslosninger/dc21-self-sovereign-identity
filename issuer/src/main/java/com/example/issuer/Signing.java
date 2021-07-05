@@ -14,7 +14,7 @@ import java.security.*;
 import java.util.Date;
 
 public class Signing {
-    private byte[] signature;
+    private final byte[] signature;
     private String signType;
     private Date signCreated;
     private String proofPurpose;

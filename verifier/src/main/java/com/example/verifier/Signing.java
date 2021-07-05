@@ -13,7 +13,7 @@ import java.security.*;
 public class Signing {
     public static final String SIGNING_ALGORITHM = "SHA256withRSA";
 
-    private byte[] signature;
+    private final byte[] signature;
 
     public Signing(PrivateKey privateKey, String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, SignatureException, JSONException {
         Signature signature = Signature.getInstance(SIGNING_ALGORITHM);

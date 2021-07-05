@@ -26,7 +26,7 @@ import java.util.*;
 public class Requester {
 
     private final URI endpointBaseUri;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
 
     public Requester(String uri) throws URISyntaxException {

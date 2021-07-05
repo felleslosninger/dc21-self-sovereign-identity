@@ -27,8 +27,8 @@ class SpringbootAppTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private String baseURL = "http://localhost:8080";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String baseURL = "http://localhost:8080";
 
     private String addToBaseURL(String path) {
         String url = baseURL + "/" + path;
