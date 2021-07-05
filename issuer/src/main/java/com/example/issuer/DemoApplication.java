@@ -2,6 +2,7 @@ package com.example.issuer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jdk.jfr.ContentType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.websocket.server.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
@@ -33,16 +35,13 @@ public class DemoApplication {
         SpringApplication app = new SpringApplication(DemoApplication.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
         //SpringApplication.run(DemoApplication.class, args);
+
         app.run(args);
 
     }
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        Credential credential = new Credential("name", "Over 18 år");
-        KeySaver keySaver = new KeySaver(credential);
-        JsonHandler jsonHandler = new JsonHandler();
-        jsonHandler.saveKeysaverToJson(keySaver);
 
         return String.format("Hello %s!", name);
 
@@ -112,6 +111,13 @@ public class DemoApplication {
        model.addAttribute("fødselsnummer", principal.getClaim("pid"));
         System.out.println(model);
         return "index";
+    }
+
+    String code = null;
+    @GetMapping( "")
+    public String postCode(@RequestParam(value = "code") String code, @RequestParam(value = "state") String state) {
+        this.code = code;
+        return "code: " +  code +  ", state: " + state;
     }
 
 
