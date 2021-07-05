@@ -102,6 +102,8 @@ public class DemoApplication {
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
 
+    @GetMapping
+
 
 
 
@@ -120,5 +122,6 @@ public class DemoApplication {
         System.out.println(new String(message.stringifier().getBytes()));
         return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
     }
+
 
 }

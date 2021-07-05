@@ -29,10 +29,10 @@ import java.util.List;
 @RestController
 public class SpringbootApp {
 
-	private Requester credentialReq = new Requester("http://localhost:8083/api/getCredential/");
-	private Requester keyReq = new Requester("http://localhost:8083/api/key/");
-	private SignatureVerifier sv = new SignatureVerifier();
-	private boolean verified =false;
+	private final Requester credentialReq = new Requester("http://localhost:8083/api/getCredential/");
+	private final Requester keyReq = new Requester("http://localhost:8083/api/key/");
+	private final SignatureVerifier sv = new SignatureVerifier();
+	private final boolean verified =false;
 	private String key = null;
 	private Credential credential = null;
 
