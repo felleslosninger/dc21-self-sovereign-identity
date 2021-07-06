@@ -8,7 +8,7 @@ import Menu from '../Menu';
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
-    const [statement, setStatement] = useState(null);
+    const [statement, setStatement] = useState('');
 
     async function sendCredentialRequest() {
         // let url = 'http://localhost:8083/api/getCredential/';

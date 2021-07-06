@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, FlatList, StyleSheet, Button } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import Menu from '../Menu';
@@ -9,7 +9,7 @@ import Proof from '../Proof';
 
 export default function ProofOverviewFrame() {
     const dispatch = useDispatch(); // To call every reducer that we want
-    // const { cred } = useSelector((state) => state.credentials);
+    const { cred } = useSelector((state) => state.credentials);
 
     const [proofs, setProofs] = useState([]);
     const [keys, setKeys] = useState([]);
@@ -47,25 +47,43 @@ export default function ProofOverviewFrame() {
         }
     };
 
-    isFocused ? getKeys() : null;
-
     const splitProof = (proof) => {
         const p1 = proof.split('|');
         return p1;
     };
 
+    const setCredentials = () => {
+        for (let i = 0; i < proofs.length; i++) {
+            if (!cred.find((x) => x.id === proofs[i].id)) {
+                dispatch(
+                    addCredential({
+                        id: proofs[i].id,
+                        proof: splitProof(proofs[i].proof)[0],
+                        issuer: splitProof(proofs[i].proof)[1],
+                        issuedDate: splitProof(proofs[i].proof)[2],
+                        expiryDate: splitProof(proofs[i].proof)[3],
+                        verifiers: ['ei anna tenesteee', 'ei annaaaa teneste'],
+                    })
+                );
+            }
+        }
+    };
+
+    isFocused ? getKeys() : null;
+
+    setCredentials();
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 keyExtractor={(item) => item.id}
-                data={proofs}
+                data={cred}
                 renderItem={({ item }) => (
                     <Proof
                         id={item.id}
-                        name={splitProof(item.proof)[0]}
-                        issuer={splitProof(item.proof)[1]}
-                        issDate={splitProof(item.proof)[2]}
-                        expDate={splitProof(item.proof)[3]}
+                        name={item.proof}
+                        issuer={item.issuer}
+                        issDate={item.issuedDate}
+                        expDate={item.expiryDate}
                     />
                 )}
             />
@@ -92,7 +110,7 @@ export default function ProofOverviewFrame() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: '12%',
+        marginTop: '5%',
     },
     theProofs: {
         backgroundColor: 'lightgrey',

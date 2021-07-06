@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { removeCredential } from '../redux/CredentialSlice';
 
 export default function Proof(props) {
     const navigation = useNavigation();
+    const { cred } = useSelector((state) => state.credentials);
 
-    // const { cred } = useSelector((state) => state.credentials);
     const dispatch = useDispatch(); // To call every reducer that we want
 
     const styles = StyleSheet.create({
@@ -37,6 +37,8 @@ export default function Proof(props) {
     });
 
     async function removeItemValue(key) {
+        dispatch(removeCredential(key));
+        console.log(cred);
         try {
             await AsyncStorage.removeItem(key);
             return true;
