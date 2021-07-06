@@ -19,6 +19,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.*;
 import javax.websocket.server.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -75,8 +76,11 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/getCredential/{type}")
-    public ResponseEntity<String> getCredential(@PathVariable String type) throws JSONException {
-        HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
+    public String getCredential(@PathVariable String type) throws JSONException {
+        //må finne løsning for å unngå hardkoding
+        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", type,"Over 18");
+        return jwt.getToken();
+/*        HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
         //Credential credential = new Credential("Digdir", message);
         VCJson credential = new VCJson("subject", type);
         KeyGenerator keyGen = null;
@@ -102,7 +106,10 @@ public class DemoApplication {
 
         return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
+    */
     }
+
+
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
         System.out.println(principal);
