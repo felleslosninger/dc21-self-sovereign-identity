@@ -2,13 +2,10 @@ package com.example.issuer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jdk.jfr.ContentType;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -19,10 +16,19 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.websocket.server.PathParam;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 
 
@@ -89,9 +95,11 @@ public class DemoApplication {
         }
 
         FileHandler fileHandler = new FileHandler();
+        assert keyGen != null;
         PublicKey publicKey = keyGen.getPublicKey();
 
         fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
+        assert signing != null;
         String signedMessage = signing.getSignatureAsString();
         credential.setSignature(signedMessage);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -103,21 +111,14 @@ public class DemoApplication {
         return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
+
+
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        System.out.println(principal);
-        System.out.println(model);
-       model.addAttribute("fødselsnummer", principal.getClaim("pid"));
-        System.out.println(model);
-        return "index";
+
+        return principal.getIdToken().getTokenValue();
     }
 
-    String code = null;
-    @GetMapping( "")
-    public String postCode(@RequestParam(value = "code") String code, @RequestParam(value = "state") String state) {
-        this.code = code;
-        return "code: " +  code +  ", state: " + state;
-    }
 
     public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
