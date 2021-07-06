@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { httpGetCredential } from '../../utils/httpRequests';
-// import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('sv');
