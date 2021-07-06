@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public class Credential {
 
-    private String subject; //Den beviset gjelder for
-    private String type; //Type bevis
-    private Date issuanceDate; //Når beviset ble utstedt
+    private final String subject; //Den beviset gjelder for
+    private final String type; //Type bevis
+    private final Date issuanceDate; //Når beviset ble utstedt
     /*
     TODO: Make issuerID-type UUID.
      */
-    private String issuerID; //Issuer/beviset sin id
+    private final String issuerID; //Issuer/beviset sin id
 
 
     public Credential(String subject, String type) {

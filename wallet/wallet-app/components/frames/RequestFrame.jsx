@@ -36,11 +36,7 @@ export default function RequestFrame() {
 
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
-
-                <Picker
-                    selectedValue={selectedIssuer}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
                     <Picker.Item label="NTNU" value="ntnu" />
                     <Picker.Item label="Statens Vegvesen" value="sv" />
                     <Picker.Item label="Folkeregisteret" value="fr" />
@@ -57,8 +53,9 @@ export default function RequestFrame() {
                     <Text style={styles.buttonText}>Send forespørsel</Text>
                 </SafeAreaView>
             </TouchableOpacity>
-            <SafeAreaView>
-                <Text>{credential}</Text>
+
+            <SafeAreaView style={styles.credential}>
+                <Text style={styles.buttonText}>{credential}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );

@@ -2,6 +2,7 @@ package com.example.issuer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jdk.jfr.ContentType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
@@ -9,12 +10,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.websocket.server.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
@@ -30,16 +35,13 @@ public class DemoApplication {
         SpringApplication app = new SpringApplication(DemoApplication.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", 8083));
         //SpringApplication.run(DemoApplication.class, args);
+
         app.run(args);
 
     }
 
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        Credential credential = new Credential("name", "Over 18 år");
-        KeySaver keySaver = new KeySaver(credential);
-        JsonHandler jsonHandler = new JsonHandler();
-        jsonHandler.saveKeysaverToJson(keySaver);
 
         return String.format("Hello %s!", name);
 
@@ -101,9 +103,21 @@ public class DemoApplication {
         return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
         //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
+    @GetMapping("/protectedpage")
+    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+        System.out.println(principal);
+        System.out.println(model);
+       model.addAttribute("fødselsnummer", principal.getClaim("pid"));
+        System.out.println(model);
+        return "index";
+    }
 
-
-
+    String code = null;
+    @GetMapping( "")
+    public String postCode(@RequestParam(value = "code") String code, @RequestParam(value = "state") String state) {
+        this.code = code;
+        return "code: " +  code +  ", state: " + state;
+    }
 
     public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
@@ -120,5 +134,6 @@ public class DemoApplication {
         System.out.println(new String(message.stringifier().getBytes()));
         return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());
     }
+
 
 }

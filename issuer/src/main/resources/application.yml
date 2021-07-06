@@ -1,0 +1,13 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          idporten:
+           client-id: oidc_digdircamp21_issuer_test1
+           client-secret: 285fd3a7-3c5c-4ed0-be1e-2f80732d359e
+           scope: openid
+           redirect_uri: http://localhost:8083
+        provider:
+         idporten:
+          issuer-uri: https://oidc-test1.difi.eon.no/idporten-oidc-provider/

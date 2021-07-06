@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 // import { useDispatch } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
@@ -30,6 +30,24 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: '10%',
+        width: '80%',
+        alignSelf: 'center',
+    },
+    sendButton: {
+        backgroundColor: '#CDE8C5',
+        borderRadius: 5,
+        paddingTop: '2%',
+        paddingBottom: '2%',
+        width: '80%',
+        alignSelf: 'center',
+    },
+    buttonText: {
+        fontSize: 20,
+        alignSelf: 'center',
+    },
+    sharedProofText: {
+        alignSelf: 'center',
+        marginTop: '5%',
     },
 });
 
