@@ -12,7 +12,6 @@ export async function httpSendCredential(token) {
     const url = `${verifierUrl}/sendCredential`;
     const response = await fetch(url, {
         method: 'POST',
-        mode: 'no-cors',
         body: token,
     });
     const status = await response.text();
