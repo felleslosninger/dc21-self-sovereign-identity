@@ -37,10 +37,7 @@ export default function RequestFrame() {
 
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
-                <Picker
-                    selectedValue={selectedIssuer}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
                     <Picker.Item label="NTNU" value="ntnu" />
                     <Picker.Item label="Statens Vegvesen" value="sv" />
                     <Picker.Item label="Folkeregisteret" value="fr" />
@@ -85,11 +82,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 25,
         paddingBottom: '1%',
-    },
-    picker: {
-        padding: 7,
-        borderWidth: 2,
-        borderRadius: 5,
     },
     input: {
         borderColor: '#add8e6',
