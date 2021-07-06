@@ -76,12 +76,12 @@ public class Jwt {
         }
         RSAPublicKey rsaPublicKey = (RSAPublicKey) keyGen.getPublicKey();
         RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyGen.getPrivateKey();
-
+        issuerId = issuerId + UUID.randomUUID();
         // Saves Public key to the VDR
         FileHandler fileHandler = new FileHandler();
-        fileHandler.addPublicKey(issuerId + UUID.randomUUID(), rsaPublicKey);
+        fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
-        System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+        //System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
         // Creates JWT based on public & private keypair. Standard naming is used when possible.
         Algorithm algorithm = Algorithm.RSA256(null,rsaPrivateKey);
 
@@ -100,11 +100,11 @@ public class Jwt {
     }
 
 
-    public static void main(String[] args) throws JSONException {
-        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
+    public static void main(String[] args) {
+        Jwt jwt = new Jwt("testSub", "testIss11", "AgeCredential", "age", "over-18","Over 18");
         System.out.println(jwt.getToken());
         long lo = 9999999999999L;
         Jwt jwt1 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
-        System.out.println(jwt1.getToken());
+        //System.out.println(jwt1.getToken());
     }
 }

@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        System.out.println("running code in security config");
+
         http
                 .authorizeRequests()
                 .antMatchers("/protectedpage").fullyAuthenticated()

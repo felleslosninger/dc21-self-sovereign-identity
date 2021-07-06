@@ -1,5 +1,6 @@
 package com.example.issuer;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.*;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
@@ -66,6 +68,22 @@ public class DemoApplication {
         //return String.format("Public Key: %s Private key: %s",keyGen.getMOCKPublicKey(), keyGen.getMOCKPrivateKey());
         return String.format("Decryption result:    %s ",res);
 
+    }
+
+    @GetMapping("/api/uri")
+    public String testUri(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
+        if (type.equals("defaultType") || baseVC.equals("defaultVC")){
+         return "Error - Missing URL-parameters";
+        }
+        JwtVerifier jwtVerifier = new JwtVerifier();
+        DecodedJWT decodedJWT = jwtVerifier.decodeJwt(baseVC);
+        System.out.println("JWT:  " + decodedJWT.getToken());
+        FileHandler fileHandler = new FileHandler();
+        System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
+        boolean verified = jwtVerifier.verifyVC(decodedJWT.getToken(), (RSAPublicKey) fileHandler.getPublicKey(decodedJWT.getIssuer()));
+
+
+        return "Verified:  " + verified;
     }
 
     @GetMapping("/api/key/{id}")
@@ -115,8 +133,8 @@ public class DemoApplication {
 
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-
-        return principal.getIdToken().getTokenValue();
+        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), principal.getClaim("iss").toString(), "BaseCredential", "baseid", "BaseID", "BaseID");
+        return jwt.getToken();
     }
 
 
