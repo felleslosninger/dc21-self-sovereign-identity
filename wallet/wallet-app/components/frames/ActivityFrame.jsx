@@ -8,9 +8,7 @@ export default function ActivityFrame() {
     const [toggle, setToggle] = useState(false);
 
     async function sendCredential() {
-        console.log('Sender credential');
         const status = await httpSendCredential('123');
-        console.log(status);
         setToggle(status);
     }
 

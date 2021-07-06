@@ -21,12 +21,10 @@ export default function ProofOverviewFrame() {
             for (let key = 0; key < keys.length; key++) {
                 const value = await AsyncStorage.getItem(keys[key]);
                 if (value !== null) {
-                    console.log(value);
                     if (!proofs.some((item) => item.id === keys[key])) {
                         proofs.push({ id: keys[key], proof: value });
                     }
                 }
-                console.log('Proofs:', proofs);
             }
         } catch (error) {
             alert(error);
@@ -36,16 +34,13 @@ export default function ProofOverviewFrame() {
     const getKeys = async () => {
         try {
             const theKeys = await AsyncStorage.getAllKeys();
-            console.log(theKeys);
             if (theKeys !== null) {
                 for (let i = 0; i < theKeys.length; i++) {
                     if (!keys.includes(theKeys[i])) {
                         keys.push(theKeys[i]);
-                        console.log(keys);
                     }
                 }
             }
-            console.log(keys);
             getProofs();
         } catch (error) {
             alert(error);
@@ -54,12 +49,25 @@ export default function ProofOverviewFrame() {
 
     isFocused ? getKeys() : null;
 
+    const splitProof = (proof) => {
+        const p1 = proof.split('|');
+        return p1;
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 keyExtractor={(item) => item.id}
                 data={proofs}
-                renderItem={({ item }) => <Proof id={item.id} name={item.proof} />}
+                renderItem={({ item }) => (
+                    <Proof
+                        id={item.id}
+                        name={splitProof(item.proof)[0]}
+                        issuer={splitProof(item.proof)[1]}
+                        issDate={splitProof(item.proof)[2]}
+                        expDate={splitProof(item.proof)[3]}
+                    />
+                )}
             />
             <Button
                 title="Add"

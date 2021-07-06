@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,13 +6,13 @@ import { httpGetCredential } from '../../utils/httpRequests';
 import Menu from '../Menu';
 
 export default function RequestFrame() {
-    const [selectedIssuer, setSelectedIssuer] = useState('sv');
+    const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
     const [statement, setStatement] = useState(null);
+
     async function sendCredentialRequest() {
         // let url = 'http://localhost:8083/api/getCredential/';
         // let statement = 'Gyldig førerkort klasse B.';
-
         saveProof();
         const verifiedStatement = await httpGetCredential(statement);
         setCredential(verifiedStatement);
@@ -22,7 +21,15 @@ export default function RequestFrame() {
     const saveProof = async () => {
         if (statement) {
             try {
-                await AsyncStorage.setItem(Math.random().toString(36).substring(2), statement);
+                console.log(selectedIssuer);
+                const ID = Math.random().toString(36).substring(2);
+                const date = new Date().getDate();
+                const month = new Date().getMonth() + 1;
+                const year = new Date().getFullYear();
+                const issDate = `${date}-${month}-${year}`;
+                const expYear = year + 1;
+                const expDate = `${date}-${month}-${expYear}`;
+                await AsyncStorage.setItem(ID, `${statement}|${selectedIssuer}|${issDate}|${expDate}`);
             } catch (error) {
                 alert(error);
             }
@@ -36,9 +43,9 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-                    <Picker.Item label="NTNU" value="ntnu" />
-                    <Picker.Item label="Statens Vegvesen" value="sv" />
-                    <Picker.Item label="Folkeregisteret" value="fr" />
+                    <Picker.Item label="NTNU" value="NTNU" />
+                    <Picker.Item label="Statens Vegvesen" value="Statens Vegvesen" />
+                    <Picker.Item label="Folkeregisteret" value="Folkeregisteret" />
                 </Picker>
             </SafeAreaView>
 
