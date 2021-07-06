@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StatusBar, Text } from 'react-native';
+import { SafeAreaView, StatusBar, Text, Vibration } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
 import { useDispatch } from 'react-redux';
 import { signIn } from '../../redux/SignedInSlice';
@@ -13,6 +13,8 @@ export default function Access() {
 
     const dispatch = useDispatch();
     // const { signedIn } = useSelector((state) => state.signedInStatus);
+
+    const DURATION = 1000;
 
     useEffect(() => {
         if (enteredPin.length > 0) {
@@ -30,43 +32,71 @@ export default function Access() {
     const checkPin = () => {
         if (enteredPin === '1234') {
             dispatch(signIn(true));
+        } else {
+            Vibration.vibrate(DURATION);
+            alert('Wrong PIN-code');
+            pinView.current.clearAll();
         }
     };
     return (
         <>
             <StatusBar barStyle="light-content" />
             <SafeAreaView
-                style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+                style={{
+                    flex: 1,
+                    backgroundColor: 'rgb(242, 242, 242)',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                 <Text
                     style={{
                         paddingTop: 24,
-                        paddingBottom: 48,
-                        color: 'rgba(255,255,255,0.7)',
-                        fontSize: 48,
+                        paddingBottom: 20,
+                        color: '#7B7676',
+                        fontSize: 30,
                     }}>
-                    Logg inn
+                    Skriv inn personlig kode
                 </Text>
+
                 <ReactNativePinView
                     inputSize={32}
                     ref={pinView}
                     pinLength={4}
                     buttonSize={60}
                     onValueChange={(value) => setEnteredPin(value)}
+                    buttonAreaStyle={{
+                        marginTop: 24,
+                    }}
+                    inputAreaStyle={{
+                        marginBottom: 15,
+                    }}
+                    inputViewEmptyStyle={{
+                        backgroundColor: 'transparent',
+                        borderWidth: 1,
+                        borderColor: '#3aa797',
+                    }}
+                    inputViewFilledStyle={{
+                        backgroundColor: '#3aa797',
+                    }}
+                    buttonViewStyle={{
+                        borderWidth: 1,
+                        borderColor: '#3aa797',
+                        backgroundColor: 'rgb(242, 242, 242)',
+                    }}
+                    buttonTextStyle={{
+                        color: '#3aa797',
+                    }}
                     onButtonPress={(key) => {
                         if (key === 'custom_left') {
                             pinView.current.clear();
                         }
-                        if (key === 'custom_right') {
-                            console.log(enteredPin);
-                            alert(`Entered Pin: ${enteredPin}`);
-                        }
                     }}
                     customLeftButton={
-                        showRemoveButton ? <Icon name="ios-backspace" size={36} color="#FFF" /> : undefined
+                        showRemoveButton ? <Icon name="ios-backspace" size={36} color="#3aa797" /> : undefined
                     }
                     customRightButton={
                         showCompletedButton ? (
-                            <Icon name="arrow-forward-outline" size={36} color="#FFF" onPress={() => checkPin()} />
+                            <Icon name="arrow-forward-outline" size={36} color="#3aa797" onPress={() => checkPin()} />
                         ) : undefined
                     }
                 />
