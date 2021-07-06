@@ -54,9 +54,10 @@ public class Jwt {
         RSAPublicKey rsaPublicKey = (RSAPublicKey) keyGen.getPublicKey();
         RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyGen.getPrivateKey();
 
+        issuerId = issuerId + UUID.randomUUID();
        // Saves Public key to the VDR
         FileHandler fileHandler = new FileHandler();
-        fileHandler.addPublicKey(issuerId + UUID.randomUUID(), rsaPublicKey);
+        fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
         // Creates JWT based on public & private keypair. Standard naming is used when possible.
         Algorithm algorithm = Algorithm.RSA256(rsaPublicKey, rsaPrivateKey);
