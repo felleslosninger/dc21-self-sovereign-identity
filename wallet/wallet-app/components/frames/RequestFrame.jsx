@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Menu from '../Menu';
 import { httpGetCredential } from '../../utils/httpRequests';
-//import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('sv');
@@ -14,7 +13,7 @@ export default function RequestFrame() {
         // let url = 'http://localhost:8083/api/getCredential/';
         // let statement = 'Gyldig førerkort klasse B.';
 
-        //saveProof(); STORAGE
+        // saveProof(); STORAGE
         const verifiedStatement = await httpGetCredential(statement);
         setCredential(verifiedStatement);
     }
@@ -61,51 +60,50 @@ export default function RequestFrame() {
             <SafeAreaView>
                 <Text>{credential}</Text>
             </SafeAreaView>
-            <Menu />
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: '18%',
-  },
-  title: {
-    fontSize: 30,
-    alignSelf: 'center',
-    marginBottom: 13,
-  },
-  issuer: {
-    marginTop: '1%',
-  },
-  text: {
-    fontSize: 25,
-    marginLeft: 30,
-  },
-  picker: {
-    width: '80%',
-    alignSelf: 'center',
-  },
-  input: {
-    borderColor: '#add8e6',
-    borderWidth: 2,
-    borderRadius: 2,
-    width: '80%',
-    alignSelf: 'center',
-  },
-  proof: {
-    marginTop: '3%',
-  },
-  button: {
-    marginTop: '5%',
-    backgroundColor: '#add8e6',
-    alignItems: 'center',
-    borderRadius: 5,
-    width: '80%',
-    alignSelf: 'center',
-  },
-  buttonText: {
-    fontSize: 20,
-  },
+    container: {
+        flex: 1,
+        marginTop: '18%',
+    },
+    title: {
+        fontSize: 30,
+        alignSelf: 'center',
+        marginBottom: 13,
+    },
+    issuer: {
+        marginTop: '1%',
+    },
+    text: {
+        fontSize: 25,
+        marginLeft: 30,
+    },
+    picker: {
+        width: '80%',
+        alignSelf: 'center',
+    },
+    input: {
+        borderColor: '#add8e6',
+        borderWidth: 2,
+        borderRadius: 2,
+        width: '80%',
+        alignSelf: 'center',
+    },
+    proof: {
+        marginTop: '3%',
+    },
+    button: {
+        marginTop: '5%',
+        backgroundColor: '#add8e6',
+        alignItems: 'center',
+        borderRadius: 5,
+        width: '80%',
+        alignSelf: 'center',
+    },
+    buttonText: {
+        fontSize: 20,
+    },
 });

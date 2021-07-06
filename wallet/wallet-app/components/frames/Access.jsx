@@ -2,7 +2,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, StatusBar, Text } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
-import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../../redux/SignedInSlice';
 
 export default function Access() {
     const pinView = useRef(null);
@@ -10,7 +11,8 @@ export default function Access() {
     const [enteredPin, setEnteredPin] = useState('');
     const [showCompletedButton, setShowCompletedButton] = useState(false);
 
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
+    // const { signedIn } = useSelector((state) => state.signedInStatus);
 
     useEffect(() => {
         if (enteredPin.length > 0) {
@@ -27,8 +29,7 @@ export default function Access() {
 
     const checkPin = () => {
         if (enteredPin === '1234') {
-            console.log(enteredPin);
-            navigation.navigate('Oversikt');
+            dispatch(signIn(true));
         }
     };
     return (
@@ -73,31 +74,3 @@ export default function Access() {
         </>
     );
 }
-
-/*
-import React from 'react';
-import { SafeAreaView } from 'react-native';
-
-import PINCode from '@haskkor/react-native-pincode';
-
-// import { KeycodeInput } from 'react-native-keycode';
-
-export default function Access() {
-    return (
-        <SafeAreaView>
-            <PINCode status="choose" />
-        </SafeAreaView>
-    );
-
-    
-    return (
-        <SafeAreaView>
-            <KeycodeInput
-                onComplete={(value) => {
-                    alert(value);
-                }}
-            />
-        </SafeAreaView>
-    );
-}
-*/

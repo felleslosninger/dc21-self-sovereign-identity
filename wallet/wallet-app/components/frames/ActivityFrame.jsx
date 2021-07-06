@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
+// import { useDispatch } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
-import Menu from '../Menu';
+// import { signIn } from '../../redux/SignedInSlice';
 
 export default function ActivityFrame() {
     const [toggle, setToggle] = useState(false);
+    // const dispatch = useDispatch();
 
     async function sendCredential() {
         console.log('Sender credential');
@@ -20,7 +22,6 @@ export default function ActivityFrame() {
                 <Button title="Send bevis til tjeneste X" color="#f1940f" onPress={sendCredential} />
             </View>
             <Text>Du har {toggle ? 'nå' : 'ikke'} delt beviset</Text>
-            <Menu />
         </SafeAreaView>
     );
 }
@@ -31,3 +32,5 @@ const styles = StyleSheet.create({
         marginTop: '10%',
     },
 });
+
+// onPress={() => dispatch(signIn(false))
