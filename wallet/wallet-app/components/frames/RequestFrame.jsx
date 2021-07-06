@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Menu from '../Menu';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { httpGetCredential } from '../../utils/httpRequests';
-// import AsyncStorage from '@react-native-community/async-storage';
+import Menu from '../Menu';
 
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('sv');
@@ -14,22 +14,20 @@ export default function RequestFrame() {
         // let url = 'http://localhost:8083/api/getCredential/';
         // let statement = 'Gyldig førerkort klasse B.';
 
-        // saveProof(); STORAGE
+        saveProof();
         const verifiedStatement = await httpGetCredential(statement);
         setCredential(verifiedStatement);
     }
 
-    /*
     const saveProof = async () => {
-      if (statement) {
-        try {
-          await AsyncStorage.setItem(Math.random().toString(36).substring(2), statement);
-        } catch (error) {
-          alert(error);
+        if (statement) {
+            try {
+                await AsyncStorage.setItem(Math.random().toString(36).substring(2), statement);
+            } catch (error) {
+                alert(error);
+            }
         }
-      }
     };
-    */
 
     return (
         <SafeAreaView style={styles.container}>
