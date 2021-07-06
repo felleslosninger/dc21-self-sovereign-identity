@@ -1,11 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
-
-// import Test from './components/test'
-// import { generateKeyPair, signing } from './utils/signing';
-// import {sign} from './utils.sign';
-// import { signDemo } from './utils/sign' ;
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import store from './redux/configureStore';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Button } from 'react-native';
-import { sign } from '../utils/signnew';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 
 export default function Knapp() {
     const styles = StyleSheet.create({
@@ -24,7 +23,6 @@ export default function Knapp() {
                 value={isAccepted}
             />
             <Text>Nå {isAccepted ? 'deler' : 'tilbakeholder'} du informasjon.</Text>
-            <Button onPress={sign} />
         </View>
     );
 }
