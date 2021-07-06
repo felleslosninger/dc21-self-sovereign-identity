@@ -20,10 +20,9 @@ export default function ActivityFrame() {
     // const { cred } = useSelector((state) => state.credentials);
 
     async function sendCredential() {
-        const response = await httpSendCredential(credential.token);
-        if (response === 'received token') setStatus(true);
-        // eslint-disable-next-line no-alert
-        else alert('Noe gikk galt...');
+        const verified = await httpSendCredential(credential.token);
+        setStatus(verified);
+        return verified;
     }
 
     return (

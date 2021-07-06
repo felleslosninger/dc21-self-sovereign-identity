@@ -10,12 +10,21 @@ export async function httpGetCredential(statement) {
 
 export async function httpSendCredential(token) {
     const url = `${verifierUrl}/sendCredential`;
-    const response = await fetch(url, {
-        method: 'POST',
-        body: token,
-    });
-    const status = await response.text();
-    return status;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: token,
+        });
+        if (response.ok) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        // eslint-disable-next-line no-alert
+        alert('Noe gikk galt...');
+        return false;
+    }
 }
 
 export const exampleToken =
