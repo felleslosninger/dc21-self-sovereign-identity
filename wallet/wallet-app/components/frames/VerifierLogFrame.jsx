@@ -19,7 +19,7 @@ export default function VerifierLogFrame({ route }) {
             <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
 
             {shared
-                .filter((share) => share.credential_id === route.params.item.id)
+                .filter((share) => share.credential_id === route.params.item.jti)
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}

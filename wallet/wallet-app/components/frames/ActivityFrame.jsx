@@ -1,27 +1,39 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Button, View } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-// import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
-// import { signIn } from '../../redux/SignedInSlice';
 
 export default function ActivityFrame() {
-    const [toggle, setToggle] = useState(false);
-    // const dispatch = useDispatch();
+    const [status, setStatus] = useState(false);
+
+    const [credential, setCredential] = useState({
+        sub: 'testSub',
+        iss: 'NTNU',
+        exp: 1718445600,
+        iat: 1623751200,
+        vc: 'er-sykepleier',
+        jti: 'randomID-sykepleier',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiaXNzIjoiTlROVSIsImV4cCI6MTcxODQ0NTYwMCwiaWF0IjoxNjIzNzUxMjAwLCJ2YyI6ImVyLXN5a2VwbGVpZXIiLCJqdGkiOiJyYW5kb21JRC1zeWtlcGxlaWVyIn0.Yieg4SAjR2rzFaQf8I77f6qOlRnCTxbMCa93k5t0tNo',
+    });
+    // const { cred } = useSelector((state) => state.credentials);
 
     async function sendCredential() {
-        console.log('Sender credential');
-        const status = await httpSendCredential('123');
-        console.log(status);
-        setToggle(status);
+        const verified = await httpSendCredential(credential.token);
+        setStatus(verified);
+        return verified;
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <View>
-                <Button title="Send bevis til tjeneste X" color="#f1940f" onPress={sendCredential} />
+                <Button
+                    title={`Send bevis ${credential.vc} til tjeneste X`}
+                    color="#f1940f"
+                    onPress={() => sendCredential()}
+                />
             </View>
-            <Text>Du har {toggle ? 'nå' : 'ikke'} delt beviset</Text>
+            <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
         </SafeAreaView>
     );
 }

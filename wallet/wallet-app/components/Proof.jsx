@@ -103,14 +103,14 @@ import { useIsFocused } from '@react-navigation/native';
 
     return (
         <FlatList
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.jti}
             data={cred}
             renderItem={({ item }) => (
                 <View style={styles.theProofs}>
-                    <Text style={styles.textProofs}> {item.proof}</Text>
-                    <Text> Utstedt av: {item.issuer}</Text>
+                    <Text style={styles.textProofs}> {item.vc}</Text>
+                    <Text> Utstedt av: {item.iss}</Text>
                     <Text>
-                        Gyldig fra/til: {item.issuedDate}/{item.expiryDate}
+                        Gyldig fra/til: {new Date(item.iat).toLocaleString()}/{new Date(item.exp).toLocaleString()}
                     </Text>
                     <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { item })}>
                         <Text>Delt med</Text>
@@ -118,7 +118,7 @@ import { useIsFocused } from '@react-navigation/native';
                     <Button
                         title="Fjern bevis"
                         onPress={() => {
-                            dispatch(removeCredential(item.id));
+                            dispatch(removeCredential(item.jti));
                         }}
                     />
                 </View>
