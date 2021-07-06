@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Menu from '../Menu';
 import { httpGetCredential } from '../../utils/httpRequests';
-// import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('sv');
@@ -58,8 +57,6 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.credential}>
                 <Text style={styles.buttonText}>{credential}</Text>
             </SafeAreaView>
-
-            <Menu />
         </SafeAreaView>
     );
 }
@@ -68,8 +65,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: '18%',
-        width: '80%',
-        alignSelf: 'center',
     },
     title: {
         fontSize: 30,
@@ -81,13 +76,18 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 25,
-        paddingBottom: '1%',
+        marginLeft: 30,
+    },
+    picker: {
+        width: '80%',
+        alignSelf: 'center',
     },
     input: {
         borderColor: '#add8e6',
         borderWidth: 2,
-        borderRadius: 5,
-        padding: 7,
+        borderRadius: 2,
+        width: '80%',
+        alignSelf: 'center',
     },
     proof: {
         marginTop: '3%',
@@ -95,18 +95,12 @@ const styles = StyleSheet.create({
     button: {
         marginTop: '5%',
         backgroundColor: '#add8e6',
+        alignItems: 'center',
         borderRadius: 5,
-        paddingTop: '2%',
-        paddingBottom: '2%',
         width: '80%',
         alignSelf: 'center',
     },
     buttonText: {
         fontSize: 20,
-        alignSelf: 'center',
-    },
-    credential: {
-        alignSelf: 'center',
-        marginTop: '5%',
     },
 });

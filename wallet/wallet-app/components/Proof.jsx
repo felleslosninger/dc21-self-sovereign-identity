@@ -12,7 +12,7 @@ export default function Proof() {
 
     /* STORAGE - IKKE FJERN
     
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
     const [proofs, setProofs] = useState([]);
@@ -103,7 +103,7 @@ import { useIsFocused } from '@react-navigation/native';
 
     return (
         <FlatList
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             data={cred}
             renderItem={({ item }) => (
                 <View style={styles.theProofs}>
