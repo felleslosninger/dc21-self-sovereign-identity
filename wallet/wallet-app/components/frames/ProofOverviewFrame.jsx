@@ -69,9 +69,8 @@ export default function ProofOverviewFrame() {
         }
     };
 
-    isFocused ? getKeys() : null;
+    isFocused ? getKeys() && setCredentials() : null;
 
-    setCredentials();
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
