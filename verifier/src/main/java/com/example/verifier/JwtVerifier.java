@@ -35,8 +35,8 @@ public class JwtVerifier {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(jwt.getIssuer())
                     .build();
-            DecodedJWT decodedJWT = verifier.verify(token);
-            algorithm.verify(JWT.decode(token));
+            verifier.verify(token);
+
             return true;
         }catch (JWTVerificationException exception){
             //Invalid signature/claims
