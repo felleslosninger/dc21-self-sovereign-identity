@@ -19,7 +19,7 @@ export default function RequestFrame() {
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
         const token = exampleToken;
-        const retrievedCredential = { ...JWT.decode(token) };
+        const retrievedCredential = { ...JWT.decode(token), token };
         console.log(retrievedCredential);
         dispatch(addCredential(retrievedCredential));
         setCredential(retrievedCredential);
