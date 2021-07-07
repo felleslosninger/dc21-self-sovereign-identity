@@ -1,8 +1,7 @@
-package com.example.issuer;
+package com.example.verifier;
 
 
 import com.google.gson.Gson;
-
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;

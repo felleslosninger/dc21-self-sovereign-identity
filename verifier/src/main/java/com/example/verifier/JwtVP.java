@@ -55,11 +55,11 @@ public class JwtVP {
 
 
     public static void main(String[] args)  {
-        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
+      /*  Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
         Jwt jwt2 = new Jwt("testSub2", "testIss2", "DegreeCredential", "degree", "er-sykepleier","Er sykepleier");
 
         JwtVP VP = new JwtVP("walletId", jwt.getToken(), jwt2.getToken());
-        System.out.println(VP.token);
+        System.out.println(VP.token);*/
 
 
 

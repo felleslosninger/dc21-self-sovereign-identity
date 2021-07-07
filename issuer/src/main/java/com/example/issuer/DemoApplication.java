@@ -80,33 +80,6 @@ public class DemoApplication {
         //må finne løsning for å unngå hardkoding
         Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", type,"Over 18");
         return jwt.getToken();
-/*        HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
-        //Credential credential = new Credential("Digdir", message);
-        VCJson credential = new VCJson("subject", type);
-        KeyGenerator keyGen = null;
-        Signing signing = null;
-        try {
-            keyGen = new KeyGenerator();
-            signing = new Signing(keyGen.getPrivateKey(), credential.getPayload());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FileHandler fileHandler = new FileHandler();
-        PublicKey publicKey = keyGen.getPublicKey();
-
-        fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
-        String signedMessage = signing.getSignatureAsString();
-        credential.setSignature(signedMessage);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        //return signedMessage + "  |  " + credential.stringifier();
-
-        responseHeaders.set("Hva-som-helst", "200");
-
-        return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
-        //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
-    */
     }
 
 

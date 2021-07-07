@@ -92,7 +92,9 @@ public class JwtVerifier {
          System.out.println(v.verify(token));
 
 */
-        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
+
+
+/*        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
         Jwt jwt2 = new Jwt("testSub2", "testIss2", "DegreeCredential", "degree", "er-sykepleier","Er sykepleier");
         JwtVP VP = new JwtVP("walletId", jwt.getToken(), jwt2.getToken());
         System.out.println(VP.getToken());
@@ -102,7 +104,17 @@ public class JwtVerifier {
         System.out.println(decoded.getClaim("verifiableCredentials").getClass());
         System.out.println(decoded.getClaim("verifiableCredentials"));
 
-        System.out.println(verifier.verifyVP(VP.getToken()));
+        System.out.println(verifier.verifyVP(VP.getToken()));*/
+
+        String VPToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiYXVkIjoidmVyaWZpZXIiLCJleHAiOjE3MTg0NDU2MDAsImlhdCI6MTYyMzc1MTIwMCwianRpIjoxMDAwMDAwMDAsImNyZWQiOlsiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKMFpYTjBVM1ZpSWl3aWFYTnpJam9pVGxST1ZTSXNJbVY0Y0NJNk1UY3hPRFEwTlRZd01Dd2lhV0YwSWpveE5qSXpOelV4TWpBd0xDSjJZeUk2SW1WeUxYTjVhMlZ3YkdWcFpYSWlMQ0pxZEdraU9pSnlZVzVrYjIxSlJDMXplV3RsY0d4bGFXVnlJbjAuWWllZzRTQWpSMnJ6RmFRZjhJNzdmNnFPbFJuQ1R4Yk1DYTkzazV0MHRObyJdfQ.MFkCcDXQ6rZUJLCq5_tcGPgqkR0JlATlzlfRBUP7yPE";
+
+
+        JwtVerifier verifier = new JwtVerifier();
+        DecodedJWT decoded = verifier.decodeJwt(VPToken);
+
+        System.out.println(decoded.getClaims());
+        System.out.println(decoded.getClaim("cred").getClass());
+        System.out.println(decoded.getClaim("cred"));
 
     }
 
