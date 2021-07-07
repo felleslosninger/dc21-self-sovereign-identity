@@ -24,12 +24,21 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 
+
+/**
+ * Class that gets information from an api-server by sending HTTP requests to the server
+ */
 public class Requester {
+
+
 
     private final URI endpointBaseUri;
     private final ObjectMapper objectMapper;
 
-
+    /**
+     * Class constructor
+     * @param uri = uri-string to the api-server
+     */
     public Requester(String uri) throws URISyntaxException {
         this.endpointBaseUri = new URI(uri);
         this.objectMapper = new ObjectMapper();
@@ -37,17 +46,26 @@ public class Requester {
     }
 
 
-
+    /**
+     * Helper method to resolve uri path to the api-server
+     */
     private String uriParam(String s) {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
-
+    /**
+     * Resolves the uri path to the api-server
+     */
     private URI requestUri(String s) {
         return endpointBaseUri.resolve(uriParam(s));
     }
 
 
+    /**
+     * Method that gets the public key of the issuer with the requested ID from the api-server
+     * @param id = the id to get the public key of
+     * @return the public key, or null if it was not found
+     */
     public PublicKey getKeyByID(String id) {
         PublicKey publicKey = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
@@ -71,37 +89,15 @@ public class Requester {
     }
 
 
-
-/*    public VCJson getCredentialFromIssuer() {
-        VCJson vcJson = null;
-        List<String> credString = null;
-        HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
-        try {
-            final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
-                    HttpResponse.BodyHandlers.ofString());
-            String responseString = response.body();
-            System.out.println("getCredentialFromIssuer() response: " + responseString);
-
-            Gson gson = new Gson();
-            credString = gson.fromJson(responseString, List.class);
-
-            System.out.println("credString = " + credString);
-
-            vcJson = new VCJson(credString.get(0), credString.get(1), credString.get(2), credString.get(3),
-                     gson.fromJson(credString.get(4), Date.class), gson.fromJson(credString.get(5), Date.class));
-            System.out.println("vcJson = " + vcJson);
-
-
-        } catch (IOException | InterruptedException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-        return vcJson;
-    }*/
-
-
-    public String getJwt() {
+    /**
+     * Method that gets the VC/VP Jwt-token of the requested type
+     *
+     * @param type = the type of VC/VP Jwt-token to request
+     * @return the token of the requested VC/CP, or null if it was not found
+     */
+    public String getJwt(String type) {
         String token = null;
-        HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
+        HttpRequest request = HttpRequest.newBuilder(requestUri(type)).GET().build();
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
@@ -120,8 +116,8 @@ public class Requester {
 
         Requester r = new Requester("http://localhost:8083/api/key/");
         Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
-        System.out.println(r2.getJwt());
-        System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
+        System.out.println(r2.getJwt("over-18"));
+       // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
 /*
 
         VCJson vcJson = r2.getCredentialFromIssuer();

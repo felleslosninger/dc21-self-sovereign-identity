@@ -15,8 +15,18 @@ import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
+
+/**
+ * A class that verifies Jwt-tokens
+ */
 public class JwtVerifier {
 
+
+    /**
+     * Decodes a jwt-token
+     * @param jwtToken = the token to verify
+     * @return the decoded jwt
+     */
     public DecodedJWT decodeJwt(String jwtToken) {
         DecodedJWT jwt = null;
         try {
@@ -29,6 +39,11 @@ public class JwtVerifier {
     }
 
 
+    /**
+     * Method that verifies a token
+     * @param token = the token to verify
+     * @return a boolean, true if the token was verified, false if not
+     */
     public boolean verifyToken(String token) {
         try {
             DecodedJWT jwt = decodeJwt(token);
@@ -47,16 +62,35 @@ public class JwtVerifier {
         }
     }
 
+    /**
+     * Method that verifies a VC
+     * @param token = the VC token to verify
+     * @return a boolean, true if the VC was verified, false if not
+     */
     public boolean verifyVC(String token) {
         return verifyVCType(token) && verifyVCClaim(token) && verifyToken(token);
     }
 
+    /**
+     * Helper method to verify a VC
+     * Checks if the VC has the correct type
+     * @param token = the token to verify type
+     * @return a boolean, true if the type was correct, false if not
+     */
     private boolean verifyVCType(String token) {
         DecodedJWT jwt = decodeJwt(token);
         ArrayList<String> typeList = (ArrayList<String>) jwt.getClaim("vc").as(HashMap.class).get("type");
         return typeList.contains("AgeCredential");
     }
 
+    // må fikse hardkoding her
+
+    /**
+     * Helper method to verify a VC
+     * Checks if the VC has the claim
+     * @param token = the token to verify claim
+     * @return a boolean, true if the claim was correct, false if not
+     */
     private boolean verifyVCClaim(String token) {
         DecodedJWT jwt = decodeJwt(token);
         LinkedHashMap<String, Object> lhm = (LinkedHashMap<String, Object>) jwt.getClaim("vc").asMap().get("credentialSubject");
@@ -65,6 +99,12 @@ public class JwtVerifier {
         return type.equals("over-18");
     }
 
+
+    /**
+     * Method that verifies a VP, and the VCs in the VP
+     * @param token = the VP token to verify
+     * @return a boolean, true if the VP was verified, false if not
+     */
     public boolean verifyVP(String token) throws URISyntaxException {
         try {
             DecodedJWT jwt = decodeJwt(token);
