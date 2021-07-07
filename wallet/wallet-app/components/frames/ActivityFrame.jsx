@@ -1,30 +1,40 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
+import { useSelector } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
-import Menu from '../Menu';
 
 export default function ActivityFrame() {
-    const [toggle, setToggle] = useState(false);
+    const [status, setStatus] = useState(false);
+
+    const [credential, setCredential] = useState({
+        sub: 'testSub',
+        iss: 'NTNU',
+        exp: 1718445600,
+        iat: 1623751200,
+        vc: 'er-sykepleier',
+        jti: 'randomID-sykepleier',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiaXNzIjoiTlROVSIsImV4cCI6MTcxODQ0NTYwMCwiaWF0IjoxNjIzNzUxMjAwLCJ2YyI6ImVyLXN5a2VwbGVpZXIiLCJqdGkiOiJyYW5kb21JRC1zeWtlcGxlaWVyIn0.Yieg4SAjR2rzFaQf8I77f6qOlRnCTxbMCa93k5t0tNo',
+    });
+    // const { cred } = useSelector((state) => state.credentials);
 
     async function sendCredential() {
-        console.log('Sender credential');
-        const status = await httpSendCredential('123');
-        console.log(status);
-        setToggle(status);
+        const verified = await httpSendCredential(credential.token);
+        setStatus(verified);
+        return verified;
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={sendCredential}>
                 <SafeAreaView style={styles.sendButton}>
-                    <Text style={styles.buttonText}>Send bevis til tjeneste X</Text>
+                    <Text style={styles.buttonText}>Send bevis {credential.vc} til tjeneste X</Text>
                 </SafeAreaView>
             </TouchableOpacity>
             <SafeAreaView styles={styles.sharedProofText}>
-                <Text style={styles.buttonText}>Du har {toggle ? 'nå' : 'ikke'} delt beviset</Text>
+                <Text style={styles.buttonText}>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
             </SafeAreaView>
-            <Menu />
+
         </SafeAreaView>
     );
 }
@@ -43,6 +53,7 @@ const styles = StyleSheet.create({
         paddingBottom: '2%',
         width: '80%',
         alignSelf: 'center',
+        padding: '2%',
     },
     buttonText: {
         fontSize: 20,
@@ -50,6 +61,7 @@ const styles = StyleSheet.create({
     },
     sharedProofText: {
         alignSelf: 'center',
-        marginTop: '5%',
     },
 });
+
+// onPress={() => dispatch(signIn(false))
