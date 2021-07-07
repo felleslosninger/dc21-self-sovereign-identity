@@ -29,9 +29,7 @@ import java.security.*;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -77,13 +75,44 @@ public class DemoApplication {
         }
         JwtVerifier jwtVerifier = new JwtVerifier();
         DecodedJWT decodedJWT = jwtVerifier.decodeJwt(baseVC);
-        System.out.println("JWT:  " + decodedJWT.getToken());
+        //System.out.println("JWT:  " + decodedJWT.getToken());
         FileHandler fileHandler = new FileHandler();
-        System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
+        //System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
         boolean verified = jwtVerifier.verifyVC(decodedJWT.getToken(), (RSAPublicKey) fileHandler.getPublicKey(decodedJWT.getIssuer()));
 
+        Map<String,String> typeMap = new HashMap<>();
+        typeMap.put("over-18", "AgeCredential");
+        typeMap.put("over-20", "AgeCredential");
+        typeMap.put("førerkort-klasse-b", "DriverlicenseCredential");
 
-        return "Verified:  " + verified;
+        Map<String,String> claimTypeMap = new HashMap<>();
+        claimTypeMap.put("over-18", "age");
+        claimTypeMap.put("over-20", "age");
+        claimTypeMap.put("førerkort-klasse-b", "driverlicense");
+
+        Map<String,String> nameTypeMap = new HashMap<>();
+        nameTypeMap.put("over-18", "Over 18");
+        nameTypeMap.put("over-20", "Over 20");
+        nameTypeMap.put("førerkort-klasse-b", "Førerkort klasse B");
+
+
+
+        if (verified){
+
+            try {
+                Jwt newJWt = new Jwt(decodedJWT.getSubject(), "UtstederAvBevis.no", typeMap.get(type), claimTypeMap.get(type), type, nameTypeMap.get(type));
+                return "BEVIS av type " + nameTypeMap.get(type) + ":  "  + newJWt.getToken();
+            }catch (Exception e){
+                System.out.println("ERROR: Wrong type input. Function: testUri");
+
+                return "Type not valid.";
+            }
+
+
+        }
+
+
+        return "BaseID not valid.";
     }
 
     @GetMapping("/api/key/{id}")
@@ -133,7 +162,8 @@ public class DemoApplication {
 
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), principal.getClaim("iss").toString(), "BaseCredential", "baseid", "BaseID", "BaseID");
+        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
+        System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
         return jwt.getToken();
     }
 

@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class FileHandler {
 
-    private String path = "issuer/src/main/resources/testFile.json";
+    private String path = "src/main/resources/testFile.json";
     private Writer file;
 
 
