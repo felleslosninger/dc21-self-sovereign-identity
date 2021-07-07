@@ -66,53 +66,64 @@ export default function RequestFrame() {
                     <Text style={styles.buttonText}>Send forespørsel</Text>
                 </SafeAreaView>
             </TouchableOpacity>
-            <SafeAreaView>
-                <Text>{credential.vc}</Text>
+            <SafeAreaView style={styles.credential}>
+                <Text style={styles.buttonText}>{credential.vc}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );
 }
 
+
+
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: '18%',
-    },
-    title: {
-        fontSize: 30,
-        alignSelf: 'center',
-        marginBottom: 13,
-    },
-    issuer: {
-        marginTop: '1%',
-    },
-    text: {
-        fontSize: 25,
-        marginLeft: 30,
-    },
-    picker: {
-        width: '80%',
-        alignSelf: 'center',
-    },
-    input: {
-        borderColor: '#add8e6',
-        borderWidth: 2,
-        borderRadius: 2,
-        width: '80%',
-        alignSelf: 'center',
-    },
-    proof: {
-        marginTop: '3%',
-    },
-    button: {
-        marginTop: '5%',
-        backgroundColor: '#add8e6',
-        alignItems: 'center',
-        borderRadius: 5,
-        width: '80%',
-        alignSelf: 'center',
-    },
-    buttonText: {
-        fontSize: 20,
-    },
+        container: {
+            flex: 1,
+            marginTop: '18%',
+            width: '80%',
+            alignSelf: 'center',
+        },
+        title: {
+            fontSize: 30,
+            alignSelf: 'center',
+            marginBottom: 13,
+        },
+        issuer: {
+            marginTop: '1%',
+        },
+        text: {
+            fontSize: 25,
+            paddingBottom: '1%',
+        },
+        picker: {
+            padding: 7,
+            borderWidth: 2,
+            borderRadius: 5,
+        },
+        input: {
+            borderColor: '#add8e6',
+            borderWidth: 2,
+            borderRadius: 5,
+            padding: 7,
+        },
+        proof: {
+            marginTop: '3%',
+        },
+        button: {
+            marginTop: '5%',
+            backgroundColor: '#add8e6',
+            borderRadius: 5,
+            paddingTop: '2%',
+            paddingBottom: '2%',
+            width: '80%',
+            alignSelf: 'center',
+        },
+        buttonText: {
+            fontSize: 20,
+            alignSelf: 'center',
+        },
+        credential: {
+            alignSelf: 'center',
+            marginTop: '5%',
+        },
 });
