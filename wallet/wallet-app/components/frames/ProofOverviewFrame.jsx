@@ -1,15 +1,18 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Button } from 'react-native';
+import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
-import Menu from '../Menu';
 import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
+import { signIn } from '../../redux/SignedInSlice';
 
 export default function ProofOverviewFrame() {
-  const dispatch = useDispatch(); // To call every reducer that we want
+    const dispatch = useDispatch(); // To call every reducer that we want
 
     return (
         <SafeAreaView style={styles.container}>
+            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
+                <Text>Logg ut</Text>
+            </TouchableOpacity>
             <Proof />
             <Button
                 title="Add"
@@ -26,26 +29,23 @@ export default function ProofOverviewFrame() {
                     )
                 }
             />
-            <Menu />
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: '12%',
-  },
-  theProofs: {
-    backgroundColor: 'lightgrey',
-    padding: 10,
-    fontSize: 20,
-    marginVertical: 3,
-    marginHorizontal: 16,
-    borderRadius: 4,
-    alignItems: 'center',
-  },
-  textProofs: {
-    fontSize: 40,
-  },
+    container: {
+        flex: 1,
+        marginTop: '12%',
+    },
+    logOut: {
+        borderRadius: 4,
+        backgroundColor: '#3aa797',
+        padding: 10,
+        marginTop: 10,
+        marginBottom: 30,
+        width: 75,
+        alignSelf: 'flex-end',
+        right: 5,
+    },
 });

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Button } from 'react-native';
-import { sign } from '../utils/signnew';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 
-export default function Knapp() {
+export default function ConsentButton() {
     const styles = StyleSheet.create({
         container: {
             alignItems: 'center',
@@ -24,7 +23,6 @@ export default function Knapp() {
                 value={isAccepted}
             />
             <Text>Nå {isAccepted ? 'deler' : 'tilbakeholder'} du informasjon.</Text>
-            <Button onPress={sign} />
         </View>
     );
 }
