@@ -1,6 +1,7 @@
 package com.example.verifier;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -26,7 +27,7 @@ public class JwtTypeHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private final String path = "verifier/src/main/resources/JwtTypes.txt";
+    private final String path = "erifier/src/main/resources/JwtTypes.txt";
 
 
     /**
@@ -53,8 +54,8 @@ public class JwtTypeHandler {
             }
             scanner.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println("file "+ " was not found");
         }
     return typeMap;
     }
@@ -73,11 +74,11 @@ public class JwtTypeHandler {
             }
             scanner.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println("file "+ " was not found");
         }
 
-    return types;
+        return types;
     }
 
 
