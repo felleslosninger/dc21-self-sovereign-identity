@@ -1,8 +1,7 @@
-package com.example.issuer;
+package com.example.verifier;
 
 
 import com.google.gson.Gson;
-
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
@@ -19,7 +18,7 @@ import java.util.Objects;
 
 public class FileHandler {
 
-    private String path = "src/main/resources/testFile.json";
+    private String path = "issuer/src/main/resources/testFile.json";
     private Writer file;
 
 

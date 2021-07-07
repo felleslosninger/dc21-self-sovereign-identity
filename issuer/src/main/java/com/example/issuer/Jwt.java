@@ -77,8 +77,10 @@ public class Jwt {
         }
         RSAPublicKey rsaPublicKey = (RSAPublicKey) keyGen.getPublicKey();
         RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyGen.getPrivateKey();
+
         issuerId = issuerId + UUID.randomUUID();
         // Saves Public key to the VDR
+
         FileHandler fileHandler = new FileHandler();
         fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
