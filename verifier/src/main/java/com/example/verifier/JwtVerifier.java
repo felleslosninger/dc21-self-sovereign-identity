@@ -67,9 +67,10 @@ public class JwtVerifier {
      * @param token = the VC token to verify
      * @return a boolean, true if the VC was verified, false if not
      */
-    public boolean verifyVC(String token) {
-        return verifyVCType(token) && verifyVCClaim(token) && verifyToken(token);
+    public boolean verifyVC(String token, String type) {
+        return verifyVCType(token, type) && verifyVCClaim(token, type) && verifyToken(token);
     }
+
 
     /**
      * Helper method to verify a VC
@@ -77,13 +78,13 @@ public class JwtVerifier {
      * @param token = the token to verify type
      * @return a boolean, true if the type was correct, false if not
      */
-    private boolean verifyVCType(String token) {
+    private boolean verifyVCType(String token, String type) {
+        JwtTypeHandler jth = new JwtTypeHandler();
         DecodedJWT jwt = decodeJwt(token);
         ArrayList<String> typeList = (ArrayList<String>) jwt.getClaim("vc").as(HashMap.class).get("type");
-        return typeList.contains("AgeCredential");
+        return typeList.contains(jth.getVcType(type));
     }
 
-    // må fikse hardkoding her
 
     /**
      * Helper method to verify a VC
@@ -91,12 +92,14 @@ public class JwtVerifier {
      * @param token = the token to verify claim
      * @return a boolean, true if the claim was correct, false if not
      */
-    private boolean verifyVCClaim(String token) {
+    private boolean verifyVCClaim(String token, String type) {
+        JwtTypeHandler jth = new JwtTypeHandler();
+
         DecodedJWT jwt = decodeJwt(token);
         LinkedHashMap<String, Object> lhm = (LinkedHashMap<String, Object>) jwt.getClaim("vc").asMap().get("credentialSubject");
-        LinkedHashMap<String, String> linkedHashMap = (LinkedHashMap<String, String>) lhm.get("age");
-        String type = linkedHashMap.get("type");
-        return type.equals("over-18");
+        LinkedHashMap<String, String> linkedHashMap = (LinkedHashMap<String, String>) lhm.get(jth.getClaimType(type));
+        String typeType = linkedHashMap.get("type");
+        return typeType.equals(type);
     }
 
 
@@ -105,17 +108,28 @@ public class JwtVerifier {
      * @param token = the VP token to verify
      * @return a boolean, true if the VP was verified, false if not
      */
-    public boolean verifyVP(String token) throws URISyntaxException {
+    public boolean verifyVP(String token, String ... types) throws URISyntaxException {
         try {
             DecodedJWT jwt = decodeJwt(token);
 
             //verifies the VP token
             verifyToken(token);
 
-            //verifies the VC's in the VP
+            //verifies the VCs in the VP
             String[] VCs = jwt.getClaim("verifiableCredentials").asArray(String.class);
-            Arrays.stream(VCs).forEach(vc -> verifyVC(vc));
-            return true;
+
+            boolean allTypesFound = true;
+            for (String type : Arrays.asList(types)) {
+                if (Arrays.stream(VCs).noneMatch(vc -> verifyVC(vc, type) ==true)) {
+                    allTypesFound = false;
+                    System.out.println("Not all types present in VP");
+                    System.out.println(type);
+
+                    break;
+                }
+
+            }
+            return allTypesFound;
         } catch (JWTVerificationException exception){
             //Invalid signature/claims
             System.out.println("VP not verified");
@@ -134,19 +148,17 @@ public class JwtVerifier {
 */
 
 
-/*        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
+        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
         Jwt jwt2 = new Jwt("testSub2", "testIss2", "DegreeCredential", "degree", "er-sykepleier","Er sykepleier");
         JwtVP VP = new JwtVP("walletId", jwt.getToken(), jwt2.getToken());
-        System.out.println(VP.getToken());
 
         JwtVerifier verifier = new JwtVerifier();
         DecodedJWT decoded = verifier.decodeJwt(VP.getToken());
-        System.out.println(decoded.getClaim("verifiableCredentials").getClass());
         System.out.println(decoded.getClaim("verifiableCredentials"));
 
-        System.out.println(verifier.verifyVP(VP.getToken()));*/
+        System.out.println(verifier.verifyVP(VP.getToken(), "over-18"));
 
-        String VPToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiYXVkIjoidmVyaWZpZXIiLCJleHAiOjE3MTg0NDU2MDAsImlhdCI6MTYyMzc1MTIwMCwianRpIjoxMDAwMDAwMDAsImNyZWQiOlsiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKMFpYTjBVM1ZpSWl3aWFYTnpJam9pVGxST1ZTSXNJbVY0Y0NJNk1UY3hPRFEwTlRZd01Dd2lhV0YwSWpveE5qSXpOelV4TWpBd0xDSjJZeUk2SW1WeUxYTjVhMlZ3YkdWcFpYSWlMQ0pxZEdraU9pSnlZVzVrYjIxSlJDMXplV3RsY0d4bGFXVnlJbjAuWWllZzRTQWpSMnJ6RmFRZjhJNzdmNnFPbFJuQ1R4Yk1DYTkzazV0MHRObyJdfQ.MFkCcDXQ6rZUJLCq5_tcGPgqkR0JlATlzlfRBUP7yPE";
+/*        String VPToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiYXVkIjoidmVyaWZpZXIiLCJleHAiOjE3MTg0NDU2MDAsImlhdCI6MTYyMzc1MTIwMCwianRpIjoxMDAwMDAwMDAsImNyZWQiOlsiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKMFpYTjBVM1ZpSWl3aWFYTnpJam9pVGxST1ZTSXNJbVY0Y0NJNk1UY3hPRFEwTlRZd01Dd2lhV0YwSWpveE5qSXpOelV4TWpBd0xDSjJZeUk2SW1WeUxYTjVhMlZ3YkdWcFpYSWlMQ0pxZEdraU9pSnlZVzVrYjIxSlJDMXplV3RsY0d4bGFXVnlJbjAuWWllZzRTQWpSMnJ6RmFRZjhJNzdmNnFPbFJuQ1R4Yk1DYTkzazV0MHRObyJdfQ.MFkCcDXQ6rZUJLCq5_tcGPgqkR0JlATlzlfRBUP7yPE";
 
 
         JwtVerifier verifier = new JwtVerifier();
@@ -154,7 +166,7 @@ public class JwtVerifier {
 
         System.out.println(decoded.getClaims());
         System.out.println(decoded.getClaim("cred").getClass());
-        System.out.println(decoded.getClaim("cred"));
+        System.out.println(decoded.getClaim("cred"));*/
 
     }
 
