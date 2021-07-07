@@ -5,6 +5,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
 import Menu from '../Menu';
 import Verifier from '../Verifier';
+import CreateQR from '../QRcode';
 
 export default function VerifierLogFrame({ route }) {
     const styles = StyleSheet.create({
@@ -24,6 +25,7 @@ export default function VerifierLogFrame({ route }) {
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
+            <CreateQR />
             <Menu />
         </SafeAreaView>
     );
