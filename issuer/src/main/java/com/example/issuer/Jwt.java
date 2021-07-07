@@ -44,6 +44,7 @@ public class Jwt {
 
 
     public Jwt(String subjectId, String issuerId, String vcType, String claimType, String type, String name, long expOffset) {
+        long baseIdOffset = 2629800000L;
         this.issuedAt = new Date();
         this.expiresAt = new Date(issuedAt.getTime() + expOffset);
         this.token = constructJwt(subjectId, issuerId, vcType, claimType, type,name);
@@ -81,9 +82,9 @@ public class Jwt {
         FileHandler fileHandler = new FileHandler();
         fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
-        //System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+        System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
         // Creates JWT based on public & private keypair. Standard naming is used when possible.
-        Algorithm algorithm = Algorithm.RSA256(null,rsaPrivateKey);
+        Algorithm algorithm = Algorithm.RSA256(null, rsaPrivateKey);
 
         return token = JWT.create()
                 .withIssuer(issuerId)
@@ -103,7 +104,7 @@ public class Jwt {
     public static void main(String[] args) {
         Jwt jwt = new Jwt("testSub", "testIss11", "AgeCredential", "age", "over-18","Over 18");
         System.out.println(jwt.getToken());
-        long lo = 9999999999999L;
+        long lo = 2629800000L;
         Jwt jwt1 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
         //System.out.println(jwt1.getToken());
     }
