@@ -24,6 +24,7 @@
         "expo-status-bar": "~1.0.4",
         "jsonwebtoken": "^8.5.1",
         "jsrsasign": "^10.3.0",
+        "jwt-decode": "^3.1.2",
         "react": "16.13.1",
         "react-dom": "16.13.1",
         "react-icons": "^4.2.0",
