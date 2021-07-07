@@ -19,6 +19,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.*;
 import javax.websocket.server.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -75,34 +76,22 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/getCredential/{type}")
-    public ResponseEntity<String> getCredential(@PathVariable String type) throws JSONException {
-        HttpHeaders responseHeaders = new org.springframework.http.HttpHeaders();
-        //Credential credential = new Credential("Digdir", message);
-        VCJson credential = new VCJson("subject", type);
-        KeyGenerator keyGen = null;
-        Signing signing = null;
+    public String getCredential(@PathVariable String type) {
+        // må finne løsning for å unngå hardkoding av subjectId og issuerId
+        JwtTypeHandler jth = new JwtTypeHandler();
+
         try {
-            keyGen = new KeyGenerator();
-            signing = new Signing(keyGen.getPrivateKey(), credential.getPayload());
-        } catch (Exception e) {
+            Jwt jwt = new Jwt("testSub", "testIss", jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
+            return jwt.getToken();
+
+        } catch(Exception e) {
             e.printStackTrace();
+            return "Cannot make credential of this type. Available types: " + jth.getTypes();
+
         }
-
-        FileHandler fileHandler = new FileHandler();
-        PublicKey publicKey = keyGen.getPublicKey();
-
-        fileHandler.addPublicKey(credential.getIssuerID(), publicKey);
-        String signedMessage = signing.getSignatureAsString();
-        credential.setSignature(signedMessage);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        //return signedMessage + "  |  " + credential.stringifier();
-
-        responseHeaders.set("Hva-som-helst", "200");
-
-        return ResponseEntity.ok().headers(responseHeaders).body(gson.toJson(credential.getCredentials()));
-        //return new ResponseEntity<String>("Ett eller annet", responseHeaders, HttpStatus.CREATED);
     }
+
+
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
         System.out.println(principal);

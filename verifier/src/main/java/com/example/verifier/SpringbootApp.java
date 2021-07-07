@@ -32,7 +32,9 @@ public class SpringbootApp {
 	private final Requester credentialReq = new Requester("http://localhost:8083/api/getCredential/");
 	private final Requester keyReq = new Requester("http://localhost:8083/api/key/");
 	private final SignatureVerifier sv = new SignatureVerifier();
+
 	private boolean verified = false;
+
 	private String key = null;
 	private Credential credential = null;
 
@@ -52,18 +54,13 @@ public class SpringbootApp {
 
 	@PostMapping("/api/sendCredential")
 	public ResponseEntity sendCredential(@RequestBody String token) throws Exception {
-		System.out.println("JWT token" + token);
-		/*
-		Gson gson = new Gson();
-		Credential cred = gson.fromJson(credential, Credential.class);
-		this.credential = cred;
-		System.out.println(cred.stringifier());
-		*/
-		// TODO: Decode and verify JWT token
-		System.out.println("JWT-token: " + token);
-		// TODO: Reasonable representation of user's verified status
-		this.verified = true;
-		return new ResponseEntity<>("received token",
+
+		System.out.println("token: " + token);
+		JwtVerifier verifier = new JwtVerifier();
+		verified = verifier.verifyToken(token);
+
+		return new ResponseEntity<>("token:" + token,
+
 				HttpStatus.OK);
 	}
 
