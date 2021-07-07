@@ -13,7 +13,7 @@ export default function CreateQR() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <Text style={styles.titleStyle}>Generation of QR Code in React Native</Text>
+                <Text style={styles.titleStyle}>QR-kode for beviset ditt</Text>
                 <QRCode
                     // QR code value
                     value={qrvalue || 'NA'}
@@ -26,6 +26,7 @@ export default function CreateQR() {
                     // Logo of in the center of QR Code (Optional)
                     // logo={{
                     // url: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/logosmalltransparen.png'", }}
+                    // eslint-disable-next-line global-require
                     logo={require('../assets/digdir-logo.jpg')}
                     // Center Logo size  (Optional)S
                     logoSize={50} // 32 funker bra
