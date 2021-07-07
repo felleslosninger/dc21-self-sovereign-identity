@@ -54,7 +54,7 @@ public class SpringbootApp {
 	public ResponseEntity sendCredential(@RequestBody String token) throws Exception {
 		System.out.println("token: " + token);
 		JwtVerifier verifier = new JwtVerifier();
-		verified = verifier.verifyVC(token);
+		verified = verifier.verifyToken(token);
 
 		return new ResponseEntity<>("token:" + token,
 				HttpStatus.OK);
