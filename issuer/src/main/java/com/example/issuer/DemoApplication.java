@@ -1,14 +1,12 @@
 package com.example.issuer;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jdk.jfr.ContentType;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -19,12 +17,22 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import javax.swing.*;
 import javax.websocket.server.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.util.Arrays;
-import java.util.Collections;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -63,6 +71,53 @@ public class DemoApplication {
 
     }
 
+    @GetMapping("/api/uri")
+    public String testUri(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
+        if (type.equals("defaultType") || baseVC.equals("defaultVC")){
+         return "Error - Missing URL-parameters";
+        }
+        JwtVerifier jwtVerifier = new JwtVerifier();
+        DecodedJWT decodedJWT = jwtVerifier.decodeJwt(baseVC);
+        //System.out.println("JWT:  " + decodedJWT.getToken());
+        FileHandler fileHandler = new FileHandler();
+        //System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
+        boolean verified = jwtVerifier.verifyVC(decodedJWT.getToken(), (RSAPublicKey) fileHandler.getPublicKey(decodedJWT.getIssuer()));
+
+        Map<String,String> typeMap = new HashMap<>();
+        typeMap.put("over-18", "AgeCredential");
+        typeMap.put("over-20", "AgeCredential");
+        typeMap.put("førerkort-klasse-b", "DriverlicenseCredential");
+
+        Map<String,String> claimTypeMap = new HashMap<>();
+        claimTypeMap.put("over-18", "age");
+        claimTypeMap.put("over-20", "age");
+        claimTypeMap.put("førerkort-klasse-b", "driverlicense");
+
+        Map<String,String> nameTypeMap = new HashMap<>();
+        nameTypeMap.put("over-18", "Over 18");
+        nameTypeMap.put("over-20", "Over 20");
+        nameTypeMap.put("førerkort-klasse-b", "Førerkort klasse B");
+
+
+
+        if (verified){
+
+            try {
+                Jwt newJWt = new Jwt(decodedJWT.getSubject(), "UtstederAvBevis.no", typeMap.get(type), claimTypeMap.get(type), type, nameTypeMap.get(type));
+                return "BEVIS av type " + nameTypeMap.get(type) + ":  "  + newJWt.getToken();
+            }catch (Exception e){
+                System.out.println("ERROR: Wrong type input. Function: testUri");
+
+                return "Type not valid.";
+            }
+
+
+        }
+
+
+        return "BaseID not valid.";
+    }
+
     @GetMapping("/api/key/{id}")
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
@@ -91,22 +146,13 @@ public class DemoApplication {
         }
     }
 
-
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        System.out.println(principal);
-        System.out.println(model);
-       model.addAttribute("fødselsnummer", principal.getClaim("pid"));
-        System.out.println(model);
-        return "index";
+        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
+        System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
+        return jwt.getToken();
     }
 
-    String code = null;
-    @GetMapping( "")
-    public String postCode(@RequestParam(value = "code") String code, @RequestParam(value = "state") String state) {
-        this.code = code;
-        return "code: " +  code +  ", state: " + state;
-    }
 
     public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
