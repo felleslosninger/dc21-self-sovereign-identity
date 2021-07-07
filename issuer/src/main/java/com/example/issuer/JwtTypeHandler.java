@@ -22,7 +22,7 @@ import java.util.*;
 public class JwtTypeHandler {
 
 
-    private final String path = "issuer/src/main/resources/JwtTypes.txt";
+    private final String path = "src/main/resources/JwtTypes.txt";
 
 
     private Map<String, String> getType(String type) {
