@@ -63,8 +63,9 @@ public class JwtVerifier {
     }
 
     /**
-     * Method that verifies a VC
+     * Method that verifies a VC, including the type of the VC
      * @param token = the VC token to verify
+     * @param type = the required type for the VC
      * @return a boolean, true if the VC was verified, false if not
      */
     public boolean verifyVC(String token, String type) {
@@ -76,6 +77,7 @@ public class JwtVerifier {
      * Helper method to verify a VC
      * Checks if the VC has the correct type
      * @param token = the token to verify type
+     * @param type = the required type for the VC
      * @return a boolean, true if the type was correct, false if not
      */
     private boolean verifyVCType(String token, String type) {
@@ -90,6 +92,7 @@ public class JwtVerifier {
      * Helper method to verify a VC
      * Checks if the VC has the claim
      * @param token = the token to verify claim
+     * @param type = the required type for the VC
      * @return a boolean, true if the claim was correct, false if not
      */
     private boolean verifyVCClaim(String token, String type) {
@@ -106,6 +109,7 @@ public class JwtVerifier {
     /**
      * Method that verifies a VP, and the VCs in the VP
      * @param token = the VP token to verify
+     * @param types = the types required for the VP
      * @return a boolean, true if the VP was verified, false if not
      */
     public boolean verifyVP(String token, String ... types) throws URISyntaxException {
@@ -156,7 +160,7 @@ public class JwtVerifier {
         DecodedJWT decoded = verifier.decodeJwt(VP.getToken());
         System.out.println(decoded.getClaim("verifiableCredentials"));
 
-        System.out.println(verifier.verifyVP(VP.getToken(), "over-18"));
+        System.out.println(verifier.verifyVP(VP.getToken(), "over-18", "er-sykepleier"));
 
 /*        String VPToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiYXVkIjoidmVyaWZpZXIiLCJleHAiOjE3MTg0NDU2MDAsImlhdCI6MTYyMzc1MTIwMCwianRpIjoxMDAwMDAwMDAsImNyZWQiOlsiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKMFpYTjBVM1ZpSWl3aWFYTnpJam9pVGxST1ZTSXNJbVY0Y0NJNk1UY3hPRFEwTlRZd01Dd2lhV0YwSWpveE5qSXpOelV4TWpBd0xDSjJZeUk2SW1WeUxYTjVhMlZ3YkdWcFpYSWlMQ0pxZEdraU9pSnlZVzVrYjIxSlJDMXplV3RsY0d4bGFXVnlJbjAuWWllZzRTQWpSMnJ6RmFRZjhJNzdmNnFPbFJuQ1R4Yk1DYTkzazV0MHRObyJdfQ.MFkCcDXQ6rZUJLCq5_tcGPgqkR0JlATlzlfRBUP7yPE";
 
