@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 public class JwtVP {
@@ -18,6 +19,10 @@ public class JwtVP {
     public JwtVP(String walletId, String ... VC) {
 
         this.VC=VC;
+
+        // makes current time issuance date and sets expiration date to two weeks.
+        Date issuedAt = new Date();
+        Date expiresAt = new Date(issuedAt.getTime() + 1209600000);
 
         // Generates keypair - Private & Public
         KeyGenerator keyGen = null;
@@ -44,6 +49,8 @@ public class JwtVP {
 
         this.token = JWT.create()
                 .withIssuer(walletId)
+                .withIssuedAt(issuedAt)
+                .withExpiresAt(expiresAt)
                 .withClaim("verifiableCredentials", Arrays.asList(VC))
                 .sign(algorithm);
 
