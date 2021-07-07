@@ -46,9 +46,6 @@ export default function Proof(props) {
             return false;
         }
     }
-
-    console.log(props)
-
     return (
        
                 <View style={styles.theProofs}>

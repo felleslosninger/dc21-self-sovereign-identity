@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import JWT from 'jsonwebtoken';
@@ -14,28 +14,25 @@ export default function RequestFrame() {
     const [credential, setCredential] = useState('Ingen bevis hentet.');
     const [statement, setStatement] = useState('');
 
-    const { cred } = useSelector((state) => state.credentials);
-
     const dispatch = useDispatch();
 
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
         const token = exampleToken;
-        console.log(token)
-        const decode = jwt_decode(exampleToken);
+        const decode = await jwt_decode(exampleToken);
         console.log(decode)
-        const retrievedCredential = { ...decode, token };
-        console.log(retrievedCredential)
+        const retrievedCredential = await { ...decode, token };
         dispatch(addCredential(retrievedCredential));
-        console.log(cred)
-        setCredential(retrievedCredential);
+        setCredential(decode);
+        console.log(decode.jti)
         saveProof();
     }
 
     const saveProof = async () => {
-        if (statement && !(credential === 'Ingen bevis hentet.')) {
+        if (statement) {
             try {
-                await AsyncStorage.setItem(credential, `${statement}|${selectedIssuer}|${credential}|${credential}`);
+                console.log(credential)
+                await AsyncStorage.setItem(credential.jti, `${statement}|${selectedIssuer}|${credential.iat}|${credential.exp}`);
             } catch (error) {
                 alert(error);
             }
