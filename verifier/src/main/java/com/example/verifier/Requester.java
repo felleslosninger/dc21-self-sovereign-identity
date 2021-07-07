@@ -3,6 +3,7 @@ package com.example.verifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.json.JSONException;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.ResponseEntity;
 
 
@@ -51,7 +52,6 @@ public class Requester {
         PublicKey publicKey = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
         System.out.println(request);
-
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
@@ -70,38 +70,9 @@ public class Requester {
         return publicKey;
     }
 
-/*
-    public List<Object> getCredentialInfo() {
-        String id = "";
-        byte[] signature = null;
-        Credential credential = null;
-        HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
-        System.out.println(request);
-        try {
-            final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
-                    HttpResponse.BodyHandlers.ofString());
-            String responseString = response.body();
-            System.out.println("getIDfromCredential() response: " + responseString);
-            String[] split = responseString.split(" | ");
-            Gson gson = new Gson();
-            signature = gson.fromJson(split[0], byte[].class);
-            List<String> credentialCollection = gson.fromJson(split[2], List.class);
-            String subject = credentialCollection.get(0);
-            String message = credentialCollection.get(1);
-            id= credentialCollection.get(2);
-            credential = new Credential(subject, message, id);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        List<Object> list = new ArrayList<>();
-        list.add(id);
-        list.add(credential);
-        list.add(signature);
-        return list;
-    }
-*/
 
-    public VCJson getCredentialFromIssuer() {
+
+/*    public VCJson getCredentialFromIssuer() {
         VCJson vcJson = null;
         List<String> credString = null;
         HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
@@ -125,25 +96,33 @@ public class Requester {
             throw new RuntimeException(e);
         }
         return vcJson;
+    }*/
+
+
+    public String getJwt() {
+        String token = null;
+        HttpRequest request = HttpRequest.newBuilder(requestUri("over_18")).GET().build();
+        try {
+            final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            System.out.println("getJwt() response: " + response);
+            String responseString = response.body();
+            token = responseString;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return token;
     }
-
-
-
-
-
-
-
-
 
 
     public static void main(String[] args) throws Exception {
 
 
         Requester r = new Requester("http://localhost:8083/api/key/");
-
-        // System.out.println(r.getKeyByID("bb9c615c-643d-4f28-ac74-2b90c8b8727c"));
-
         Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
+        System.out.println(r2.getJwt());
+        System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
+/*
 
         VCJson vcJson = r2.getCredentialFromIssuer();
 
@@ -160,6 +139,7 @@ public class Requester {
 
         boolean verify = sv.verifySignature(vcJson.getPayload(), bytes, key);
          System.out.println(verify);
+*/
 
 
         // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));

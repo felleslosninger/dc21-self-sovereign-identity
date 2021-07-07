@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { SafeAreaView, FlatList, StyleSheet, Button } from 'react-native';
+import { SafeAreaView, TouchableOpacity, Text, FlatList, StyleSheet, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import Menu from '../Menu';
 import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
+import { signIn } from '../../redux/SignedInSlice';
 
 export default function ProofOverviewFrame() {
     const dispatch = useDispatch(); // To call every reducer that we want
@@ -54,7 +54,7 @@ export default function ProofOverviewFrame() {
 
     const setCredentials = () => {
         for (let i = 0; i < proofs.length; i++) {
-            if (!cred.find((x) => x.id === proofs[i].id)) {
+            if (!cred.find((x) => x.jti === proofs[i].id)) {
                 dispatch(
                     addCredential({
                         id: proofs[i].id,
@@ -69,20 +69,23 @@ export default function ProofOverviewFrame() {
         }
     };
 
-    isFocused ? getKeys() && setCredentials() : null;
+    isFocused ? getKeys() : null;
 
     return (
         <SafeAreaView style={styles.container}>
+             <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
+                <Text>Logg ut</Text>
+            </TouchableOpacity>
             <FlatList
-                keyExtractor={(item) => item.id}
-                data={cred}
-                renderItem={({ item }) => (
+            keyExtractor={(item) => item.jti}
+            data={cred}
+            renderItem={({ item }) => (
                     <Proof
-                        id={item.id}
-                        name={item.proof}
-                        issuer={item.issuer}
-                        issDate={item.issuedDate}
-                        expDate={item.expiryDate}
+                        id={item.jti}
+                        name={item.vc}
+                        issuer={item.iss}
+                        issDate={item.iat}
+                        expDate={item.exp}
                     />
                 )}
             />
@@ -101,7 +104,6 @@ export default function ProofOverviewFrame() {
                     )
                 }
             />
-            <Menu />
         </SafeAreaView>
     );
 }
@@ -122,5 +124,16 @@ const styles = StyleSheet.create({
     },
     textProofs: {
         fontSize: 40,
+        marginTop: '12%',
+    },
+    logOut: {
+        borderRadius: 4,
+        backgroundColor: '#3aa797',
+        padding: 10,
+        marginTop: 10,
+        marginBottom: 30,
+        width: 75,
+        alignSelf: 'flex-end',
+        right: 5,
     },
 });

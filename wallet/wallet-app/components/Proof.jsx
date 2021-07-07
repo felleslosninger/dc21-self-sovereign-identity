@@ -47,25 +47,25 @@ export default function Proof(props) {
         }
     }
 
+    console.log(props)
+
     return (
-        <View style={styles.theProofs}>
-            <Text style={styles.textProofs}> {props.name}</Text>
-            <Text> Utstedt av: {props.issuer}</Text>
-            <Text>
-                Gyldig fra/til: {props.issDate}/{props.expDate}
-            </Text>
-            <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
-                <Text>Delt med</Text>
-            </TouchableOpacity>
-            <Button
-                title="Fjern bevis"
-                // onPress={() => {
-                //     dispatch(removeCredential(props.id));
-                // }}
-                onPress={() => {
-                    removeItemValue(props.id);
-                }}
-            />
-        </View>
+       
+                <View style={styles.theProofs}>
+                    <Text style={styles.textProofs}> {props.name}</Text>
+                    <Text> Utstedt av: {props.issuer}</Text>
+                    <Text>
+                        Gyldig fra/til: {new Date(props.issDate).toLocaleString()}/{new Date(props.expDate).toLocaleString()}
+                    </Text>
+                    <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
+                        <Text>Delt med</Text>
+                    </TouchableOpacity>
+                    <Button
+                        title="Fjern bevis"
+                        onPress={() => {
+                            dispatch(removeCredential(props.id));
+                        }}
+                    />
+                </View>
     );
 }
