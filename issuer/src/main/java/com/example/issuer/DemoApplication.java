@@ -76,10 +76,19 @@ public class DemoApplication {
     }
 
     @GetMapping("/api/getCredential/{type}")
-    public String getCredential(@PathVariable String type) throws JSONException {
-        //må finne løsning for å unngå hardkoding
-        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", type,"Over 18");
-        return jwt.getToken();
+    public String getCredential(@PathVariable String type) {
+        // må finne løsning for å unngå hardkoding av subjectId og issuerId
+        JwtTypeHandler jth = new JwtTypeHandler();
+
+        try {
+            Jwt jwt = new Jwt("testSub", "testIss", jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
+            return jwt.getToken();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "Cannot make credential of this type. Available types: " + jth.getTypes();
+
+        }
     }
 
 
