@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StatusBar, Text, Vibration } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TouchableOpacity, Vibration } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -56,8 +56,7 @@ export default function Access() {
     const checkPin = async () => {
         if (check === false) {
             await AsyncStorage.setItem('key', enteredPin);
-            // const pin = await AsyncStorage.getItem('key');
-            // console.log('The new PIN ', pin);
+            alert(`Personlig kode opprettet: ${enteredPin}`);
         } else {
             const thePin = await AsyncStorage.getItem('key');
             if (enteredPin === thePin) {
@@ -144,6 +143,20 @@ export default function Access() {
                     }
                 />
             </SafeAreaView>
+            <TouchableOpacity
+                style={{
+                    borderRadius: 4,
+                    backgroundColor: '#3aa797',
+                    alignItems: 'center',
+                    width: 150,
+                    marginBottom: 10,
+                    marginLeft: 10,
+                }}
+                onPress={() => AsyncStorage.removeItem('key') && checkHasPin() && alert('Personlig kode slettet')}>
+                <Text style={{ color: 'white' }}>Slett personlig kode</Text>
+            </TouchableOpacity>
         </>
     );
 }
+
+// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE MAN GLEMMER KODEN SIN, ELLER NOE LIGNENDE
