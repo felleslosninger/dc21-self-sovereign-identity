@@ -133,6 +133,7 @@ public class DemoApplication {
 
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+        System.out.println(principal.getIdToken().getTokenValue());
         Jwt jwt = new Jwt(principal.getClaim("pid").toString(), principal.getClaim("iss").toString(), "BaseCredential", "baseid", "BaseID", "BaseID");
         return jwt.getToken();
     }
