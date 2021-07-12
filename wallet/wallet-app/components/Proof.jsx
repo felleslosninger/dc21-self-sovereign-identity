@@ -60,7 +60,8 @@ export default function Proof(props) {
                     <Button
                         title="Fjern bevis"
                         onPress={() => {
-                            dispatch(removeCredential(props.id));
+                            // dispatch(removeCredential(props.id));
+                            removeItemValue(props.id)
                         }}
                     />
                 </View>

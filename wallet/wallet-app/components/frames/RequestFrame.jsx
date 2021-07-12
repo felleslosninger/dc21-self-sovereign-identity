@@ -4,8 +4,6 @@ import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import JWT from 'jsonwebtoken';
-// eslint-disable-next-line no-unused-vars
 import { exampleToken, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -20,18 +18,17 @@ export default function RequestFrame() {
         // const token = await httpGetCredential(statement);
         const token = exampleToken;
         const decode = await jwt_decode(exampleToken);
-        console.log(decode)
         const retrievedCredential = await { ...decode, token };
         dispatch(addCredential(retrievedCredential));
         setCredential(decode);
-        console.log(decode.jti)
+        console.log(credential)
+        console.log(decode.exp)
         saveProof();
     }
 
     const saveProof = async () => {
         if (statement) {
             try {
-                console.log(credential)
                 await AsyncStorage.setItem(credential.jti, `${statement}|${selectedIssuer}|${credential.iat}|${credential.exp}`);
             } catch (error) {
                 alert(error);

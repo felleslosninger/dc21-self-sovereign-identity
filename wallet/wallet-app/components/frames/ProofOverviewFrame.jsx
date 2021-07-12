@@ -55,21 +55,24 @@ export default function ProofOverviewFrame() {
     const setCredentials = () => {
         for (let i = 0; i < proofs.length; i++) {
             if (!cred.find((x) => x.jti === proofs[i].id)) {
+                console.log(proofs[i].proof)
                 dispatch(
                     addCredential({
-                        id: proofs[i].id,
-                        proof: splitProof(proofs[i].proof)[0],
-                        issuer: splitProof(proofs[i].proof)[1],
-                        issuedDate: splitProof(proofs[i].proof)[2],
-                        expiryDate: splitProof(proofs[i].proof)[3],
-                        verifiers: ['ei anna tenesteee', 'ei annaaaa teneste'],
+                        sub: 'testSub',
+                        iss: splitProof(proofs[i].proof)[1],
+                        exp: splitProof(proofs[i].proof)[3],
+                        iat: splitProof(proofs[i].proof)[2],
+                        vc: splitProof(proofs[i].proof)[0],
+                        jti: proofs[i].id,
+                        token: 'noko'
+        
                     })
                 );
             }
         }
     };
 
-    isFocused ? getKeys() : null;
+    isFocused ? getKeys() && setCredentials() : null;
 
     return (
         <SafeAreaView style={styles.container}>
