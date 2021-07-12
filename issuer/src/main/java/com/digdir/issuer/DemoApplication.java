@@ -3,6 +3,7 @@ package com.digdir.issuer;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.digdir.issuer.credentials.old.Credential;
 import com.digdir.issuer.jwt.Jwt;
+import com.digdir.issuer.service.VcService;
 import com.digdir.issuer.storage.JwtTypeHandler;
 import com.digdir.issuer.jwt.JwtVerifier;
 import com.digdir.issuer.old.Signing;
@@ -25,6 +26,7 @@ import java.util.Collections;
 @SpringBootApplication
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DemoApplication {
+    VcService vcService = new VcService();
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(DemoApplication.class);
@@ -58,45 +60,19 @@ public class DemoApplication {
         return String.format("Decryption result:    %s ",res);
 
     }
-
-    /**
-     * Route that handles issuance of certain VC, it requiers a valid baseVC to be input
-     *
-     * @param type Type of credential, that is checked in the "database" if the type exists
-     * @param baseVC The VC gotten from the baseId issuer by logging in through id-porten.
-     * @return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by gettting that key from the VDR
-     * @throws URISyntaxException If the URI is of wrong format.
-     */
-    @GetMapping("/api/getVC")
-    public String getVC(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
-        if (type.equals("defaultType") || baseVC.equals("defaultVC")){
-         return "Error - Missing URL-parameters";
-        }
-        JwtVerifier jwtVerifier = new JwtVerifier();
-        DecodedJWT decodedJWT = jwtVerifier.decodeJwt(baseVC);
-        //System.out.println("JWT:  " + decodedJWT.getToken());
-        FileHandler fileHandler = new FileHandler();
-        //System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
-        boolean verified = jwtVerifier.verifyVC(decodedJWT.getToken(), (RSAPublicKey) fileHandler.getPublicKey(decodedJWT.getIssuer()));
-
-
-        JwtTypeHandler jth = new JwtTypeHandler();
-
-        if (verified){
-            try {
-                Jwt jwt = new Jwt(decodedJWT.getSubject(), "UtsederAvBevis.no", jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
-                return jwt.getToken();
-
-            } catch(Exception e) {
-                e.printStackTrace();
-                return "Cannot make credential of this type. Available types: " + jth.getTypes();
-
-            }
-        }
-
-
-        return "BaseID not valid.";
-    }
+//
+//    /**
+//     * Route that handles issuance of certain VC, it requiers a valid baseVC to be input
+//     *
+//     * @param type Type of credential, that is checked in the "database" if the type exists
+//     * @param baseVC The VC gotten from the baseId issuer by logging in through id-porten.
+//     * @return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by gettting that key from the VDR
+//     * @throws URISyntaxException If the URI is of wrong format.
+//     */
+//    @GetMapping("/api/getVC")
+//    public String getVC(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
+//        return vcService.getVC(type, baseVC);
+//    }
 
     /**
      * Route to get a public key based on the issuer id.
@@ -139,22 +115,22 @@ public class DemoApplication {
         }
     }
 
-    /**
-     * Route that redirects to id-porten and after user login gets an id-porten token.
-     * Token is used to issue a baseId, that is signed to be used and verified by other issuers.
-     *
-     * @param principal id-token object
-     * @param model TODO What is model?
-     * @return baseId token in the format of a jwt-String
-     * @throws Exception If the input to JWT is wrong, a multitude of exceptions can be thrown :)
-     */
-    @GetMapping("/protectedpage")
-    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
-        System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
-        System.out.println(model.toString());
-        return jwt.getToken();
-    }
+//    /**
+//     * Route that redirects to id-porten and after user login gets an id-porten token.
+//     * Token is used to issue a baseId, that is signed to be used and verified by other issuers.
+//     *
+//     * @param principal id-token object
+//     * @param model TODO What is model?
+//     * @return baseId token in the format of a jwt-String
+//     * @throws Exception If the input to JWT is wrong, a multitude of exceptions can be thrown :)
+//     */
+//    @GetMapping("/protectedpage")
+//    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+//        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
+//        System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
+//        System.out.println(model.toString());
+//        return jwt.getToken();
+//    }
 
     /**
      * Old verification method, used to verifi signatures on JSON objects

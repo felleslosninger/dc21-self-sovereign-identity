@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class FileHandler {
 
-    private String path = "src/main/resources/PublicKeyFile.json";
+    private String path = "issuer/src/main/resources/PublicKeyFile.json";
     private Writer file;
 
 

@@ -14,6 +14,11 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Class for creating and signing a jwt for use as a verifiable credential with a holder.
+ * Is verifiable because the public key is stored for later use in the VDR.
+ *
+ */
 public class Jwt {
     private String token;
     // makes current time issuance date and sets expiration date to two weeks.
@@ -21,9 +26,6 @@ public class Jwt {
     private final Date expiresAt;
 
     /**
-     * Class for creating and signing a jwt for use as a verifiable credential with a holder.
-     * Is verifiable because the public key is stored for later use in the VDR.
-     *
      *
      * If you want to test this by sys.outing, remember to get the public key encoded as base64
      * and on jwt.io remember to start the public key with "-----BEGIN PUBLIC KEY-----",
@@ -52,6 +54,10 @@ public class Jwt {
         this.token = constructJwt(subjectId, issuerId, vcType, claimType, type,name);
     }
     /**
+     *
+     * Creating and signing a jwt for use as a verifiable credential with a holder.
+     * Is verifiable because the public key is stored for later use in the VDR.
+     *
      * @param subjectId = whom the token refers to
      * @param issuerId = who creates and signs this token
      * @param vcType = type of credential
@@ -86,7 +92,7 @@ public class Jwt {
         FileHandler fileHandler = new FileHandler();
         fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
-        System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+        //System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
         // Creates JWT based on public & private keypair. Standard naming is used when possible.
         Algorithm algorithm = Algorithm.RSA256(null, rsaPrivateKey);
 

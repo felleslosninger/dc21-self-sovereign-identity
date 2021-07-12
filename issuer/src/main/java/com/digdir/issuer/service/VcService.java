@@ -5,9 +5,12 @@ import com.digdir.issuer.jwt.Jwt;
 import com.digdir.issuer.jwt.JwtVerifier;
 import com.digdir.issuer.storage.FileHandler;
 import com.digdir.issuer.storage.JwtTypeHandler;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.security.interfaces.RSAPublicKey;
 
 @Service
@@ -46,4 +49,11 @@ public class VcService {
         }
         return "BaseID not valid.";
 }
+
+    public String getBaseVC(OidcUser principal){
+        Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
+        System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
+
+        return jwt.getToken();
+    }
 }
