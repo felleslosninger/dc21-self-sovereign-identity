@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
-import { exampleToken, httpGetCredential } from '../../utils/httpRequests';
+import { exampleCredentialToken, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 export default function RequestFrame() {
@@ -18,8 +18,8 @@ export default function RequestFrame() {
 
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
-        const token = exampleToken;
-        const decode = jwt_decode(exampleToken);
+        const token = exampleCredentialToken;
+        const decode = jwtDecode(token);
         const retrievedCredential = { ...decode, token };
         console.log(retrievedCredential);
         dispatch(addCredential(retrievedCredential));
