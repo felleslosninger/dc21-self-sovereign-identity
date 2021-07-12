@@ -25,6 +25,7 @@ class CredentialTest {
         String fullString = "[\"" + subject + "\",\"" + message+ "\",\"" + issuerID + "\"]";
         assertEquals(jsonString, fullString);
         assertEquals(jsonString.getClass(), String.class);
+
     }
 
 }

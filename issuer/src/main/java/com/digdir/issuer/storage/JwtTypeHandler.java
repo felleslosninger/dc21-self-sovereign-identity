@@ -33,7 +33,7 @@ public class JwtTypeHandler {
      * @param type type of VC.
      * @return Map of typenames
      */
-    private Map<String, String> getType(String type) {
+    Map<String, String> getType(String type) {
         Map<String, String> typeMap = new HashMap<>();
         try {
 

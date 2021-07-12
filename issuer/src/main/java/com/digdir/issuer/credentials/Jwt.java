@@ -17,6 +17,7 @@ import java.util.UUID;
  * Is verifiable because the public key is stored for later use in the VDR.
  *
  */
+
 public class Jwt {
     private String token;
     // makes current time issuance date and sets expiration date to two weeks.
@@ -113,8 +114,8 @@ public class Jwt {
     public static void main(String[] args) {
         Jwt jwt = new Jwt("testSub", "testIss11", "AgeCredential", "age", "over-18","Over 18");
         System.out.println(jwt.getToken());
-        long lo = 2629800000L;
-        Jwt jwt1 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
-        System.out.println(jwt1.getToken());
+//        long lo = 2629800000L;
+//        Jwt jwt1 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
+//        System.out.println(jwt1.getToken());
     }
 }

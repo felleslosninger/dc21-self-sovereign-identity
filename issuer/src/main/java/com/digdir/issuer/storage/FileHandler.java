@@ -88,6 +88,7 @@ public class FileHandler {
 
 
     /**
+     * Todo: Change catch to human readable
      * Loads existing HashMap of id and PublicKey from PublicKeyFile.json
      * @return HashMap of id and PublicKey
      */
