@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc
 @WebMvcTest
 
-class SpringbootAppTest {
+class SpringbootVerifierAppTest {
 
     @Autowired
     private MockMvc mockMvc;

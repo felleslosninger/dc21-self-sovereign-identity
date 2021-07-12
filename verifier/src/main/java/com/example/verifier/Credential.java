@@ -24,13 +24,6 @@ public class Credential {
         this.issuerID = UUID.randomUUID().toString();
     }
 
-    public Credential(String subject, String type, String issuerID, String date) {
-        this.subject = subject;
-        this.type = type;
-        this.issuerID = issuerID;
-        this.issuanceDate = new Date(Long.valueOf(date));
-    }
-
     public String stringifier(){
         Gson gson = new Gson();
         Collection<String> collection = new ArrayList<>();
