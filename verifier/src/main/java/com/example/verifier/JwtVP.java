@@ -10,15 +10,25 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Class representing a jwt as a verifiable presentation
+ * Mainly used for testing verification of VPs on verifier side
+ */
 public class JwtVP {
 
     private final String token;
     private final static String type = "Verifiable Presentation";
-    private String[] VC;
+    private final String[] VCs;
 
-    public JwtVP(String walletId, String ... VC) {
 
-        this.VC=VC;
+    /**
+     * Class constructor creating an instance of a jwt VP, for a given holder, containing given VCs
+     * @param walletId = the id of the holder of this VP
+     * @param VCs = the VCs that will be included in this VP
+     */
+    public JwtVP(String walletId, String ... VCs) {
+
+        this.VCs=VCs;
 
         // makes current time issuance date and sets expiration date to two weeks.
         Date issuedAt = new Date();
@@ -51,7 +61,8 @@ public class JwtVP {
                 .withIssuer(walletId)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiresAt)
-                .withClaim("verifiableCredentials", Arrays.asList(VC))
+                .withClaim("type",type)
+                .withClaim("cred", Arrays.asList(this.VCs))
                 .sign(algorithm);
 
     }
@@ -60,13 +71,17 @@ public class JwtVP {
         return this.token;
     }
 
+    public String[] getVCs() {
+        return this.VCs;
+    }
+
 
     public static void main(String[] args)  {
-      /*  Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
+        Jwt jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18","Over 18");
         Jwt jwt2 = new Jwt("testSub2", "testIss2", "DegreeCredential", "degree", "er-sykepleier","Er sykepleier");
 
         JwtVP VP = new JwtVP("walletId", jwt.getToken(), jwt2.getToken());
-        System.out.println(VP.token);*/
+        System.out.println(VP.token);
 
 
 

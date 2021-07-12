@@ -1,38 +1,19 @@
 package com.example.issuer;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.json.JSONException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import javax.swing.*;
-import javax.websocket.server.PathParam;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @SpringBootApplication
@@ -57,22 +38,33 @@ public class DemoApplication {
     }
 
     @GetMapping("/keys")
-    public String keys(@RequestParam(value = "key", defaultValue = "deafult") String name) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, SignatureException {
+    public String keys() throws Exception {
         KeyGenerator keyGen = new KeyGenerator();
         Credential credential = new Credential("Digdir", "Over 18 år");
         Signing signing = new Signing(keyGen.getPrivateKey(), credential);
 
         byte[] signature = signing.getSignature();
-        boolean res = decryptSignature(signature, keyGen.getPublicKey(), credential);
+        boolean res = false;
+        try {
+            res = decryptSignature(signature, keyGen.getPublicKey(), credential);
+        } catch (Exception e) {
+            System.out.println("Problems in the /keys endpoint. Located in issuer spring boot server.");
+        }
 
-        //return String.format("Public Key: %s/n Private key: %s",keyGen.getPublicKey(), keyGen.getPrivateKey());
-        //return String.format("Public Key: %s Private key: %s",keyGen.getMOCKPublicKey(), keyGen.getMOCKPrivateKey());
         return String.format("Decryption result:    %s ",res);
 
     }
 
-    @GetMapping("/api/uri")
-    public String testUri(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
+    /**
+     * Route that handles issuance of certain VC, it requiers a valid baseVC to be input
+     *
+     * @param type Type of credential, that is checked in the "database" if the type exists
+     * @param baseVC The VC gotten from the baseId issuer by logging in through id-porten.
+     * @return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by gettting that key from the VDR
+     * @throws URISyntaxException If the URI is of wrong format.
+     */
+    @GetMapping("/api/getVC")
+    public String getVC(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
         if (type.equals("defaultType") || baseVC.equals("defaultVC")){
          return "Error - Missing URL-parameters";
         }
@@ -83,41 +75,32 @@ public class DemoApplication {
         //System.out.println("Issuer PK:  " + fileHandler.getPublicKey(decodedJWT.getIssuer()));
         boolean verified = jwtVerifier.verifyVC(decodedJWT.getToken(), (RSAPublicKey) fileHandler.getPublicKey(decodedJWT.getIssuer()));
 
-        Map<String,String> typeMap = new HashMap<>();
-        typeMap.put("over-18", "AgeCredential");
-        typeMap.put("over-20", "AgeCredential");
-        typeMap.put("førerkort-klasse-b", "DriverlicenseCredential");
 
-        Map<String,String> claimTypeMap = new HashMap<>();
-        claimTypeMap.put("over-18", "age");
-        claimTypeMap.put("over-20", "age");
-        claimTypeMap.put("førerkort-klasse-b", "driverlicense");
-
-        Map<String,String> nameTypeMap = new HashMap<>();
-        nameTypeMap.put("over-18", "Over 18");
-        nameTypeMap.put("over-20", "Over 20");
-        nameTypeMap.put("førerkort-klasse-b", "Førerkort klasse B");
-
-
+        JwtTypeHandler jth = new JwtTypeHandler();
 
         if (verified){
-
             try {
-                Jwt newJWt = new Jwt(decodedJWT.getSubject(), "UtstederAvBevis.no", typeMap.get(type), claimTypeMap.get(type), type, nameTypeMap.get(type));
-                return "BEVIS av type " + nameTypeMap.get(type) + ":  "  + newJWt.getToken();
-            }catch (Exception e){
-                System.out.println("ERROR: Wrong type input. Function: testUri");
+                Jwt jwt = new Jwt(decodedJWT.getSubject(), "UtsederAvBevis.no", jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
+                return jwt.getToken();
 
-                return "Type not valid.";
+            } catch(Exception e) {
+                e.printStackTrace();
+                return "Cannot make credential of this type. Available types: " + jth.getTypes();
+
             }
-
-
         }
 
 
         return "BaseID not valid.";
     }
 
+    /**
+     * Route to get a public key based on the issuer id.
+     * This class should be in VDR
+     *
+     * @param id issuerId for a given signature to get the corresponding Public key.
+     * @return Public RSA key in string format
+     */
     @GetMapping("/api/key/{id}")
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
@@ -130,6 +113,12 @@ public class DemoApplication {
         }
     }
 
+    /**
+     * Old route that doesnt need a valid baseId to make VC
+     * @param type type of VC wanted
+     * @return VC based on the type of VC wanted in the jwt format.
+     */
+    @Deprecated
     @GetMapping("/api/getCredential/{type}")
     public String getCredential(@PathVariable String type) {
         // må finne løsning for å unngå hardkoding av subjectId og issuerId
@@ -146,25 +135,36 @@ public class DemoApplication {
         }
     }
 
+    /**
+     * Route that redirects to id-porten and after user login gets an id-porten token.
+     * Token is used to issue a baseId, that is signed to be used and verified by other issuers.
+     *
+     * @param principal id-token object
+     * @param model TODO What is model?
+     * @return baseId token in the format of a jwt-String
+     * @throws Exception If the input to JWT is wrong, a multitude of exceptions can be thrown :)
+     */
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
         Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
         System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
+        System.out.println(model.toString());
         return jwt.getToken();
     }
 
-
-    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    /**
+     * Old verification method, used to verifi signatures on JSON objects
+     * @param signature The signature part of a sent JSON object
+     * @param publicKey The corresponding public key of the privat key used to sign
+     * @param message The message/payload of a JSON object. aka. the thing that was hashed and signed.
+     * @return true if signature is valid. i.e. message is not tampered with.
+     * @throws Exception if format is wrong, errors will be thrown
+     */
+    public boolean decryptSignature(byte[] signature, PublicKey publicKey, Credential message) throws Exception {
 
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, publicKey);
         byte[] decryptedMessageHash = cipher.doFinal(signature);
-
-        /*
-        byte[] messageBytes = message.stringifier().getBytes();
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] messageHash = md.digest(messageBytes);
-         */
 
         System.out.println(new String(message.stringifier().getBytes()));
         return Arrays.equals(decryptedMessageHash, message.stringifier().getBytes());

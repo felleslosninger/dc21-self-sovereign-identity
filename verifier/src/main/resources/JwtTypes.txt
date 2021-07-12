@@ -1,0 +1,2 @@
+over-18:AgeCredential:age:Over 18
+er-sykepleier:DegreeCredential:degree:Er sykepleier

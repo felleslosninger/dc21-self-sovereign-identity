@@ -1,8 +1,12 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-alert */
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StatusBar, Text, Vibration } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TouchableOpacity, Vibration } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
 import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 import { signIn } from '../../redux/SignedInSlice';
 
 export default function Access() {
@@ -10,9 +14,13 @@ export default function Access() {
     const [showRemoveButton, setShowRemoveButton] = useState(false);
     const [enteredPin, setEnteredPin] = useState('');
     const [showCompletedButton, setShowCompletedButton] = useState(false);
+    const [check, setCheck] = useState('');
+    const [text, setText] = useState('');
 
     const dispatch = useDispatch();
     // const { signedIn } = useSelector((state) => state.signedInStatus);
+
+    const isFocused = useIsFocused();
 
     const DURATION = 1000;
 
@@ -29,15 +37,47 @@ export default function Access() {
         }
     }, [enteredPin]);
 
-    const checkPin = () => {
-        if (enteredPin === '1234') {
-            dispatch(signIn(true));
+    const checkHasPin = async () => {
+        const pin = await AsyncStorage.getItem('pin');
+        if (pin === null) {
+            setCheck(false);
         } else {
-            Vibration.vibrate(DURATION);
-            alert('Wrong PIN-code');
+            setCheck(true);
+        }
+        changeText();
+    };
+
+    const changeText = () => {
+        check ? setText('Skriv inn personlig kode') : setText('Opprett personlig kode');
+        // if (check === true) {
+        //     setText('Skriv inn personlig kode');
+        // } else setText('Opprett personlig kode');
+    };
+
+    isFocused ? checkHasPin() : null;
+
+    const checkPin = async () => {
+        if (check === false) {
+            await AsyncStorage.setItem('pin', enteredPin);
+            alert(`Personlig kode opprettet: ${enteredPin}`);
+        } else {
+            const thePin = await AsyncStorage.getItem('pin');
+            if (enteredPin === thePin) {
+                dispatch(signIn(true));
+            } else {
+                Vibration.vibrate(DURATION);
+                alert('Wrong PIN code');
+                pinView.current.clearAll();
+            }
+        }
+    };
+
+    const clearPin = () => {
+        if (text === 'Opprett personlig kode') {
             pinView.current.clearAll();
         }
     };
+
     return (
         <>
             <StatusBar barStyle="light-content" />
@@ -55,7 +95,7 @@ export default function Access() {
                         color: '#7B7676',
                         fontSize: 30,
                     }}>
-                    Skriv inn personlig kode
+                    {text}
                 </Text>
 
                 <ReactNativePinView
@@ -96,11 +136,30 @@ export default function Access() {
                     }
                     customRightButton={
                         showCompletedButton ? (
-                            <Icon name="arrow-forward-outline" size={36} color="#3aa797" onPress={() => checkPin()} />
+                            <Icon
+                                name="arrow-forward-outline"
+                                size={36}
+                                color="#3aa797"
+                                onPress={() => checkPin() && checkHasPin() && clearPin()}
+                            />
                         ) : undefined
                     }
                 />
             </SafeAreaView>
+            <TouchableOpacity
+                style={{
+                    borderRadius: 4,
+                    backgroundColor: '#3aa797',
+                    alignItems: 'center',
+                    width: 150,
+                    marginBottom: 10,
+                    marginLeft: 10,
+                }}
+                onPress={() => AsyncStorage.removeItem('pin') && checkHasPin() && alert('Personlig kode slettet')}>
+                <Text style={{ color: 'white' }}>Slett personlig kode</Text>
+            </TouchableOpacity>
         </>
     );
 }
+
+// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE MAN GLEMMER KODEN SIN, ELLER NOE LIGNENDE
