@@ -1,24 +1,20 @@
 package com.digdir.issuer;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.digdir.issuer.credentials.old.Credential;
 import com.digdir.issuer.jwt.Jwt;
-import com.digdir.issuer.service.VcService;
-import com.digdir.issuer.storage.JwtTypeHandler;
-import com.digdir.issuer.jwt.JwtVerifier;
 import com.digdir.issuer.old.Signing;
+import com.digdir.issuer.service.VcService;
 import com.digdir.issuer.storage.FileHandler;
+import com.digdir.issuer.storage.JwtTypeHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.crypto.Cipher;
-import java.net.URISyntaxException;
 import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Collections;
 

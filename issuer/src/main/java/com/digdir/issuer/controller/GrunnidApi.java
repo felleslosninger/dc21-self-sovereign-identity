@@ -1,14 +1,13 @@
 package com.digdir.issuer.controller;
 
-import com.digdir.issuer.jwt.Jwt;
 import com.digdir.issuer.service.VcService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class GrunnidApi {
     VcService vcService = new VcService();
 
