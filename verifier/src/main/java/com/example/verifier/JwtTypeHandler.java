@@ -27,13 +27,13 @@ public class JwtTypeHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private final String path = "erifier/src/main/resources/JwtTypes.txt";
+    private final String path = "verifier/src/main/resources/JwtTypes.txt";
 
 
     /**
-     * Method that gets the
-     * @param type
-     * @return
+     * Method that gets from file the required input params and each corresponding value for a given type
+     * @param type = the jwt type that we wish to get the params for
+     * @return a map that maps each param to its value from the given type, an empty map if the type is not found
      */
     private Map<String, String> getType(String type) {
         Map<String, String> typeMap = new HashMap<>();
@@ -60,6 +60,10 @@ public class JwtTypeHandler {
     return typeMap;
     }
 
+    /**
+     * Gets from file all the available jwt types
+     * @return a collection of all the types
+     */
     public Collection<String> getTypes() {
         Collection<String> types = new ArrayList<>();
         try {
@@ -81,15 +85,29 @@ public class JwtTypeHandler {
         return types;
     }
 
-
+    /**
+     * Gets the value for vcType of a given type
+     * @param type = the type we want the vcType to
+     * @return the value, or null if the type is not found
+     */
     public String getVcType(String type) {
         return getType(type).get("vcType");
     }
 
+    /**
+     * Gets the value for claimType of a given type
+     * @param type = the type we want the claimType to
+     * @return the value, or null if the type is not found
+     */
     public String getClaimType(String type) {
         return getType(type).get("claimType");
     }
 
+    /**
+     * Gets the value for name of a given type
+     * @param type = the type we want the name to
+     * @return the value, or null if the type is not found
+     */
     public String getName(String type) {
         return getType(type).get("name");
     }

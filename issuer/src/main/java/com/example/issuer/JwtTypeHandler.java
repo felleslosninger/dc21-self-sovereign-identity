@@ -1,5 +1,7 @@
 package com.example.issuer;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -22,9 +24,18 @@ import java.util.*;
 public class JwtTypeHandler {
 
 
-    private final String path = "src/main/resources/JwtTypes.txt";
+    /**
+     * The path to the file that contains the available jwt types
+     */
+    private final String path = "verifier/src/main/resources/JwtTypes.txt";
 
 
+    /**
+     * Method that gets from file the required input params and each corresponding value for a given type
+     * @param type = the jwt type that we wish to get the params for
+     * @return a map that maps each param to its value from the given type, an empty map if the type is not found
+     * @throws FileNotFoundException if the file is not found
+     */
     private Map<String, String> getType(String type) {
         Map<String, String> typeMap = new HashMap<>();
         try {
@@ -44,12 +55,17 @@ public class JwtTypeHandler {
             }
             scanner.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println("file "+ " was not found");
         }
-    return typeMap;
+        return typeMap;
     }
 
+    /**
+     * Gets from file all the available jwt types
+     * @return a collection of all the types
+     * @throws FileNotFoundException if the file is not found
+     */
     public Collection<String> getTypes() {
         Collection<String> types = new ArrayList<>();
         try {
@@ -60,29 +76,45 @@ public class JwtTypeHandler {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split(":");
-               types.add(parts[0]);
+                types.add(parts[0]);
             }
             scanner.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println("file "+ " was not found");
         }
 
-    return types;
+        return types;
     }
 
-
+    /**
+     * Gets the value for vcType of a given type
+     * @param type = the type we want the vcType to
+     * @return the value, or null if the type is not found
+     */
     public String getVcType(String type) {
         return getType(type).get("vcType");
     }
 
+    /**
+     * Gets the value for claimType of a given type
+     * @param type = the type we want the claimType to
+     * @return the value, or null if the type is not found
+     */
     public String getClaimType(String type) {
         return getType(type).get("claimType");
     }
 
+    /**
+     * Gets the value for name of a given type
+     * @param type = the type we want the name to
+     * @return the value, or null if the type is not found
+     */
     public String getName(String type) {
         return getType(type).get("name");
     }
+
+
 
     public static void main(String[] args) {
         JwtTypeHandler jth = new JwtTypeHandler();

@@ -5,8 +5,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.ResponseEntity;
-
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,15 +30,20 @@ public class Requester {
 
 
 
-    private final URI endpointBaseUri;
-    private final ObjectMapper objectMapper;
+    private URI endpointBaseUri = null;
+    private ObjectMapper objectMapper;
 
     /**
      * Class constructor
      * @param uri = uri-string to the api-server
+     * @throws IllegalArgumentException if the param uri cannot be parsed as a URI reference
      */
-    public Requester(String uri) throws URISyntaxException {
-        this.endpointBaseUri = new URI(uri);
+    public Requester(String uri) {
+        try {
+            this.endpointBaseUri = new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(uri + " cannot be parsed as a URI reference");
+        }
         this.objectMapper = new ObjectMapper();
 
     }

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
@@ -16,14 +17,21 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Objects;
 
-
+/**
+ * Class that reads and writes public keys from and to file
+ */
 public class FileHandler {
 
+    /**
+     * The path to the file that contains the available jwt types
+     */
     private String path = "src/main/resources/testFile.json";
-    private Writer file;
 
 
-
+    /**
+     * Saves to file a hashmap that maps IDs to corresponding public keys
+     * @param publicKeyMap = the map to save to file
+     */
     private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
         Gson gson = new Gson();
 
@@ -35,22 +43,21 @@ public class FileHandler {
         try {
 
             FileOutputStream fileStream = new FileOutputStream(path);
-            file = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
+            Writer file = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
             file.write(javaObjectString);
+            file.flush();
+            file.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println("an error occurred when writing to file");
         }
+
     }
 
+    /**
+     * Loads from file IDs and their corresponding public keys
+     * @return the hashmap mapping the IDs to corresponding public keys
+     */
     private HashMap<String, PublicKey> loadFromFile() {
         try {
             InputStream inputStream = new FileInputStream(path);
@@ -61,19 +68,23 @@ public class FileHandler {
             mapFromFile.forEach((key, value) -> {
                 try {
                     publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value)));
-                } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
-                    invalidKeySpecException.printStackTrace();
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                    throw new RuntimeException("an error occurred when reading keys from file");
                 }
             });
             return publicKeyMap;
 
-        } catch (Exception e) {
-            throw new NullPointerException("There was an error loading from file.");
-
+        } catch (FileNotFoundException e) {
+            System.out.println("no such file");
+            return null;
         }
-
     }
 
+    /**
+     * Gets the public key of a given holder
+     * @param id = the id of the holder we wish to get the public key of
+     * @return the public key of the holder
+     */
     public PublicKey getPublicKey(String id){
         if (!Objects.requireNonNull(loadFromFile()).containsKey(id)) {
             throw new IllegalArgumentException("No such id");
@@ -81,6 +92,12 @@ public class FileHandler {
         return loadFromFile().get(id);
     }
 
+
+    /**
+     * Gets the public key of a given holder as a string
+     * @param id = the id of the holder we wish to get the public key of
+     * @return the public key of the holder as a string
+     */
     public String getPublicKeyAsString(String id){
         PublicKey pk = getPublicKey(id);
         byte[] jsonPk = pk.getEncoded();
@@ -88,6 +105,13 @@ public class FileHandler {
         return gson.toJson(jsonPk);
     }
 
+
+    /**
+     * Adds a mapping of a holder and a public key to the file
+     * @param id = the id of the holder
+     * @param pk = the public key of the holder
+     * @throws IllegalArgumentException if the holder id already exists in the file
+     */
     public void addPublicKey(String id, PublicKey pk){
         if(loadFromFile().containsKey(id)) {
             throw new IllegalArgumentException("id already exists");
@@ -97,6 +121,11 @@ public class FileHandler {
         saveToFile(map);
     }
 
+    /**
+     * Removes a mapping of a holder from the file
+     * @param id = the id of the holder
+     * @throws IllegalArgumentException if the holder id doesn't exist in the file
+     */
     public void removeKeyByID(String id) {
         if(!loadFromFile().containsKey(id)) {
             throw new IllegalArgumentException("no such id, cannot remove");
