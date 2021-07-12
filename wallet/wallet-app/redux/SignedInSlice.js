@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const SignedInSlice = createSlice({
     name: 'signedInStatus',
-    initialState: { signedIn: false },
+    initialState: { signedIn: true },
     reducers: {
         signIn: (state, action) => ({ ...state, signedIn: action.payload }),
         signOut: (state, action) => ({ ...state, signedIn: action.payload }),
