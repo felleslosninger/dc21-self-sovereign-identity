@@ -18,13 +18,13 @@ export default function VerifierLogFrame({ route }) {
     return (
         <SafeAreaView>
             <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
-
             {shared
                 .filter((share) => share.credential_id === route.params.item.jti)
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
-            <CreateQR />
-        </SafeAreaView>
-    );
+            <Text>En tjeneste kan verifisere beviset ditt med QRkoden under</Text>
+            <CreateQR content="digdir.no" /> 
+        </SafeAreaView> // content^ kan være en jwt, url...
+    ); 
 }

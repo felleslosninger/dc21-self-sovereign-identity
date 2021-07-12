@@ -1,41 +1,24 @@
-// Generation of QR Code in React Native
-// https://aboutreact.com/generation-of-qr-code-in-react-native/
-
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { useState } from 'react';
-import { SafeAreaView, Text, View, StyleSheet } from 'react-native'; // TextInput, TouchableOpacity
+import { SafeAreaView, View, StyleSheet } from 'react-native'; // TextInput, TouchableOpacity
 
 import QRCode from 'react-native-qrcode-svg';
 
-export default function CreateQR() {
-    // const [inputText, setInputText] = useState('');
-    const [qrvalue] = useState('https://www.digdir.no/'); // setQrvalue
-
+// QRkode som tar inn informasjonen som skal ligge i koden (jwt)
+export default function CreateQR(props) {
+    const [qrvalue] = useState(props.content); // content=en string med informasjon(jwt) eller nettadresse
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <Text style={styles.titleStyle}>QR-kode for beviset ditt</Text>
                 <QRCode
-                    // QR code value
-                    value={qrvalue || 'NA'}
-                    // size of QR Code
+                    value={qrvalue || 'NA'} // informasjon som skal inn i QRkoden
                     size={250}
-                    // Color of the QR Code (Optional)
                     color="#1e2b3c"
-                    // Background Color of the QR Code (Optional)
                     backgroundColor="white"
-                    // Logo of in the center of QR Code (Optional)
-                    // logo={{
-                    // url: "https://raw.githubusercontent.com/AboutReact/sampleresource/master/logosmalltransparen.png'", }}
                     // eslint-disable-next-line global-require
-                    logo={require('../assets/digdir-logo.jpg')}
-                    // Center Logo size  (Optional)S
+                    logo={require('../assets/digdir-logo.jpg')} // digdirlogo i midten
                     logoSize={50} // 32 funker bra
-                    // Center Logo margin (Optional)
-                    // logoMargin={2}
-                    // Center Logo radius (Optional)
-                    // logoBorderRadius={15}
-                    // Center Logo background (Optional)
-                    // logoBackgroundColor="#c2132c" // "red"
                 />
             </View>
         </SafeAreaView>
@@ -50,37 +33,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: 10,
-    },
-    titleStyle: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    textStyle: {
-        textAlign: 'center',
-        margin: 10,
-    },
-    textInputStyle: {
-        flexDirection: 'row',
-        height: 40,
-        marginTop: 20,
-        marginLeft: 35,
-        marginRight: 35,
-        margin: 10,
-    },
-    buttonStyle: {
-        backgroundColor: '#51D8C7',
-        borderWidth: 0,
-        color: '#FFFFFF',
-        borderColor: '#51D8C7',
-        alignItems: 'center',
-        borderRadius: 5,
-        marginTop: 30,
-        padding: 10,
-    },
-    buttonTextStyle: {
-        color: '#FFFFFF',
-        paddingVertical: 10,
-        fontSize: 16,
     },
 });
