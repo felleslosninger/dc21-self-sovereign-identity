@@ -17,7 +17,7 @@ function Wait() {
         history.push(path);
     }
     function oneSecondFunction() {
-        return
+
     }
 
     return (

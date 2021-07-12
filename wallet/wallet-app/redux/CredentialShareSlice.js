@@ -6,21 +6,21 @@ export const CredentialShareSlice = createSlice({
         shared: [
             {
                 id: Math.random().toString(),
-                credential_id: 1,
+                credential_id: 'randomID-sykepleier',
                 // shared_date: Date.now().toString(),
                 // expiry_date: new Date().setDate(new Date().getDate() + 14),
                 verifier: 'ei anna tenesteee',
             },
             {
                 id: Math.random().toString(),
-                credential_id: 1,
+                credential_id: 'randomID-førerkort',
                 // shared_date: Date.now().toString(),
                 // expiry_date: new Date().setDate(new Date().getDate() + 14),
                 verifier: 'ei annaaaa teneste',
             },
             {
                 id: Math.random().toString(),
-                credential_id: 0,
+                credential_id: 'randomID-førerkort',
                 // shared_date: Date.now().toString(),
                 // expiry_date: new Date().setDate(new Date().getDate() + 14),
                 verifier: 'ei annaaaa teneste',
