@@ -1,4 +1,4 @@
-package com.example.verifier;
+package com.example.verifier.verification;
 
 import java.io.File;
 import java.io.FileNotFoundException;

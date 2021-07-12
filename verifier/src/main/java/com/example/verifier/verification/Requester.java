@@ -1,4 +1,4 @@
-package com.example.verifier;
+package com.example.verifier.verification;
 
 import com.google.gson.Gson;
 import java.io.IOException;
