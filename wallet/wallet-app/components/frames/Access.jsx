@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-alert */
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, StatusBar, Text, TouchableOpacity, Vibration } from 'react-native';
@@ -36,7 +38,7 @@ export default function Access() {
     }, [enteredPin]);
 
     const checkHasPin = async () => {
-        const pin = await AsyncStorage.getItem('key');
+        const pin = await AsyncStorage.getItem('pin');
         if (pin === null) {
             setCheck(false);
         } else {
@@ -46,19 +48,20 @@ export default function Access() {
     };
 
     const changeText = () => {
-        if (check === true) {
-            setText('Skriv inn personlig kode');
-        } else setText('Opprett personlig kode');
+        check ? setText('Skriv inn personlig kode') : setText('Opprett personlig kode');
+        // if (check === true) {
+        //     setText('Skriv inn personlig kode');
+        // } else setText('Opprett personlig kode');
     };
 
     isFocused ? checkHasPin() : null;
 
     const checkPin = async () => {
         if (check === false) {
-            await AsyncStorage.setItem('key', enteredPin);
+            await AsyncStorage.setItem('pin', enteredPin);
             alert(`Personlig kode opprettet: ${enteredPin}`);
         } else {
-            const thePin = await AsyncStorage.getItem('key');
+            const thePin = await AsyncStorage.getItem('pin');
             if (enteredPin === thePin) {
                 dispatch(signIn(true));
             } else {
@@ -152,7 +155,7 @@ export default function Access() {
                     marginBottom: 10,
                     marginLeft: 10,
                 }}
-                onPress={() => AsyncStorage.removeItem('key') && checkHasPin() && alert('Personlig kode slettet')}>
+                onPress={() => AsyncStorage.removeItem('pin') && checkHasPin() && alert('Personlig kode slettet')}>
                 <Text style={{ color: 'white' }}>Slett personlig kode</Text>
             </TouchableOpacity>
         </>
