@@ -39,7 +39,7 @@ export default function ProofOverviewFrame() {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
                 for (let i = 0; i < theKeys.length; i++) {
-                    if (!keys.includes(theKeys[i])) {
+                    if (!keys.includes(theKeys[i]) && theKeys[i] !== 'pin') {
                         keys.push(theKeys[i]);
                     }
                 }
