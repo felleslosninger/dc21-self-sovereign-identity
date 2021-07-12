@@ -119,6 +119,8 @@ public class JwtTypeHandler {
         System.out.println(jth.getType("over-18"));
         System.out.println(jth.getVcType("over-18"));
         System.out.println(jth.getClaimType("er-sykepleier"));
+        System.out.println(jth.getName("er-sykepleier"));
+
 
 
     }

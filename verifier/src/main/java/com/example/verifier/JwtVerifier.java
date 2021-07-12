@@ -5,12 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.SignatureGenerationException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import javax.xml.crypto.AlgorithmMethod;
-import java.awt.*;
 import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
@@ -123,8 +119,8 @@ public class JwtVerifier {
             String[] VCs = jwt.getClaim("cred").asArray(String.class);
 
             boolean allTypesFound = true;
-            for (String type : Arrays.asList(types)) {
-                if (Arrays.stream(VCs).noneMatch(vc -> verifyVC(vc, type) ==true)) {
+            for (String type : types) {
+                if (Arrays.stream(VCs).noneMatch(vc -> verifyVC(vc, type))) {
                     allTypesFound = false;
                     System.out.println("Not all types present in VP");
                     System.out.println(type);

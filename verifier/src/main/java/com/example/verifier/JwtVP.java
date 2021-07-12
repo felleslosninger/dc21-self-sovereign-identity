@@ -18,7 +18,7 @@ public class JwtVP {
 
     private final String token;
     private final static String type = "Verifiable Presentation";
-    private String[] VCs;
+    private final String[] VCs;
 
 
     /**
