@@ -19,17 +19,17 @@ export default function RequestFrame() {
         const token = exampleToken;
         const decode = await jwt_decode(exampleToken);
         const retrievedCredential = await { ...decode, token };
+        setCredential(retrievedCredential);
         dispatch(addCredential(retrievedCredential));
-        setCredential(decode);
-        console.log(credential)
-        console.log(decode.exp)
-        saveProof();
+        console.log(credential);
+        console.log(decode.exp);
+        await saveProof(retrievedCredential);
     }
 
-    const saveProof = async () => {
-        if (statement) {
+    const saveProof = async (cred) => {
+        if (statement && cred.jti !== undefined) {
             try {
-                await AsyncStorage.setItem(credential.jti, `${statement}|${selectedIssuer}|${credential.iat}|${credential.exp}`);
+                await AsyncStorage.setItem(cred.jti, JSON.stringify(cred));
             } catch (error) {
                 alert(error);
             }
@@ -43,10 +43,7 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
 
-                <Picker
-                    selectedValue={selectedIssuer}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
                     <Picker.Item label="NTNU" value="NTNU" />
                     <Picker.Item label="Statens Vegvesen" value="Statens Vegvesen" />
                     <Picker.Item label="Folkeregisteret" value="Folkeregisteret" />
@@ -70,57 +67,49 @@ export default function RequestFrame() {
     );
 }
 
-
-
-
 const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            marginTop: '18%',
-            width: '80%',
-            alignSelf: 'center',
-        },
-        title: {
-            fontSize: 30,
-            alignSelf: 'center',
-            marginBottom: 13,
-        },
-        issuer: {
-            marginTop: '1%',
-        },
-        text: {
-            fontSize: 25,
-            paddingBottom: '1%',
-        },
-        picker: {
-            padding: 7,
-            borderWidth: 2,
-            borderRadius: 5,
-        },
-        input: {
-            borderColor: '#add8e6',
-            borderWidth: 2,
-            borderRadius: 5,
-            padding: 7,
-        },
-        proof: {
-            marginTop: '3%',
-        },
-        button: {
-            marginTop: '5%',
-            backgroundColor: '#add8e6',
-            borderRadius: 5,
-            paddingTop: '2%',
-            paddingBottom: '2%',
-            width: '80%',
-            alignSelf: 'center',
-        },
-        buttonText: {
-            fontSize: 20,
-            alignSelf: 'center',
-        },
-        credential: {
-            alignSelf: 'center',
-            marginTop: '5%',
-        },
+    container: {
+        flex: 1,
+        marginTop: '18%',
+        width: '80%',
+        alignSelf: 'center',
+    },
+    title: {
+        fontSize: 30,
+        alignSelf: 'center',
+        marginBottom: 13,
+    },
+    issuer: {
+        marginTop: '1%',
+    },
+    text: {
+        fontSize: 25,
+        paddingBottom: '1%',
+    },
+    input: {
+        borderColor: '#add8e6',
+        borderWidth: 2,
+        borderRadius: 5,
+        padding: 7,
+    },
+    proof: {
+        marginTop: '3%',
+    },
+    button: {
+        marginTop: '5%',
+        backgroundColor: '#add8e6',
+        borderRadius: 5,
+        paddingTop: '2%',
+        paddingBottom: '2%',
+        width: '80%',
+        alignSelf: 'center',
+    },
+    buttonText: {
+        fontSize: 20,
+        alignSelf: 'center',
+    },
+    credential: {
+        alignSelf: 'center',
+        marginTop: '5%',
+    },
 });

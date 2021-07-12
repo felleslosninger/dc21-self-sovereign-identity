@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-alert */
+
 import React, { useState } from 'react';
-import { SafeAreaView, TouchableOpacity, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { SafeAreaView, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
 import { signIn } from '../../redux/SignedInSlice';
 
@@ -32,6 +34,7 @@ export default function ProofOverviewFrame() {
     };
 
     const getKeys = async () => {
+        console.log(cred);
         try {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
@@ -47,65 +50,19 @@ export default function ProofOverviewFrame() {
         }
     };
 
-    const splitProof = (proof) => {
-        const p1 = proof.split('|');
-        return p1;
-    };
-
-    const setCredentials = () => {
-        for (let i = 0; i < proofs.length; i++) {
-            if (!cred.find((x) => x.jti === proofs[i].id)) {
-                console.log(proofs[i].proof)
-                dispatch(
-                    addCredential({
-                        sub: 'testSub',
-                        iss: splitProof(proofs[i].proof)[1],
-                        exp: splitProof(proofs[i].proof)[3],
-                        iat: splitProof(proofs[i].proof)[2],
-                        vc: splitProof(proofs[i].proof)[0],
-                        jti: proofs[i].id,
-                        token: 'noko'
-        
-                    })
-                );
-            }
-        }
-    };
-
-    isFocused ? getKeys() && setCredentials() : null;
+    isFocused ? getKeys() : null;
 
     return (
         <SafeAreaView style={styles.container}>
-             <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
+            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
                 <Text>Logg ut</Text>
             </TouchableOpacity>
             <FlatList
-            keyExtractor={(item) => item.jti}
-            data={cred}
-            renderItem={({ item }) => (
-                    <Proof
-                        id={item.jti}
-                        name={item.vc}
-                        issuer={item.iss}
-                        issDate={item.iat}
-                        expDate={item.exp}
-                    />
+                keyExtractor={(item) => item.jti}
+                data={cred}
+                renderItem={({ item }) => (
+                    <Proof id={item.jti} name={item.vc} issuer={item.iss} issDate={item.iat} expDate={item.exp} />
                 )}
-            />
-            <Button
-                title="Add"
-                onPress={() =>
-                    dispatch(
-                        addCredential({
-                            id: Math.random().toString(),
-                            proof: `${`over-${Math.floor(Math.random() * 100)}`}`,
-                            issuer: 'Folkeregisteret',
-                            issuedDate: '20.02.21',
-                            expiryDate: '20.02.24',
-                            verifiers: ['ei anna tenesteee', 'ei annaaaa teneste'],
-                        })
-                    )
-                }
             />
         </SafeAreaView>
     );
