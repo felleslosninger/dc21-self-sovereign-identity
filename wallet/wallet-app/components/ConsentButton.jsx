@@ -8,8 +8,8 @@ export default function ConsentButton() {
         },
     });
 
-    const [isAccepted, setIsAccepted] = useState(false);
-    const toggleSwitch = () => setIsAccepted((previousState) => !previousState);
+    const [isAccepted, setIsAccepted] = useState(false); // fra start har man ikke akseptert å dele vc
+    const toggleSwitch = () => setIsAccepted((previousState) => !previousState); // deler vc når du trykker på toggle
 
     return (
         <View style={styles.container}>
