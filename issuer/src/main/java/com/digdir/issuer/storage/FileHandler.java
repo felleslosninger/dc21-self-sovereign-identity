@@ -4,6 +4,7 @@ package com.digdir.issuer.storage;
 import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 
+@Repository
 public class FileHandler {
 
     private String path = "src/main/resources/PublicKeyFile.json";

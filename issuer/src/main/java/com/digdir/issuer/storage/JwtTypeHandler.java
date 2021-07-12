@@ -1,4 +1,6 @@
 package com.digdir.issuer.storage;
+import org.springframework.stereotype.Repository;
+
 import java.io.*;
 import java.util.*;
 
@@ -19,6 +21,7 @@ import java.util.*;
  *     - there should be a better implementation for mapping types...
  *
  */
+@Repository
 public class JwtTypeHandler {
 
 

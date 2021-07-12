@@ -92,7 +92,7 @@ public class Jwt {
         FileHandler fileHandler = new FileHandler();
         fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
-        //System.out.println(Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
+        System.out.println("PK:   " + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
         // Creates JWT based on public & private keypair. Standard naming is used when possible.
         Algorithm algorithm = Algorithm.RSA256(null, rsaPrivateKey);
 
