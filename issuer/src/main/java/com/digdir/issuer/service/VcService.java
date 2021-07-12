@@ -68,6 +68,7 @@ public class VcService {
      */
     public String getBaseVC(OidcUser principal){
         Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
+        System.out.println(jwt.getToken());
         System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());
         System.out.println("JWT:   " + jwt.getToken());
         return jwt.getToken();
