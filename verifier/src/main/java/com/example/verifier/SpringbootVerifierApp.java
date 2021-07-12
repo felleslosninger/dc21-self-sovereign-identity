@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @SpringBootApplication
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -27,6 +25,12 @@ public class SpringbootVerifierApp {
 		return String.format("Hello %s!", name);
 	}
 
+
+	/**
+	 * Route that receives and verifies a jwt token
+	 * @param token = the jwt token to send
+	 * @return a response entity containing the token, if it was verified, and a HttpStatus.OK
+	 */
 	@PostMapping("/api/sendCredential")
 	public ResponseEntity<String> sendCredential(@RequestBody String token) {
 		JwtVerifier verifier = new JwtVerifier();
@@ -35,6 +39,10 @@ public class SpringbootVerifierApp {
 	}
 
 
+	/**
+	 * Route that gets if the sent jwt token was verified
+	 * @return a boolean true if the token was verified, false if not
+	 */
 	@GetMapping("/api/checkVerified")
 	public boolean checkVerify() {
 		return this.verified;
