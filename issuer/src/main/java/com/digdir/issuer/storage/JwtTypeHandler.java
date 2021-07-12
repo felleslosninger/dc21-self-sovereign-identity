@@ -28,6 +28,11 @@ public class JwtTypeHandler {
     private final String path = "src/main/resources/JwtTypes.txt";
 
 
+    /**
+     * Method retrives typenames for a specific VC-type.
+     * @param type type of VC.
+     * @return Map of typenames
+     */
     private Map<String, String> getType(String type) {
         Map<String, String> typeMap = new HashMap<>();
         try {
@@ -53,6 +58,10 @@ public class JwtTypeHandler {
     return typeMap;
     }
 
+    /**
+     *
+     * @return All available types of VC
+     */
     public Collection<String> getTypes() {
         Collection<String> types = new ArrayList<>();
         try {

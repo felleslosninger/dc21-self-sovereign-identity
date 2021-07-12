@@ -6,10 +6,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * Method that sets path "/protectedpage" as a protected resource. The resource needs authentication through ID-porten.
+     * @param http HttpSecurity
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
 

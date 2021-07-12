@@ -1,23 +1,19 @@
 package com.digdir.issuer;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.RSAKey;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.security.*;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Scanner;
-import java.util.UUID;
 
+/**
+ * Class for generating pairs of public and private keys with RSA
+ */
 public class KeyGenerator {
 
     KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
     KeyPair keyPair;
 
-
+    /**
+     * Constructor initalizes keygenerator with keySize 2048 and creates keypair
+     * @throws NoSuchAlgorithmException if algorithm not exists.
+     */
     public KeyGenerator() throws NoSuchAlgorithmException {
         generator.initialize(2048);
         keyPair = generator.generateKeyPair();
@@ -32,57 +28,6 @@ public class KeyGenerator {
         return keyPair.getPublic();
     }
 
-    public String getMOCKPrivateKey()  {
-        File file = new File("C:\\Users\\camp-jhv\\IdeaProjects\\digdir-camp-2021-VC\\issuer\\src\\main\\resources\\PrivateKey.txt");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        StringBuilder total = new StringBuilder();
 
-        while (true){
-            assert sc != null;
-            if (!sc.hasNextLine()) break;
-            //  System.out.println(sc.nextLine());
-            total.append(sc.nextLine());
-        }
-
-        return total.toString();
-    }
-
-    public String getMOCKPublicKey() {
-
-        File file = new File("C:\\Users\\camp-jhv\\IdeaProjects\\digdir-camp-2021-VC\\issuer\\src\\main\\resources\\PublicKey.txt");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        StringBuilder total = new StringBuilder();
-
-        while (true){
-            assert sc != null;
-            if (!sc.hasNextLine()) break;
-            //  System.out.println(sc.nextLine());
-            total.append(sc.nextLine());
-        }
-
-
-        return total.toString();
-    }
-
-    public String generateJWK() {
-        JWK jwk = new RSAKey.Builder((RSAPublicKey)keyPair.getPublic())
-                .privateKey((RSAPrivateKey)keyPair.getPrivate())
-                .keyUse(KeyUse.SIGNATURE)
-                .keyID(UUID.randomUUID().toString())
-                .build();
-        return jwk.toJSONString();
-
-
-    }
 
 }

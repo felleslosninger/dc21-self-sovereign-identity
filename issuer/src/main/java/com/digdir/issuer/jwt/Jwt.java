@@ -53,6 +53,7 @@ public class Jwt {
         this.expiresAt = new Date(issuedAt.getTime() + expOffset);
         this.token = constructJwt(subjectId, issuerId, vcType, claimType, type,name);
     }
+
     /**
      *
      * Creating and signing a jwt for use as a verifiable credential with a holder.

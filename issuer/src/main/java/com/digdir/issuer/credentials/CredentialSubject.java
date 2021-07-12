@@ -9,14 +9,18 @@ public record CredentialSubject(String claimType, String type, String name) {
 
 
     /**
-     * @param claimType =  type of credentialSubject i.e. age, degree
-     * @param type      = type of claimType i.e. over-18, over-20
-     * @param name      = human-readable name i.e. Over 18, Over 20
+     * @param claimType type of credentialSubject i.e. age, degree
+     * @param type type of claimType i.e. over-18, over-20
+     * @param name human-readable name i.e. Over 18, Over 20
      */
     public CredentialSubject {
     }
 
 
+    /**
+     * Method creates credentialsubject as Map with specific credentialSubjectType
+     * @return credenitalSubject as Map
+     */
     public Map<String, Object> getCredentialSubjectAsMap() {
         Map<String, Object> credentialSubject = new HashMap<>();
         Map<String, String> credentialSubjectType = new HashMap<>();

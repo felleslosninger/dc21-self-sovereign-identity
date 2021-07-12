@@ -11,9 +11,21 @@ import org.springframework.stereotype.Service;
 import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
 
+/**
+ * Class as a Service for maintaining logic for operations with creating VC's
+ */
 @Service
 public class VcService {
 
+    /**
+     * Creates VC of a specific type if:
+     *          - Type exists
+     *          - BaseVC is correct and verified
+     *
+     *@param type Type of credential, that is checked in the "database" if the type exists
+     *@param baseVC The VC gotten from the baseId issuer by logging in through id-porten.
+     *@return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by gettting that key from the VDR
+     */
     public String getVC(String type, String baseVC){
 
         if (type.equals("defaultType") || baseVC.equals("defaultVC")){
@@ -48,6 +60,12 @@ public class VcService {
         return "BaseID not valid.";
 }
 
+    /**
+     * Method that generates a Base Verifiable Credential(BaseVC) as a JWT and returns it.
+     *
+     * @param principal = OidcUser, Authenticated user.
+     * @return BaseVC as a JWT-token.
+     */
     public String getBaseVC(OidcUser principal){
         Jwt jwt = new Jwt(principal.getClaim("pid").toString(), "GrunnID-portalen.no", "BaseCredential", "baseid", "BaseID", "BaseID");
         System.out.println("ID-PORTEN TOKEN:   " + principal.getIdToken().getTokenValue());

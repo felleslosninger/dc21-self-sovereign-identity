@@ -1,9 +1,7 @@
 package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VcService;
-import com.digdir.issuer.storage.FileHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,9 +10,6 @@ import java.net.URISyntaxException;
 @RestController
 public class IssuerController {
     VcService vcService = new VcService();
-
-
-
 
     /**
      * Route that handles issuance of certain VC, it requiers a valid baseVC to be input

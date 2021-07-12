@@ -17,15 +17,48 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Objects;
 
-
+/**
+ * Class as Repository for handle operations with files.
+ */
 @Repository
 public class FileHandler {
 
     private String path = "src/main/resources/PublicKeyFile.json";
     private Writer file;
 
+    /**
+     * Method for adding a public key to VDR(PublicKeyFile.json).
+     * Retrives existing map of PK's in file and appends PK.
+     *
+     * @param id id for identifying a public key to it's owner in VDR.
+     * @param pk Public key to be saved to VDR.
+     */
+    public void addPublicKey(String id, PublicKey pk){
+        if(loadFromFile().containsKey(id)) {
+            throw new IllegalArgumentException("id already exists");
+        }
+        HashMap<String, PublicKey> map = loadFromFile();
+        map.put(id, pk);
+        saveToFile(map);
+    }
+
+    /**
+     * Method for retrieving a public key from VDR(PublicKeyFile.json)
+     * @param id id for public key to retrive
+     * @return Public Key with id as specified, if existing.
+     */
+    public PublicKey getPublicKey(String id){
+        if (!Objects.requireNonNull(loadFromFile()).containsKey(id)) {
+            throw new IllegalArgumentException("No such id");
+        }
+        return loadFromFile().get(id);
+    }
 
 
+    /**
+     * Method for saving HashMap of id and PublicKey to file.
+     * @param publicKeyMap HashMap to save.
+     */
     private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
         Gson gson = new Gson();
 
@@ -53,6 +86,11 @@ public class FileHandler {
         }
     }
 
+
+    /**
+     * Loads existing HashMap of id and PublicKey from PublicKeyFile.json
+     * @return HashMap of id and PublicKey
+     */
     private HashMap<String, PublicKey> loadFromFile() {
         try {
             InputStream inputStream = new FileInputStream(path);
@@ -76,29 +114,11 @@ public class FileHandler {
 
     }
 
-    public PublicKey getPublicKey(String id){
-        if (!Objects.requireNonNull(loadFromFile()).containsKey(id)) {
-            throw new IllegalArgumentException("No such id");
-        }
-        return loadFromFile().get(id);
-    }
 
-    public String getPublicKeyAsString(String id){
-        PublicKey pk = getPublicKey(id);
-        byte[] jsonPk = pk.getEncoded();
-        Gson gson = new Gson();
-        return gson.toJson(jsonPk);
-    }
-
-    public void addPublicKey(String id, PublicKey pk){
-        if(loadFromFile().containsKey(id)) {
-            throw new IllegalArgumentException("id already exists");
-        }
-        HashMap<String, PublicKey> map = loadFromFile();
-        map.put(id, pk);
-        saveToFile(map);
-    }
-
+    /**
+     * Method for removing a public key from VDR(PublicKeyFile.json) with specific id.
+     * @param id id for publuc key to remove
+     */
     public void removeKeyByID(String id) {
         if(!loadFromFile().containsKey(id)) {
             throw new IllegalArgumentException("no such id, cannot remove");
@@ -111,12 +131,7 @@ public class FileHandler {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         KeyPairGenerator kpg1 = KeyPairGenerator.getInstance("RSA");
-        /*
-        HashMap<String, PublicKey> map = new HashMap<>();
-        map.put("id1", kpg1.generateKeyPair().getPublic());
-        map.put("id2", kpg1.generateKeyPair().getPublic());
 
-         */
 
         FileHandler fh = new FileHandler();
         HashMap<String, PublicKey> map;
@@ -129,6 +144,13 @@ public class FileHandler {
 
     }
 
+    // Used in test: -----------------------------------------------------------------------
+    public String getPublicKeyAsString(String id){
+        PublicKey pk = getPublicKey(id);
+        byte[] jsonPk = pk.getEncoded();
+        Gson gson = new Gson();
+        return gson.toJson(jsonPk);
+    }
     public void setPath(String path){
         this.path = path;
     }

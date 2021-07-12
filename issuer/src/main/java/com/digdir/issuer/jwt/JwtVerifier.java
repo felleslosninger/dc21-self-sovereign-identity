@@ -5,17 +5,22 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.SignatureGenerationException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import javax.xml.crypto.AlgorithmMethod;
 import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
 
-
+/**
+ * Class for Verifying and decoding Json Web Tokens
+ */
 public class JwtVerifier {
 
+
+    /**
+     * Method decodes JWT-String to DecodedJWT, ready for verifying.
+     * @param jwtToken String-representation of a JWT
+     * @return JWT as DecodedJWT
+     */
     public DecodedJWT decodeJwt(String jwtToken) {
         DecodedJWT jwt = null;
         try {
@@ -28,6 +33,14 @@ public class JwtVerifier {
     }
 
 
+    /**
+     * Method for verifing signature of a JWT with signer's public key
+     *
+     * @param token JWT as String
+     * @param rsaPublicKey Public key of signer
+     * @return true if verified, false if not verified.
+     * @throws URISyntaxException If the URI is of wrong format.
+     */
     public boolean verifyVC(String token, RSAPublicKey rsaPublicKey) throws URISyntaxException {
         try {
             DecodedJWT jwt = decodeJwt(token);
@@ -45,9 +58,4 @@ public class JwtVerifier {
             return false;
         }
     }
-
-
-
-
-
 }
