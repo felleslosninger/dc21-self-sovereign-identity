@@ -3,7 +3,7 @@ package com.digdir.issuer;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.digdir.issuer.credentials.old.Credential;
 import com.digdir.issuer.jwt.Jwt;
-import com.digdir.issuer.jwt.JwtTypeHandler;
+import com.digdir.issuer.storage.JwtTypeHandler;
 import com.digdir.issuer.jwt.JwtVerifier;
 import com.digdir.issuer.old.Signing;
 import com.digdir.issuer.storage.FileHandler;

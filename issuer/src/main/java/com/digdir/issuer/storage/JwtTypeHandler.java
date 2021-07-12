@@ -1,4 +1,4 @@
-package com.digdir.issuer.jwt;
+package com.digdir.issuer.storage;
 import java.io.*;
 import java.util.*;
 
