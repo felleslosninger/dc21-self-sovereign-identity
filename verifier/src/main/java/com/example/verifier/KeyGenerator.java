@@ -1,13 +1,8 @@
 package com.example.verifier;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.security.*;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Scanner;
-import java.util.UUID;
+
 
 public class KeyGenerator {
 

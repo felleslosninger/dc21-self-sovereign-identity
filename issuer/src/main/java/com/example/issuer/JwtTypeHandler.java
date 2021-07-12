@@ -34,7 +34,6 @@ public class JwtTypeHandler {
      * Method that gets from file the required input params and each corresponding value for a given type
      * @param type = the jwt type that we wish to get the params for
      * @return a map that maps each param to its value from the given type, an empty map if the type is not found
-     * @throws FileNotFoundException if the file is not found
      */
     private Map<String, String> getType(String type) {
         Map<String, String> typeMap = new HashMap<>();
@@ -64,7 +63,6 @@ public class JwtTypeHandler {
     /**
      * Gets from file all the available jwt types
      * @return a collection of all the types
-     * @throws FileNotFoundException if the file is not found
      */
     public Collection<String> getTypes() {
         Collection<String> types = new ArrayList<>();

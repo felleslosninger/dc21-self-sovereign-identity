@@ -21,8 +21,6 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class Requester {
 
-
-
     private final URI endpointBaseUri;
 
     /**
@@ -85,7 +83,6 @@ public class Requester {
 
     /**
      * Method that gets the VC/VP Jwt-token of the requested type
-     *
      * @param type = the type of VC/VP Jwt-token to request
      * @return the token of the requested VC/CP, or null if it was not found
      */

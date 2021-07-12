@@ -1,11 +1,6 @@
 package com.example.verifier;
 
-import com.example.verifier.Credential;
-import com.example.verifier.KeyGenerator;
-import com.example.verifier.SignatureVerifier;
-import com.example.verifier.Signing;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.BadPaddingException;
