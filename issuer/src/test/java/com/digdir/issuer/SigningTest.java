@@ -2,6 +2,7 @@ package com.digdir.issuer;
 
 import com.digdir.issuer.credentials.old.Credential;
 import com.digdir.issuer.old.Signing;
+import com.digdir.issuer.util.KeyGenerator;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.BadPaddingException;

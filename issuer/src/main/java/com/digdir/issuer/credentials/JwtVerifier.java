@@ -1,4 +1,4 @@
-package com.digdir.issuer.jwt;
+package com.digdir.issuer.credentials;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

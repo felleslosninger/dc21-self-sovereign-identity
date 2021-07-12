@@ -1,6 +1,7 @@
 package com.digdir.issuer;
 
 import com.digdir.issuer.storage.FileHandler;
+import com.digdir.issuer.util.KeyGenerator;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

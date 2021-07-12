@@ -1,6 +1,6 @@
 package com.digdir.issuer.old;
 
-import com.digdir.issuer.KeyGenerator;
+import com.digdir.issuer.util.KeyGenerator;
 import com.digdir.issuer.credentials.old.Credential;
 
 import java.security.Key;

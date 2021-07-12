@@ -1,4 +1,4 @@
-package com.digdir.issuer.controller;
+package com.digdir.issuer.security;
 
 
 import org.springframework.context.annotation.Configuration;

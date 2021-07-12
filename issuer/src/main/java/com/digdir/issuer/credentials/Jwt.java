@@ -1,10 +1,8 @@
-package com.digdir.issuer.jwt;
+package com.digdir.issuer.credentials;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.digdir.issuer.KeyGenerator;
-import com.digdir.issuer.credentials.CredentialSubject;
-import com.digdir.issuer.credentials.VC;
+import com.digdir.issuer.util.KeyGenerator;
 import com.digdir.issuer.storage.FileHandler;
 
 import java.security.NoSuchAlgorithmException;

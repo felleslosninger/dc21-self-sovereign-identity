@@ -1,8 +1,8 @@
 package com.digdir.issuer.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.digdir.issuer.jwt.Jwt;
-import com.digdir.issuer.jwt.JwtVerifier;
+import com.digdir.issuer.credentials.Jwt;
+import com.digdir.issuer.credentials.JwtVerifier;
 import com.digdir.issuer.storage.FileHandler;
 import com.digdir.issuer.storage.JwtTypeHandler;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;

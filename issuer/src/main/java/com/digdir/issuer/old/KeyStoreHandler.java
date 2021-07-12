@@ -1,6 +1,6 @@
 package com.digdir.issuer.old;
 
-import com.digdir.issuer.KeyGenerator;
+import com.digdir.issuer.util.KeyGenerator;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

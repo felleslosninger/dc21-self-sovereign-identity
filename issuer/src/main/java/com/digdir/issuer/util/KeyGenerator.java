@@ -1,4 +1,4 @@
-package com.digdir.issuer;
+package com.digdir.issuer.util;
 
 import java.security.*;
 
