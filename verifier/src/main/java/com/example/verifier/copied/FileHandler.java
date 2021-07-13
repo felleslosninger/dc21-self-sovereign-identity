@@ -24,7 +24,7 @@ public class FileHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private String path = "verifier/src/main/resources/testFile.json";
+    private String path = "verifier/src/main/resources/PublicKeyFile.json";
 
 
     /**

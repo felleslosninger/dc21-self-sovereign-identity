@@ -105,8 +105,8 @@ public class Requester {
 
 
       //  Requester r = new Requester("http://localhost:8083/api/key/");
-        Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
-        System.out.println(r2.getJwt("over-18"));
+        Requester r2 = new Requester("http://localhost:8083/api/getVC/");
+        System.out.println(r2.getJwt("?type=over-18"));
        // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
 /*
 
