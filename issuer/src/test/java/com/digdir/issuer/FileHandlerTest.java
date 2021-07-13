@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileHandlerTest {
     static FileHandler fileHandler;
-    private static final String issuerId = "idTest1";
+    private static final String issuerId = "idTest1122";
     private static PublicKey publicKey;
     static KeyGenerator keyGenerator;
     @BeforeAll

@@ -88,7 +88,6 @@ public class FileHandler {
 
 
     /**
-     * Todo: Change catch to human readable
      * Loads existing HashMap of id and PublicKey from PublicKeyFile.json
      * @return HashMap of id and PublicKey
      */
@@ -103,7 +102,7 @@ public class FileHandler {
                 try {
                     publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value)));
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
-                    invalidKeySpecException.printStackTrace();
+                    System.out.println("Problem in Filehandler. Cant load from file. ");
                 }
             });
             return publicKeyMap;
