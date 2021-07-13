@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>3.17.0</version>
+            <version>3.18.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,10 +68,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.2.11.RELEASE</version>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, Button, View } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
@@ -26,14 +26,15 @@ export default function ActivityFrame() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View>
-                <Button
-                    title={`Send bevis ${credential.vc} til tjeneste X`}
-                    color="#f1940f"
-                    onPress={() => sendCredential()}
-                />
-            </View>
-            <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
+            <TouchableOpacity onPress={sendCredential}>
+                <SafeAreaView style={styles.sendButton}>
+                    <Text style={styles.buttonText}>Send bevis {credential.vc} til tjeneste X</Text>
+                </SafeAreaView>
+            </TouchableOpacity>
+            <SafeAreaView styles={styles.sharedProofText}>
+                <Text style={styles.buttonText}>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
+            </SafeAreaView>
+
         </SafeAreaView>
     );
 }
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
         paddingBottom: '2%',
         width: '80%',
         alignSelf: 'center',
+        padding: '2%',
     },
     buttonText: {
         fontSize: 20,
@@ -59,7 +61,6 @@ const styles = StyleSheet.create({
     },
     sharedProofText: {
         alignSelf: 'center',
-        marginTop: '5%',
     },
 });
 

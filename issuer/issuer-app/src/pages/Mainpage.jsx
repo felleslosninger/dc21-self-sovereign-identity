@@ -11,8 +11,7 @@ function Mainpage() {
         { value: 'fødselsattest', label: 'Fødselsattest' }
     ]
     let history = useHistory();
-    let chosenOption;
-    let credential = "start";
+
 
     async function getCredential() {
         //console.log(chosenOption)
@@ -20,7 +19,6 @@ function Mainpage() {
         let response = await fetch('/api/getCredential/' + selectedOption.value)
             .then(response => response.json())
 
-        credential = response;
 
         console.log(selectedOption.value);
 
@@ -64,7 +62,7 @@ function Mainpage() {
 
             <br/><br/> <br/>
 
-            <QRCode  value={credential} />
+            <QRCode  value={selectedOption.value} />
         </div>
     )
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import 'react-native-gesture-handler';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -16,12 +17,15 @@ import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 import VerifierLogFrame from './components/frames/VerifierLogFrame';
 import Access from './components/frames/Access';
 import ProfileMenuSlide from './components/frames/ProfileMenu';
+import Onboarding from './components/frames/Onboarding';
+import StartPage from './components/frames/StartPage';
 
 export default function AppWrapper() {
     const Stack = createStackNavigator();
     const Tab = createBottomTabNavigator();
 
     const OverviewStack = createStackNavigator();
+    const StartStack = createStackNavigator();
 
     const { signedIn } = useSelector((state) => state.signedInStatus);
 
@@ -35,6 +39,16 @@ export default function AppWrapper() {
                 <OverviewStack.Screen name="Delt med" component={VerifierLogFrame} />
                 <OverviewStack.Screen name="Profil" component={ProfileMenuSlide} />
             </OverviewStack.Navigator>
+        );
+    }
+
+    function StartStackScreen() {
+        return (
+            <StartStack.Navigator>
+                <StartStack.Screen name="Start" component={StartPage} />
+                <StartStack.Screen name="Opprett bruker" component={Onboarding} />
+                <StartStack.Screen name="Adgangskontroll" component={Access} />
+            </StartStack.Navigator>
         );
     }
 
@@ -79,7 +93,7 @@ export default function AppWrapper() {
                     screenOptions={{
                         headerShown: false,
                     }}>
-                    <Stack.Screen name="Tilgang" component={Access} />
+                    <Stack.Screen name="Start" component={StartStackScreen} />
                 </Stack.Navigator>
             )}
         </NavigationContainer>
