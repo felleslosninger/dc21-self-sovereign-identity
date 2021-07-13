@@ -1,90 +1,65 @@
-/* SIGN.JS
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import forge from 'node-forge';
 
-import { RSA, RSAKeychain } from 'react-native-rsa-native';
+/**
+ * Creates a RS256 JWT token for a verifiable presentation.
+ *
+ * @param {string[]} jwtCredentialsList List of one or more JWT string credentials.
+ * @param {string} audience The intended receiver of the verifiable presentation.
+ * @returns A verifiable presentation JWT signed with RS256.
+ */
+export default async function createVerifiablePresentationJWT(jwtCredentialsList, audience = 'testVerifier') {
+    // Convert encode with base64 and sign using RSA SHA256.
+    // Taken from 'react-native-jwt-rsa', https://github.com/alvarorece/react-native-jwt-rsa/blob/master/index.js
 
-const secret = 'secret message';
-const keyTag = 'com.domain.mykey';
-
-export default const signDemo = async () => {
-    console.log('signDemo');
-    const keys = await RSA.generate();
-    const signature = await RSA.sign(secret, keys.private);
-    console.log('signature', signature);
-    const valid = await RSA.verify(signature, secret, keys.public);
-    console.log('verified', valid);
-};
-*/
-
-/* SIGNING.JS
-import { RSA, RSAKeychain } from 'react-native-digital-signature';
-
-// export function encrypting() {
-const message = 'my secret message';
-
-RSA.generateKeys(4096) // set key size
-    .then((keys) => {
-        console.log('4096 private:', keys.private); // the private key
-        console.log('4096 public:', keys.public); // the public key
-        RSA.encrypt(message, keys.public).then((encodedMessage) => {
-            console.log(`the encoded message is ${encodedMessage}`);
-            RSA.decrypt(encodedMessage, keys.private).then((decryptedMessage) => {
-                console.log(`The original message was ${decryptedMessage}`);
-            });
-        });
-    });
-// };
-
-export function main() {
-    const keyTag = 'com.domain.mykey';
-    const message = 'message to be verified';
-
-    const publicKey = generateKeyPair(keyTag);
-    // Share the generated public key with third parties as desired.
-
-    const messageSignature = RSAKeychain.sign(message, keyTag);
-
-    if (RSAKeychain.verify(messageSignature, message, keyTag)) {
-        // The signature matches: trust this message.
-    } else {
-        // The signature does not match.
+    const removeB64Padding = (base64) => base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    function encodeB64(str) {
+        const encodedB64 = forge.util.encode64(str);
+        return removeB64Padding(encodedB64);
     }
 
-    RSAKeychain.deletePrivateKey(keyTag);
+    // Could be extracted as a separate util function
+    const time = Math.floor(Date.now() / 1000);
+
+    // Header for the JWT token, will always be the same
+    const header = {
+        alg: 'RS256',
+        typ: 'JWT',
+    };
+
+    // Create the payload using the provided parameters
+    const payload = {
+        // TODO: Assign proper subject
+        sub: 'testSub',
+        aud: audience,
+        // Will expire in 5 minutes
+        exp: time + 300,
+        iat: time,
+        // TODO: Improve random generation of unique ID
+        jti: Math.floor(Math.random() * 100000000),
+        cred: jwtCredentialsList,
+    };
+
+    const strHeader = JSON.stringify(header);
+    const strPayload = JSON.stringify(payload);
+
+    const header64 = encodeB64(strHeader);
+    const payload64 = encodeB64(strPayload);
+
+    // The message to be signed
+    const preHash = `${header64}.${payload64}`;
+    const md = forge.md.sha256.create();
+    md.update(preHash, 'utf8');
+
+    // Generates a RSA keypair, should perhaps be moved to global state
+    const key = forge.pki.rsa.generateKeyPair(2048);
+    console.log(forge.pki.publicKeyToPem(key.publicKey));
+    console.log(forge.pki.privateKeyToPem(key.privateKey));
+
+    // The signature for the header and payload message
+    const signature = key.privateKey.sign(md);
+    const signature64 = encodeB64(signature);
+
+    // Concatenate the base64 encoded header, payload and signature as a JWT.
+    const token = `${header64}.${payload64}.${signature64}`;
+    return token;
 }
-
-export function generateKeyPair(keyTag) {
-    const keys = RSAKeychain.generate(keyTag);
-    return keys.public;
-}
-*/
-
-/* SIGNNEW.JS
-import { KEYUTIL, KJUR } from 'jsrsasign';
-
-export const sign = async () => {
-    const rsaKeypair = KEYUTIL.generateKeypair('RSA', 2048);
-
-    // RSA signature generation
-    const sig = new KJUR.crypto.Signature({ alg: 'SHA256withRSA' });
-    console.log(sig);
-
-    const publicKey = rsaKeypair.pubKeyObj;
-    console.log(publicKey);
-    const privateKey = rsaKeypair.prvKeyObj;
-    console.log(privateKey);
-
-    sig.init(privateKey);
-    sig.updateString('hallo');
-    const signature = sig.sign();
-    console.log(signature);
-
-    // DSA signature validation
-    const sig2 = new KJUR.crypto.Signature({ alg: 'SHA256withRSA' });
-    sig2.init(publicKey);
-    sig2.updateString('hallo');
-    const isValid = sig2.verify(signature);
-    console.log(isValid);
-};
-*/

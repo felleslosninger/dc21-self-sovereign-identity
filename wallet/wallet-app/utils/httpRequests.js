@@ -8,7 +8,29 @@ export async function httpGetCredential(statement) {
     return payload;
 }
 
+// Utdatert
+/*
 export async function httpSendCredential(token) {
+    const url = `${verifierUrl}/sendCredential`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: token,
+        });
+        if (response.ok) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        // eslint-disable-next-line no-alert
+        alert('Noe gikk galt...');
+        return false;
+    }
+}
+*/
+
+export async function httpSendPresentation(token) {
     const url = `${verifierUrl}/sendCredential`;
 
     try {

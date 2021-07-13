@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, Button, View } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
-import { httpSendCredential } from '../../utils/httpRequests';
+import { httpSendPresentation } from '../../utils/httpRequests';
+import createVerifiablePresentationJWT from '../../utils/sign';
+import createVerifiablePresentation from '../../utils/sign';
 
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
@@ -18,8 +20,18 @@ export default function ActivityFrame() {
     });
     // const { cred } = useSelector((state) => state.credentials);
 
+    /* UTDATERT
     async function sendCredential() {
         const verified = await httpSendCredential(credential.token);
+        setStatus(verified);
+        return verified;
+    }
+
+    */
+
+    async function sendPresentation() {
+        const token = await createVerifiablePresentationJWT([credential.token], 'verifier123');
+        const verified = await httpSendPresentation(token);
         setStatus(verified);
         return verified;
     }
@@ -30,7 +42,7 @@ export default function ActivityFrame() {
                 <Button
                     title={`Send bevis ${credential.vc} til tjeneste X`}
                     color="#f1940f"
-                    onPress={() => sendCredential()}
+                    onPress={() => sendPresentation()}
                 />
             </View>
             <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
