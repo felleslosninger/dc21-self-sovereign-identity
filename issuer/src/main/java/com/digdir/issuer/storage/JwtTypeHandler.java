@@ -25,7 +25,7 @@ import java.util.*;
 public class JwtTypeHandler {
 
 
-    private final String path = "src/main/resources/JwtTypes.txt";
+    private final String path = "issuer/src/main/resources/JwtTypes.txt";
 
 
     /**
@@ -101,6 +101,7 @@ public class JwtTypeHandler {
         System.out.println(jth.getType("over-18"));
         System.out.println(jth.getVcType("over-18"));
         System.out.println(jth.getClaimType("er-sykepleier"));
+        System.out.println(jth.getTypes());
 
 
     }

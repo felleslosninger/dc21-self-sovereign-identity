@@ -50,7 +50,7 @@ public class JwtVerifier {
     public boolean verifyToken(String token) {
         try {
             DecodedJWT jwt = decodeJwt(token);
-            Requester r = new Requester("http://localhost:8083/api/key/");
+            Requester r = new Requester("http://localhost:8083/vdr/key/");
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) r.getKeyByID(jwt.getIssuer()), null);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(jwt.getIssuer())
@@ -58,7 +58,7 @@ public class JwtVerifier {
             verifier.verify(token);
 
             return true;
-        }catch (JWTVerificationException | URISyntaxException exception){
+        }catch (JWTVerificationException exception){
             //Invalid signature/claims
             System.out.println("Token not verified");
             return false;
@@ -147,7 +147,7 @@ public class JwtVerifier {
     }
 
 
-//    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) throws URISyntaxException {
 //    /*    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiaXNzIjoidGVzdElzc2Q4NzAyNTAyLWJkMTctNGQ3Mi04NGNhLWY3MDY4YTE2YjdiNyIsImV4cCI6MTYyNjc3NTE1NywiaWF0IjoxNjI1NTY1NTU3LCJ2YyI6eyJjcmVkZW50aWFsU3ViamVjdCI6eyJhZ2UiOnsibmFtZSI6Ik92ZXIgMTgiLCJ0eXBlIjoib3Zlci0xOCJ9fSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkFnZUNyZWRlbnRpYWwiXSwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXX0sImp0aSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4My9jcmVkZW50aWFscy8xIn0.mSi6wBHK0Qhr5g_hEKl0mCUbbp0EswQQ5nJsLT45T1DPnYtmAHmtKjqLcyaEk4nzBnzkGo9hnf0PM8qr62D00IWVFyfXoEEJ_btbOOIkw8qjpBzjP3pHxn1Vc4c8Wq85PpkZ9EEFVE-mtWi20cRlWqFyAl9P0R6YibsIdB3H2uwl8K-LKQHIenLQjmDDkQ8pvgwdwBE7TzVnZhgKYRqzglb_Ry9notEa8GEvuqn60dsZJPnWdD8cuiZvCotIQoaEAKxOMXeLVJ97EoarrmXtmxCytCKUeEY6Al8CuJHPIoPAh9FgO6tbxJiGCNV7QqQGItRZPQBunfHBYAWLwESOFA";
 //        JwtVerifier v = new JwtVerifier();
 //         System.out.println(v.verify(token));
@@ -175,7 +175,14 @@ public class JwtVerifier {
 //        System.out.println(decoded.getClaim("cred").getClass());
 //        System.out.println(decoded.getClaim("cred"));*/
 //
-//    }
+
+
+        String VCtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwODA4OTQwOTM4MiIsImlzcyI6IlV0c2VkZXJBdkJldmlzLm5vNzY2YjEwZTMtMzJmMi00MDdkLThjNGItMjRjMGQ2NDIxY2VlIiwiZXhwIjoxNjI3MzcwMTExLCJpYXQiOjE2MjYxNjA1MTEsInZjIjp7ImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFnZSI6eyJuYW1lIjoiT3ZlciAxOCIsInR5cGUiOiJvdmVyLTE4In19LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiQWdlQ3JlZGVudGlhbCJdLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdfSwianRpIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgzL2NyZWRlbnRpYWxzLzEifQ.O9GhYrVxrGKlAvcpseL-RGmnPCAbcrepGyOBE8OERPqN7YMsWhPskEtdnWq5YGqfRU9GEm1gGpoLe4rIsgCts8PbBp_W0m-5ANINI_L2XpPAUHF95FJcqbICyOf3ZAJaE1h0QQsfJi7yvUI-M0mqXSNkTk62wM8uMxh7YHUqs0G3jf4fXs_CKETRiiDW9juKMO6sZZPZru36gTfmZ6j5mvDNTTzQI23SOcF7cn0IMUTZw-to1PoT3ry8OIBjaZZXvwxk-FFmDNGwi_M0VbIj8a1HHdcDaHhgVsCVG3SVOeTwhfwAX97glT0BmRXL-9NHB9_DSR-j1-A3cZwSSDjW9Q";
+        JwtVerifier v = new JwtVerifier();
+        System.out.println(v.verifyToken(VCtoken));
+
+        System.out.println(v.verifyVC(VCtoken, "over-18"));
+    }
 
 
 
