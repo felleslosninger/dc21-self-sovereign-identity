@@ -9,7 +9,7 @@ public class VerifyController {
 
 
 
-    private VerifyService verifyService = new VerifyService();
+    private final VerifyService verifyService = new VerifyService();
 
 
     @GetMapping("/api/hello")

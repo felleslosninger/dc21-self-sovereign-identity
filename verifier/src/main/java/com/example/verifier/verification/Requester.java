@@ -61,12 +61,12 @@ public class Requester {
     public PublicKey getKeyByID(String id) {
         PublicKey publicKey;
         HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
-        System.out.println(request);
+      //  System.out.println(request);
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             final String responseString = response.body();
-            System.out.println("getKeyByID() response: " + responseString);
+          //  System.out.println("getKeyByID() response: " + responseString);
             Gson gson = new Gson();
             byte[] bytes = gson.fromJson(responseString, byte[].class);
 
