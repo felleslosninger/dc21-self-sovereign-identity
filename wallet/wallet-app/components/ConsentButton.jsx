@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 
+/**
+ * Toggle button that changes between true/false depending on if you want/not want to share information
+ * @returns Toggle button and text describing the status of the button (boolean)
+ */
 export default function ConsentButton() {
     const styles = StyleSheet.create({
         container: {
@@ -8,9 +12,8 @@ export default function ConsentButton() {
         },
     });
 
-    const [isAccepted, setIsAccepted] = useState(false); // fra start har man ikke akseptert å dele vc
-    const toggleSwitch = () => setIsAccepted((previousState) => !previousState); // deler vc når du trykker på toggle
-
+    const [isAccepted, setIsAccepted] = useState(false); // in the beginning it has not been accepted to share proof
+    const toggleSwitch = () => setIsAccepted((previousState) => !previousState); // shares proof when you press toggle (isAccepted change true/false to the opposite of what it was)
     return (
         <View style={styles.container}>
             <Text>Ønsker du å dele informasjon?</Text>

@@ -2,6 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ConsentButton from './ConsentButton';
 
+/**
+ * A card for a verifier 
+ * (VerifierLogFrame shows all Verifier cards that belong to a proof)
+ * @param {string} props props is from VerifierLogFrame with corresponding props
+ * @returns A card for a verifier
+ */
 export default function Verifier(props) {
     const styles = StyleSheet.create({
         theProofs: {

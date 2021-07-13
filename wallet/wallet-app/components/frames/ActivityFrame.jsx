@@ -4,6 +4,10 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
 import { httpSendCredential } from '../../utils/httpRequests';
 
+/**
+ * A frame with a botton to send proof to a verifier if you choose to share
+ * @returns A frame, sending the proof
+ */
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
 
