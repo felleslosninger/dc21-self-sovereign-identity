@@ -114,7 +114,6 @@ public class FileHandler {
 
     }
 
-
     /**
      * Method for removing a public key from VDR(PublicKeyFile.json) with specific id.
      * @param id id for publuc key to remove
@@ -129,20 +128,7 @@ public class FileHandler {
 
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        KeyPairGenerator kpg1 = KeyPairGenerator.getInstance("RSA");
 
-
-        FileHandler fh = new FileHandler();
-        HashMap<String, PublicKey> map;
-        map =  fh.loadFromFile();
-        map.put("id1", kpg1.generateKeyPair().getPublic());
-
-        fh.saveToFile(map);
-        HashMap<String, PublicKey> newMap = fh.loadFromFile();
-        System.out.println(newMap.get("id1").getClass());
-
-    }
 
     // Used in test: -----------------------------------------------------------------------
     public String getPublicKeyAsString(String id){

@@ -1,8 +1,9 @@
-package com.digdir.issuer;
+package com.digdir.issuer.storage;
 
 import com.digdir.issuer.storage.FileHandler;
 import com.digdir.issuer.util.KeyGenerator;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ class FileHandlerTest {
     private static final String issuerId = "idTest1122";
     private static PublicKey publicKey;
     static KeyGenerator keyGenerator;
+
     @BeforeAll
     static void before() throws NoSuchAlgorithmException {
         keyGenerator = new KeyGenerator();
@@ -46,6 +48,11 @@ class FileHandlerTest {
 
 
         assertEquals(pkAsString, pkAsString_main);
+    }
+
+    @AfterAll
+    static void teardown(){
+        fileHandler.removeKeyByID("idTest1122");
     }
 
 
