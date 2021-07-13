@@ -1,12 +1,6 @@
 package com.example.verifier;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.json.JSONException;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
-import org.springframework.http.ResponseEntity;
-
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,15 +8,12 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
 
 
 /**
@@ -33,15 +24,18 @@ public class Requester {
 
 
     private final URI endpointBaseUri;
-    private final ObjectMapper objectMapper;
 
     /**
      * Class constructor
      * @param uri = uri-string to the api-server
+     * @throws IllegalArgumentException if the param uri cannot be parsed as a URI reference
      */
-    public Requester(String uri) throws URISyntaxException {
-        this.endpointBaseUri = new URI(uri);
-        this.objectMapper = new ObjectMapper();
+    public Requester(String uri) {
+        try {
+            this.endpointBaseUri = new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(uri + " cannot be parsed as a URI reference");
+        }
 
     }
 
@@ -67,7 +61,7 @@ public class Requester {
      * @return the public key, or null if it was not found
      */
     public PublicKey getKeyByID(String id) {
-        PublicKey publicKey = null;
+        PublicKey publicKey;
         HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
         System.out.println(request);
         try {
@@ -96,14 +90,13 @@ public class Requester {
      * @return the token of the requested VC/CP, or null if it was not found
      */
     public String getJwt(String type) {
-        String token = null;
+        String token;
         HttpRequest request = HttpRequest.newBuilder(requestUri(type)).GET().build();
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             System.out.println("getJwt() response: " + response);
-            String responseString = response.body();
-            token = responseString;
+            token = response.body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -114,7 +107,7 @@ public class Requester {
     public static void main(String[] args) throws Exception {
 
 
-        Requester r = new Requester("http://localhost:8083/api/key/");
+      //  Requester r = new Requester("http://localhost:8083/api/key/");
         Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
         System.out.println(r2.getJwt("over-18"));
        // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));

@@ -1,128 +1,68 @@
 import React from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { removeCredential } from '../redux/CredentialSlice';
 
-export default function Proof() {
+export default function Proof(props) {
     const navigation = useNavigation();
-
     const { cred } = useSelector((state) => state.credentials);
+
     const dispatch = useDispatch(); // To call every reducer that we want
 
-    /* STORAGE - IKKE FJERN
-    
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
-
-    const [proofs, setProofs] = useState([]);
-  const [keys, setKeys] = useState([]);
-
-  const isFocused = useIsFocused();
-
-  const getProofs = async () => {
-    try {
-      for (let key = 0; key < keys.length; key++) {
-        const value = await AsyncStorage.getItem(keys[key]);
-        if (value !== null) {
-          console.log(value);
-          if (!proofs.some((item) => item.id == keys[key])) {
-            proofs.push({ id: keys[key], proof: value });
-          }
+    async function removeItemValue(key) {
+        dispatch(removeCredential(key));
+        try {
+            await AsyncStorage.removeItem(key);
+            return true;
+        } catch (exception) {
+            return false;
         }
-        console.log('Proofs:', proofs);
-      }
-    } catch (error) {
-      alert(error);
     }
-  };
-
-  const getKeys = async () => {
-    try {
-      const theKeys = await AsyncStorage.getAllKeys();
-      console.log(theKeys);
-      if (theKeys !== null) {
-        for (let i = 0; i < theKeys.length; i++) {
-          if (!keys.includes(theKeys[i])) {
-            keys.push(theKeys[i]);
-            console.log(keys);
-          }
-        }
-      }
-      console.log(keys);
-      getProofs();
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  isFocused ? getKeys() : null;
-
-  END STORAGE
-  */
-
-    // const proofs = [
-    //   {
-    //     id: Math.random().toString(),
-    //     proof: 'førerkort-klasse-B',
-    //   },
-    //   {
-    //     id: Math.random().toString(),
-    //     proof: 'er-sykepleier',
-    //   },
-    //   {
-    //     id: Math.random().toString(),
-    //     proof: theProof,
-    //   },
-    // ];
-
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            marginTop: '12%',
-        },
-        theProofs: {
-            backgroundColor: '#CDE8C5',
-            padding: 10,
-            fontSize: 20,
-            marginVertical: 3,
-            marginHorizontal: 16,
-            borderRadius: 4,
-            alignItems: 'center',
-        },
-        textProofs: {
-            fontSize: 40,
-        },
-        proofLog: {
-            borderRadius: 4,
-            backgroundColor: 'rgb(242, 242, 242)',
-            padding: 10,
-            marginTop: 10,
-        },
-    });
 
     return (
-        <FlatList
-            keyExtractor={(item) => item.jti}
-            data={cred}
-            renderItem={({ item }) => (
-                <View style={styles.theProofs}>
-                    <Text style={styles.textProofs}> {item.vc}</Text>
-                    <Text> Utstedt av: {item.iss}</Text>
-                    <Text>
-                        Gyldig fra/til: {new Date(item.iat).toLocaleString()}/{new Date(item.exp).toLocaleString()}
-                    </Text>
-                    <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { item })}>
-                        <Text>Delt med</Text>
-                    </TouchableOpacity>
-                    <Button
-                        title="Fjern bevis"
-                        onPress={() => {
-                            dispatch(removeCredential(item.jti));
-                        }}
-                    />
-                </View>
-            )}
-        />
+        <View style={styles.theProofs}>
+            <Text style={styles.textProofs}> {props.name}</Text>
+            <Text> Utstedt av: {props.issuer}</Text>
+            <Text>
+                Gyldig fra/til: {new Date(props.issDate).toLocaleString()}/{new Date(props.expDate).toLocaleString()}
+            </Text>
+            <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
+                <Text>Delt med</Text>
+            </TouchableOpacity>
+            <Button
+                title="Fjern bevis"
+                onPress={() => {
+                    // dispatch(removeCredential(props.id));
+                    removeItemValue(props.id);
+                }}
+            />
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginTop: '12%',
+    },
+    theProofs: {
+        backgroundColor: '#CDE8C5',
+        padding: 10,
+        fontSize: 20,
+        marginVertical: 3,
+        marginHorizontal: 16,
+        borderRadius: 4,
+        alignItems: 'center',
+    },
+    textProofs: {
+        fontSize: 40,
+    },
+    proofLog: {
+        borderRadius: 4,
+        backgroundColor: 'rgb(242, 242, 242)',
+        padding: 10,
+        marginTop: 10,
+    },
+});
