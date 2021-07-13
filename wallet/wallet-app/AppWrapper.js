@@ -15,6 +15,7 @@ import ActivityFrame from './components/frames/ActivityFrame';
 import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 import VerifierLogFrame from './components/frames/VerifierLogFrame';
 import Access from './components/frames/Access';
+import ProfileMenuSlide from './components/frames/ProfileMenu';
 
 export default function AppWrapper() {
     const Stack = createStackNavigator();
@@ -32,6 +33,7 @@ export default function AppWrapper() {
                 }}>
                 <OverviewStack.Screen name="Oversikt" component={ProofOverviewFrame} />
                 <OverviewStack.Screen name="Delt med" component={VerifierLogFrame} />
+                <OverviewStack.Screen name="Profil" component={ProfileMenuSlide} />
             </OverviewStack.Navigator>
         );
     }
@@ -52,6 +54,10 @@ export default function AppWrapper() {
                                 } else if (route.name === 'Aktivitet') {
                                     iconName = 'qrcode';
                                 }
+                                else if (route.name === 'Profil') {
+                                    iconName = 'id-badge';
+                                }
+                    
                                 // You can return any component that you like here!
                                 return <Icon name={iconName} size={size} color={color} />;
                             },
@@ -65,6 +71,7 @@ export default function AppWrapper() {
                         <Tab.Screen name="Oversikt" component={OverviewStackScreen} />
                         <Tab.Screen name="Forespørsler" component={RequestFrame} />
                         <Tab.Screen name="Aktivitet" component={ActivityFrame} />
+                        <Tab.Screen name="Profil" component={ProfileMenuSlide} />
                     </Tab.Navigator>
                 </>
             ) : (
