@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-
+import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, Flatlist } from 'react-native';
+import { addCredential } from '../../redux/CredentialSlice';
 import React, { useState } from 'react';
-import { SafeAreaView, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import Proof from '../Proof';
 import { signIn } from '../../redux/SignedInSlice';
+import ProfileMenuSlide from './ProfileMenu';
 
 export default function ProofOverviewFrame() {
     const dispatch = useDispatch(); // To call every reducer that we want
