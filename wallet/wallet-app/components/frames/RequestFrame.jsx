@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
-
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { exampleCredentialToken, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
+/**
+ * Page to request new proof, retrieve and save new proof
+ * @returns Buttons and menus to select the issuer and type of proof
+ */
 export default function RequestFrame() {
-    const [selectedIssuer, setSelectedIssuer] = useState('sv');
+    const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
-    const [statement, setStatement] = useState(null);
-
+    const [statement, setStatement] = useState('');
     const dispatch = useDispatch();
 
+    /**
+     * Retrieves proof og saves it
+     */
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
         const token = exampleCredentialToken;
@@ -24,20 +30,20 @@ export default function RequestFrame() {
         console.log(retrievedCredential);
         dispatch(addCredential(retrievedCredential));
         setCredential(retrievedCredential);
-        // saveProof(); STORAGE
+        console.log(credential);
+        console.log(decode.exp);
+        await saveProof(retrievedCredential);
     }
 
-    /*
-    const saveProof = async () => {
-      if (statement) {
-        try {
-          await AsyncStorage.setItem(Math.random().toString(36).substring(2), statement);
-        } catch (error) {
-          alert(error);
+    const saveProof = async (cred) => {
+        if (statement && cred.jti !== undefined) {
+            try {
+                await AsyncStorage.setItem(cred.jti, JSON.stringify(cred));
+            } catch (error) {
+                alert(error);
+            }
         }
-      }
     };
-    */
 
     return (
         <SafeAreaView style={styles.container}>
@@ -46,13 +52,10 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
 
-                <Picker
-                    selectedValue={selectedIssuer}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-                    <Picker.Item label="NTNU" value="ntnu" />
-                    <Picker.Item label="Statens Vegvesen" value="sv" />
-                    <Picker.Item label="Folkeregisteret" value="fr" />
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                    <Picker.Item label="NTNU" value="NTNU" />
+                    <Picker.Item label="Statens Vegvesen" value="Statens Vegvesen" />
+                    <Picker.Item label="Folkeregisteret" value="Folkeregisteret" />
                 </Picker>
             </SafeAreaView>
 
@@ -66,8 +69,8 @@ export default function RequestFrame() {
                     <Text style={styles.buttonText}>Send forespørsel</Text>
                 </SafeAreaView>
             </TouchableOpacity>
-            <SafeAreaView>
-                <Text>{credential.vc}</Text>
+            <SafeAreaView style={styles.credential}>
+                <Text style={styles.buttonText}>{credential.vc}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );
@@ -77,6 +80,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: '18%',
+        width: '80%',
+        alignSelf: 'center',
     },
     title: {
         fontSize: 30,
@@ -88,18 +93,13 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 25,
-        marginLeft: 30,
-    },
-    picker: {
-        width: '80%',
-        alignSelf: 'center',
+        paddingBottom: '1%',
     },
     input: {
         borderColor: '#add8e6',
         borderWidth: 2,
-        borderRadius: 2,
-        width: '80%',
-        alignSelf: 'center',
+        borderRadius: 5,
+        padding: 7,
     },
     proof: {
         marginTop: '3%',
@@ -107,12 +107,18 @@ const styles = StyleSheet.create({
     button: {
         marginTop: '5%',
         backgroundColor: '#add8e6',
-        alignItems: 'center',
         borderRadius: 5,
+        paddingTop: '2%',
+        paddingBottom: '2%',
         width: '80%',
         alignSelf: 'center',
     },
     buttonText: {
         fontSize: 20,
+        alignSelf: 'center',
+    },
+    credential: {
+        alignSelf: 'center',
+        marginTop: '5%',
     },
 });

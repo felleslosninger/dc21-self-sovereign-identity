@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, Button, View } from 'react-native';
+import { View, Button, Text, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
-import createVerifiablePresentation from '../../utils/sign';
 
+/**
+ * A frame with a botton to send proof to a verifier if you choose to share
+ * @returns A frame, sending the proof
+ */
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
 
@@ -64,6 +67,7 @@ const styles = StyleSheet.create({
         paddingBottom: '2%',
         width: '80%',
         alignSelf: 'center',
+        padding: '2%',
     },
     buttonText: {
         fontSize: 20,
@@ -71,7 +75,6 @@ const styles = StyleSheet.create({
     },
     sharedProofText: {
         alignSelf: 'center',
-        marginTop: '5%',
     },
 });
 
