@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Button, Text, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
-import { httpSendCredential } from '../../utils/httpRequests';
+import { httpSendPresentation } from '../../utils/httpRequests';
+import createVerifiablePresentationJWT from '../../utils/sign';
 
 /**
  * A frame with a botton to send proof to a verifier if you choose to share
@@ -22,23 +23,32 @@ export default function ActivityFrame() {
     });
     // const { cred } = useSelector((state) => state.credentials);
 
+    /* UTDATERT
     async function sendCredential() {
         const verified = await httpSendCredential(credential.token);
         setStatus(verified);
         return verified;
     }
 
+    */
+
+    async function sendPresentation() {
+        const token = await createVerifiablePresentationJWT([credential.token], 'verifier123');
+        const verified = await httpSendPresentation(token);
+        setStatus(verified);
+        return verified;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity onPress={sendCredential}>
-                <SafeAreaView style={styles.sendButton}>
-                    <Text style={styles.buttonText}>Send bevis {credential.vc} til tjeneste X</Text>
-                </SafeAreaView>
-            </TouchableOpacity>
-            <SafeAreaView styles={styles.sharedProofText}>
-                <Text style={styles.buttonText}>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
-            </SafeAreaView>
-
+            <View>
+                <Button
+                    title={`Send bevis ${credential.vc} til tjeneste X`}
+                    color="#f1940f"
+                    onPress={() => sendPresentation()}
+                />
+            </View>
+            <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
         </SafeAreaView>
     );
 }
