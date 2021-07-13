@@ -1,4 +1,4 @@
-package com.example.verifier;
+package com.example.verifier.copied;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

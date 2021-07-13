@@ -1,4 +1,4 @@
-package com.example.verifier;
+package com.example.verifier.copied;
 
 
 import com.google.gson.Gson;
@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
@@ -25,7 +24,7 @@ public class FileHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private String path = "src/main/resources/testFile.json";
+    private String path = "verifier/src/main/resources/testFile.json";
 
 
     /**

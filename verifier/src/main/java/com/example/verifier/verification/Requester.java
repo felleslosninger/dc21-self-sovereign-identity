@@ -1,4 +1,4 @@
-package com.example.verifier;
+package com.example.verifier.verification;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -20,8 +20,6 @@ import java.security.spec.X509EncodedKeySpec;
  * Class that gets information from an api-server by sending HTTP requests to the server
  */
 public class Requester {
-
-
 
     private final URI endpointBaseUri;
 
@@ -85,7 +83,6 @@ public class Requester {
 
     /**
      * Method that gets the VC/VP Jwt-token of the requested type
-     *
      * @param type = the type of VC/VP Jwt-token to request
      * @return the token of the requested VC/CP, or null if it was not found
      */
