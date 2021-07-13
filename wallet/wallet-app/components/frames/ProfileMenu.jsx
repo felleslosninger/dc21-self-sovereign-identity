@@ -5,12 +5,19 @@ import { useDispatch } from 'react-redux';
 import { signIn } from '../../redux/SignedInSlice';
 import { useNavigation } from '@react-navigation/native';
 
-//A profile site for administrativ changes on the profile
+/**
+ * A profile site for administrativ changes on the profile
+ * @returns A new site, A logout botton and a delete button 
+ */
 export default function ProfileMenuSlide() {
     const dispatch = useDispatch(); // To call every reducer that we want
     const navigation = useNavigation();
 
-    //Allert button so that it is not clicked by accident
+    /**
+     * Allert button so that it is not clicked by accident
+     * @returns Allert Button 
+     */
+
     const buttonAlert= () =>
     Alert.alert(
       "VARSEL",
@@ -27,7 +34,6 @@ export default function ProfileMenuSlide() {
 
 
     return (
-        //Making a new site in the navigation bar, with a logout button and delete button 
         <SafeAreaView>
             <View style={styles.container}>
              <Icon name='user' size={100} color='black' />
