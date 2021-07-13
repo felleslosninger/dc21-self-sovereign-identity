@@ -10,8 +10,12 @@ import Proof from '../Proof';
 import { signIn } from '../../redux/SignedInSlice';
 import ProfileMenuSlide from './ProfileMenu';
 
+/**
+ * A frame with an overview of every proof the wallet has
+ * @returns 
+ */
 export default function ProofOverviewFrame() {
-    const dispatch = useDispatch(); // To call every reducer that we want
+    const dispatch = useDispatch(); // To call every reducer that we want. Using dispatch to communicate with state management
     const { cred } = useSelector((state) => state.credentials);
 
     const [proofs, setProofs] = useState([]);
@@ -19,12 +23,15 @@ export default function ProofOverviewFrame() {
 
     const isFocused = useIsFocused();
 
+    /**
+     * Adds the keys and the associated information into a list
+     */
     const getProofs = async () => {
         try {
             for (let key = 0; key < keys.length; key++) {
                 const value = await AsyncStorage.getItem(keys[key]);
                 if (value !== null) {
-                    if (!proofs.some((item) => item.id === keys[key])) {
+                    if (!proofs.some((item) => item.id === keys[key])) { // Makes sure that there are no duplicates
                         proofs.push({ id: keys[key], proof: value });
                     }
                 }
@@ -34,6 +41,10 @@ export default function ProofOverviewFrame() {
         }
     };
 
+    /**
+     * Gets all the keys in AsyncStorage, except for the pin key
+     * Adds the keys into a list
+     */
     const getKeys = async () => {
         console.log(cred);
         try {

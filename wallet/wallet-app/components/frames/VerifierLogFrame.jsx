@@ -6,6 +6,11 @@ import { useSelector } from 'react-redux';
 import Verifier from '../Verifier';
 import CreateQR from '../QRcode';
 
+/**
+ * Page with an overview of which verifiers who have access to a specific proof
+ * @param {proof} param0 a spesific proof
+ * @returns Page with a list of all verifiers a proof is shared with
+ */
 export default function VerifierLogFrame({ route }) {
     const styles = StyleSheet.create({
         shared: {
@@ -25,6 +30,6 @@ export default function VerifierLogFrame({ route }) {
                 ))}
             <Text>En tjeneste kan verifisere beviset ditt med QRkoden under</Text>
             <CreateQR content="digdir.no" /> 
-        </SafeAreaView> // content^ kan være en jwt, url...
+        </SafeAreaView> // content^ could be a jwt, url...
     ); 
 }

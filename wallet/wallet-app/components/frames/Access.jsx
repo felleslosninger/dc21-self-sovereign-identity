@@ -9,6 +9,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { signIn } from '../../redux/SignedInSlice';
 
+
+/**
+ * Creates a PIN code and a login page where you enter the pin and one delete pin button
+ * @returns Log-in page
+ */
 export default function Access() {
     const pinView = useRef(null);
     const [showRemoveButton, setShowRemoveButton] = useState(false);
@@ -37,6 +42,9 @@ export default function Access() {
         }
     }, [enteredPin]);
 
+    /**
+     * Checks if the user already has a PIN-code for the wallet
+     */
     const checkHasPin = async () => {
         const pin = await AsyncStorage.getItem('pin');
         if (pin === null) {
@@ -56,6 +64,10 @@ export default function Access() {
 
     isFocused ? checkHasPin() : null;
 
+    /**
+     * If user does not have a PIN-code, the user creates a code
+     * If user has PIN-code it chekcs the enter pin with the users code
+     */
     const checkPin = async () => {
         if (check === false) {
             await AsyncStorage.setItem('pin', enteredPin);
@@ -72,6 +84,9 @@ export default function Access() {
         }
     };
 
+    /**
+     * Clears the inputarea 
+     */
     const clearPin = () => {
         if (text === 'Opprett personlig kode') {
             pinView.current.clearAll();
@@ -124,7 +139,7 @@ export default function Access() {
                         backgroundColor: 'rgb(242, 242, 242)',
                     }}
                     buttonTextStyle={{
-                        color: '#3aa797',
+                        color:'#3aa797', 
                     }}
                     onButtonPress={(key) => {
                         if (key === 'custom_left') {
@@ -162,4 +177,4 @@ export default function Access() {
     );
 }
 
-// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE MAN GLEMMER KODEN SIN, ELLER NOE LIGNENDE
+// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE VI GLEMMER KODEN VÅR, ELLER NOE LIGNENDE

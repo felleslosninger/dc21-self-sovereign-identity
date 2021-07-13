@@ -4,16 +4,22 @@ import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exampleToken, httpGetCredential } from '../../utils/httpRequests';
+import { exampleToken } from '../../utils/httpRequests'; // httpGetCredential
 import { addCredential } from '../../redux/CredentialSlice';
 
+/**
+ * Page to request new proof, retrieve and save new proof
+ * @returns Buttons and menus to select the issuer and type of proof
+ */
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
     const [statement, setStatement] = useState('');
-
     const dispatch = useDispatch();
 
+    /**
+     * Retrieves proof og saves it
+     */
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
         const token = exampleToken;
