@@ -6,8 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.verifier.copied.Jwt;
-import com.example.verifier.copied.JwtVP;
 
 import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
@@ -115,7 +113,7 @@ public class JwtVerifier {
      * @param types = the types required for the VP
      * @return a boolean, true if the VP was verified, false if not
      */
-    public boolean verifyVP(String token, String ... types) throws URISyntaxException {
+    public boolean verifyVP(String token, String ... types){
         try {
             DecodedJWT jwt = decodeJwt(token);
 
@@ -126,8 +124,8 @@ public class JwtVerifier {
             String[] VCs = jwt.getClaim("cred").asArray(String.class);
 
             boolean allTypesFound = true;
-            for (String type : Arrays.asList(types)) {
-                if (Arrays.stream(VCs).noneMatch(vc -> verifyVC(vc, type) ==true)) {
+            for (String type : types) {
+                if (Arrays.stream(VCs).noneMatch(vc -> verifyVC(vc, type))) {
                     allTypesFound = false;
                     System.out.println("Not all types present in VP");
                     System.out.println(type);
