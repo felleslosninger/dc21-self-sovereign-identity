@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 /**
  * A profile site for administrativ changes on the profile
- * @returns A new site, A logout botton and a delete button 
+ * @returns A new site, A logout button and a delete button 
  */
 export default function ProfileMenuSlide() {
     const dispatch = useDispatch(); // To call every reducer that we want
