@@ -31,7 +31,7 @@ export async function httpSendCredential(token) {
 */
 
 export async function httpSendPresentation(token) {
-    const url = `${verifierUrl}sendCredential`;
+    const url = `${verifierUrl}sendVP`;
 
     try {
         const response = await fetch(url, {
