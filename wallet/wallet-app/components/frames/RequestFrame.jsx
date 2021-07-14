@@ -15,20 +15,26 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
-    const [credential, setCredential] = useState('Ingen bevis hentet.');
+    const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
 
     /**
-     * Retrieves proof og saves it
+     * Retrieves proof and saves it
      */
     async function retrieveCredential() {
-        const token = await httpGetCredential(vcType, exampleBaseVc);
-        const decode = jwtDecode(token);
-        const retrievedCredential = { ...decode, token, type: vcType };
-        dispatch(addCredential(retrievedCredential));
-        setCredential(retrievedCredential);
-        // await saveProof(retrievedCredential);
+
+        const response = await httpGetCredential(vcType, exampleBaseVc);
+        try {
+            const decode = jwtDecode(response);
+            const retrievedCredential = { ...decode, token:response, type: vcType };
+            dispatch(addCredential(retrievedCredential));
+            setFeedback(`hentet ${vcType} bevis`);
+            // await saveProof(retrievedCredential);
+        }
+        catch (error) {
+            setFeedback(response);
+        }
     }
 
     const saveProof = async (cred) => {
@@ -68,7 +74,7 @@ export default function RequestFrame() {
                 </SafeAreaView>
             </TouchableOpacity>
             <SafeAreaView style={styles.credential}>
-                <Text style={styles.buttonText}>{credential.type}</Text>
+                <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );
