@@ -41,6 +41,8 @@ export default function RequestFrame() {
         }
     };
 
+    const issuers = [{name : "NTNU"}, {name : "Statens Vegvesen"}, {name : "Folkeregisteret"}, {name : "UtsederAvBevis.no"}]
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Forespørsel om nytt bevis </Text>
@@ -49,9 +51,9 @@ export default function RequestFrame() {
                 <Text style={styles.text}>Velg utsteder </Text>
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-                    <Picker.Item label="NTNU" value="NTNU" />
-                    <Picker.Item label="Statens Vegvesen" value="Statens Vegvesen" />
-                    <Picker.Item label="Folkeregisteret" value="Folkeregisteret" />
+
+                    {issuers.map((i) => (<Picker.Item label={i.name} value={i.name} />))}
+                    
                 </Picker>
             </SafeAreaView>
 
