@@ -25,6 +25,7 @@ public class BaseIDController {
      */
     @GetMapping("/protectedpage")
     public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+        System.out.println(principal.getIdToken().getTokenValue());
         return vcService.getBaseVC(principal);
     }
 

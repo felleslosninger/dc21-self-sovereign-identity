@@ -23,7 +23,7 @@ import java.util.Objects;
 @Repository
 public class FileHandler {
 
-    private String path = "issuer/src/main/resources/PublicKeyFile.json";
+    private String path = "src/main/resources/PublicKeyFile.json";
     private Writer file;
 
     /**
