@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exampleCredentialToken, httpGetCredential } from '../../utils/httpRequests';
+import { exampleBaseVc, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -16,27 +16,23 @@ import { addCredential } from '../../redux/CredentialSlice';
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
-    const [statement, setStatement] = useState('');
+    const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
 
     /**
      * Retrieves proof og saves it
      */
     async function retrieveCredential() {
-        // const token = await httpGetCredential(statement);
-        const token = exampleCredentialToken;
+        const token = await httpGetCredential(vcType, exampleBaseVc);
         const decode = jwtDecode(token);
-        const retrievedCredential = { ...decode, token };
-        console.log(retrievedCredential);
+        const retrievedCredential = { ...decode, token, type: vcType };
         dispatch(addCredential(retrievedCredential));
         setCredential(retrievedCredential);
-        console.log(credential);
-        console.log(decode.exp);
-        await saveProof(retrievedCredential);
+        // await saveProof(retrievedCredential);
     }
 
     const saveProof = async (cred) => {
-        if (statement && cred.jti !== undefined) {
+        if (vcType && cred.jti !== undefined) {
             try {
                 await AsyncStorage.setItem(cred.jti, JSON.stringify(cred));
             } catch (error) {
@@ -61,7 +57,7 @@ export default function RequestFrame() {
 
             <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
-                <TextInput style={styles.input} onChangeText={setStatement} value={statement} placeholder="Bevis" />
+                <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
             </SafeAreaView>
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
@@ -70,7 +66,7 @@ export default function RequestFrame() {
                 </SafeAreaView>
             </TouchableOpacity>
             <SafeAreaView style={styles.credential}>
-                <Text style={styles.buttonText}>{credential.vc}</Text>
+                <Text style={styles.buttonText}>{credential.type}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );

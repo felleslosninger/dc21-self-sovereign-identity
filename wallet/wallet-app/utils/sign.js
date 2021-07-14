@@ -1,4 +1,5 @@
 import forge from 'node-forge';
+import { httpPostPublicKey } from './httpRequests';
 
 /**
  * Creates a RS256 JWT token for a verifiable presentation.
@@ -29,6 +30,7 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     // Create the payload using the provided parameters
     const payload = {
         // TODO: Assign proper subject
+        iss: 'walletId5547981c-9477-4a83-918b-b22fe89bd3cb',
         sub: 'testSub',
         aud: audience,
         // Will expire in 5 minutes
@@ -52,6 +54,8 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
 
     // Generates a RSA keypair, should perhaps be moved to global state
     const key = forge.pki.rsa.generateKeyPair(2048);
+    const publicKey = forge.pki.publicKeyToPem(key.publicKey);
+    await httpPostPublicKey(payload.iss, publicKey);
     console.log(forge.pki.publicKeyToPem(key.publicKey));
     console.log(forge.pki.privateKeyToPem(key.privateKey));
 
