@@ -58,7 +58,7 @@ public class JwtVerifier {
             verifier.verify(token);
 
             return true;
-        }catch (JWTVerificationException | URISyntaxException exception){
+        }catch (JWTVerificationException exception){
             //Invalid signature/claims
             System.out.println("Token not verified");
             return false;

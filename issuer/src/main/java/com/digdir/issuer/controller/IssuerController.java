@@ -1,11 +1,14 @@
 package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VcService;
+import com.digdir.issuer.storage.JwtTypeHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URISyntaxException;
+import java.util.Collection;
+
 
 @RestController
 public class IssuerController {
@@ -23,4 +26,11 @@ public class IssuerController {
     public String getVC(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC) throws URISyntaxException {
         return vcService.getVC(type, baseVC);
     }
+
+    @GetMapping("/api/types")
+    public Collection<String> getTypes(){
+        JwtTypeHandler jth = new JwtTypeHandler();
+        return jth.getTypes();
+    }
 }
+

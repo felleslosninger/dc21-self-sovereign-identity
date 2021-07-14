@@ -4,8 +4,10 @@ import com.example.verifier.service.VerifyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.constant.Constable;
+
 @RestController
-public class VerifyController {
+public class   VerifyController {
 
 
 
@@ -26,6 +28,15 @@ public class VerifyController {
     public ResponseEntity<String> sendCredential(@RequestBody String token) {
         return verifyService.sendCredential(token);
     }
+
+    @GetMapping("/api/fix")
+    public Constable String(@RequestParam(value= "ingerdo", defaultValue = "fix") String ingerdo){
+        return String.format("Inger %s!", ingerdo);
+
+    }
+
+
+
 
 
     /**
