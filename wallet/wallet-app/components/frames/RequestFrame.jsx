@@ -2,25 +2,34 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
+// import JWT from 'jsonwebtoken';
+// eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exampleToken, httpGetCredential } from '../../utils/httpRequests';
+import { exampleCredentialToken, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
+/**
+ * Page to request new proof, retrieve and save new proof
+ * @returns Buttons and menus to select the issuer and type of proof
+ */
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
     const [credential, setCredential] = useState('Ingen bevis hentet.');
     const [statement, setStatement] = useState('');
-
     const dispatch = useDispatch();
 
+    /**
+     * Retrieves proof og saves it
+     */
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
-        const token = exampleToken;
-        const decode = await jwt_decode(exampleToken);
-        const retrievedCredential = await { ...decode, token };
-        setCredential(retrievedCredential);
+        const token = exampleCredentialToken;
+        const decode = jwtDecode(token);
+        const retrievedCredential = { ...decode, token };
+        console.log(retrievedCredential);
         dispatch(addCredential(retrievedCredential));
+        setCredential(retrievedCredential);
         console.log(credential);
         console.log(decode.exp);
         await saveProof(retrievedCredential);

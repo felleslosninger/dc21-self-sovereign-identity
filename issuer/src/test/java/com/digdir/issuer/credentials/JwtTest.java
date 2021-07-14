@@ -3,10 +3,8 @@ package com.digdir.issuer.credentials;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.digdir.issuer.storage.FileHandler;
+import org.junit.jupiter.api.*;
 
 import java.util.Date;
 
@@ -15,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class JwtTest {
     private Jwt jwt;
     private DecodedJWT djwt;
+    private static Jwt jwt2;
+    private static DecodedJWT djwt2;
+
 
 
     @BeforeEach
@@ -63,8 +64,21 @@ class JwtTest {
     @Test
     void testSecondConstructor() {
         long lo = 2629800000L;
-        jwt = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
-        djwt = decodeJwt(jwt.getToken());
-        assertTrue(djwt.getExpiresAt().getTime() >= lo);
+        jwt2 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
+        djwt2 = decodeJwt(jwt2.getToken());
+        assertTrue(djwt2.getExpiresAt().getTime() >= lo);
+
+    }
+
+    @AfterAll
+    static void teardownAll(){
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.removeKeyByID(djwt2.getIssuer());
+    }
+
+    @AfterEach
+    void teardown(){
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.removeKeyByID(djwt.getIssuer());
     }
 }
