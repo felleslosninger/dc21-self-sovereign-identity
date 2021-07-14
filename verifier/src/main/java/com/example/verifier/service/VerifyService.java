@@ -11,9 +11,9 @@ public class VerifyService {
     private boolean verified = false;
 
 
-    public ResponseEntity<String> sendCredential(String token) {
+    public ResponseEntity<String> sendVP(String token) {
         JwtVerifier verifier = new JwtVerifier();
-        verified = verifier.verifyToken(token);
+        verified = verifier.verifyVP(token, "over-18");
         return new ResponseEntity<>("token: " + token + ", verified: " + verified, HttpStatus.OK);
     }
 
