@@ -22,9 +22,9 @@ export default function VerifierLogFrame({ route }) {
 
     return (
         <SafeAreaView>
-            <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
+            <Text style={styles.shared}>Du har delt beviset {route.params.props.name} med disse tjenestene.</Text>
             {shared
-                .filter((share) => share.credential_id === route.params.item.jti)
+                .filter((share) => share.credential_id === route.params.props.id)
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
