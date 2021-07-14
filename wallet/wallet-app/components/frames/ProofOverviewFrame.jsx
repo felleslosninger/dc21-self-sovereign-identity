@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, Flatlist } from 'react-native';
+import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
 import { addCredential } from '../../redux/CredentialSlice';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
