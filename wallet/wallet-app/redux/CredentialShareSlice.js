@@ -11,20 +11,6 @@ export const CredentialShareSlice = createSlice({
                 // expiry_date: new Date().setDate(new Date().getDate() + 14),
                 verifier: 'ei anna tenesteee',
             },
-            {
-                id: Math.random().toString(),
-                credential_id: 'randomID-førerkort',
-                // shared_date: Date.now().toString(),
-                // expiry_date: new Date().setDate(new Date().getDate() + 14),
-                verifier: 'ei annaaaa teneste',
-            },
-            {
-                id: Math.random().toString(),
-                credential_id: 'randomID-førerkort',
-                // shared_date: Date.now().toString(),
-                // expiry_date: new Date().setDate(new Date().getDate() + 14),
-                verifier: 'ei annaaaa teneste',
-            },
         ],
     },
     reducers: {

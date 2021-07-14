@@ -22,14 +22,16 @@ export default function VerifierLogFrame({ route }) {
 
     return (
         <SafeAreaView>
-            <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
+            <Text style={styles.shared}>
+                Du har delt beviset {route.params.props.credential.vc} med disse tjenestene.
+            </Text>
             {shared
-                .filter((share) => share.credential_id === route.params.item.jti)
+                .filter((share) => share.credential_id === route.params.props.credential.jti)
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
             <Text>En tjeneste kan verifisere beviset ditt med QRkoden under</Text>
-            <CreateQR content="digdir.no" /> 
+            <CreateQR content={route.params.props.credential.vc} />
         </SafeAreaView> // content^ could be a jwt, url...
-    ); 
+    );
 }

@@ -38,7 +38,6 @@ export default function ActivityFrame() {
             <SafeAreaView styles={styles.sharedProofText}>
                 <Text style={styles.buttonText}>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
             </SafeAreaView>
-
         </SafeAreaView>
     );
 }
