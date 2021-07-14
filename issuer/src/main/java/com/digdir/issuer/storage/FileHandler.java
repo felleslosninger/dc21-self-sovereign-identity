@@ -34,12 +34,11 @@ public class FileHandler {
      * @param pk Public key to be saved to VDR.
      */
     public void addPublicKey(String id, PublicKey pk){
-        if(loadFromFile().containsKey(id)) {
-            throw new IllegalArgumentException("id already exists");
-        }
-        HashMap<String, PublicKey> map = loadFromFile();
-        map.put(id, pk);
-        saveToFile(map);
+             HashMap<String, PublicKey> map = loadFromFile();
+            map.put(id, pk);
+            saveToFile(map);
+
+
     }
 
     /**
