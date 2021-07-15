@@ -14,7 +14,6 @@ import java.util.Base64;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-
 public class VDRController {
     private final VDRService vdrService;
     private final FileHandler fileHandler;
