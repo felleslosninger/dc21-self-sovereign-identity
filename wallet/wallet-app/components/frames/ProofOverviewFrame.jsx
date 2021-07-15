@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -68,7 +68,16 @@ export default function ProofOverviewFrame() {
             <FlatList
                 keyExtractor={(item) => item.jti}
                 data={cred}
-                renderItem={({ item }) => <Proof id={item.jti} credential={item} />}
+                renderItem={({ item }) => (
+                    <Proof
+                        id={item.jti}
+                        name={item.type}
+                        // fix issuer display / handle issuerid
+                        issuer={item.iss.substring(0, item.iss.length - 36)}
+                        issDate={item.iat}
+                        expDate={item.exp}
+                    />
+                )}
             />
         </SafeAreaView>
     );

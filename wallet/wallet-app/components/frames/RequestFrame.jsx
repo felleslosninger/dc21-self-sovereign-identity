@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
+// import JWT from 'jsonwebtoken';
+// eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exampleToken } from '../../utils/httpRequests'; // httpGetCredential
+import { exampleBaseVc, httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -13,29 +15,32 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
-    const [credential, setCredential] = useState('Ingen bevis hentet.');
-    const [statement, setStatement] = useState('');
+    const [feedback, setFeedback] = useState('');
+    const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
 
     /**
-     * Retrieves proof og saves it
+     * Retrieves proof and saves it
      */
     async function retrieveCredential() {
-        // const token = await httpGetCredential(statement);
-        if (statement) {
-            const token = exampleToken;
-            const decode = await jwt_decode(exampleToken);
-            const retrievedCredential = await { ...decode, token };
-            setCredential(retrievedCredential);
+
+
+        const response = await httpGetCredential(vcType, exampleBaseVc);
+        try {
+            const decode = jwtDecode(response);
+            const retrievedCredential = { ...decode, token:response, type: vcType };
             dispatch(addCredential(retrievedCredential));
-            console.log(credential);
-            console.log(decode.exp);
-            await saveProof(retrievedCredential);
+            setFeedback(`hentet ${vcType} bevis`);
+            // await saveProof(retrievedCredential);
+        }
+        catch (error) {
+            setFeedback(response);
+
         }
     }
 
     const saveProof = async (cred) => {
-        if (statement && cred.jti !== undefined) {
+        if (vcType && cred.jti !== undefined) {
             try {
                 await AsyncStorage.setItem(cred.jti, JSON.stringify(cred));
             } catch (error) {
@@ -43,6 +48,8 @@ export default function RequestFrame() {
             }
         }
     };
+
+    const issuers = [{name : "NTNU"}, {name : "Statens Vegvesen"}, {name : "Folkeregisteret"}, {name : "UtsederAvBevis.no"}]
 
     return (
         <SafeAreaView style={styles.container}>
@@ -52,21 +59,16 @@ export default function RequestFrame() {
                 <Text style={styles.text}>Velg utsteder </Text>
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-                    <Picker.Item label="NTNU" value="NTNU" />
-                    <Picker.Item label="Statens Vegvesen" value="Statens Vegvesen" />
-                    <Picker.Item label="Folkeregisteret" value="Folkeregisteret" />
+
+                    {issuers.map((i) => (<Picker.Item label={i.name} value={i.name} />))}
+                    
                 </Picker>
             </SafeAreaView>
 
             <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
-                <TextInput
-                    style={styles.input}
-                    name="input"
-                    onChangeText={setStatement}
-                    value={statement}
-                    placeholder="Bevis"
-                />
+
+                <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
             </SafeAreaView>
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
@@ -75,7 +77,7 @@ export default function RequestFrame() {
                 </SafeAreaView>
             </TouchableOpacity>
             <SafeAreaView style={styles.credential}>
-                <Text style={styles.buttonText}>{credential.vc}</Text>
+                <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
         </SafeAreaView>
     );

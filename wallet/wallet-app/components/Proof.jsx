@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -13,7 +15,7 @@ import { removeCredential } from '../redux/CredentialSlice';
  */
 export default function Proof(props) {
     const navigation = useNavigation();
-    const { cred } = useSelector((state) => state.credentials);
+    // const { cred } = useSelector((state) => state.credentials);
 
     const dispatch = useDispatch(); // To call every reducer that we want
 
@@ -38,8 +40,7 @@ export default function Proof(props) {
             <Text style={styles.textProofs}>{props.credential.vc}</Text>
             <Text> Utstedt av: {props.credential.iss}</Text>
             <Text>
-                Gyldig fra/til: {new Date(props.credential.iat).toLocaleString()}/
-                {new Date(props.credential.exp).toLocaleString()}
+                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til {new Date(props.expDate * 1000).toLocaleString()}
             </Text>
             <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
                 <Text>Delt med</Text>

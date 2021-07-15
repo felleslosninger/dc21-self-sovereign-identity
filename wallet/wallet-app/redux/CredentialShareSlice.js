@@ -3,23 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 export const CredentialShareSlice = createSlice({
     name: 'credentialShares',
     initialState: {
-        shared: [
-            {
-                id: Math.random().toString(),
-                credential_id: 'randomID-sykepleier',
-                // shared_date: Date.now().toString(),
-                // expiry_date: new Date().setDate(new Date().getDate() + 14),
-                verifier: 'ei anna tenesteee',
-            },
-        ],
+        shared: [],
     },
     reducers: {
         addCredentialShare: (state, action) => {
-            state.push(action.payload);
+            state.shared.push(action.payload);
         },
         removeCredentialShare: (state, action) => {
             state.splice(
-                state.findIndex((item) => item.id === action.payload),
+                state.shared.findIndex((item) => item.id === action.payload),
                 1
             );
         },
