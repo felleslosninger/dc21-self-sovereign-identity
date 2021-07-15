@@ -4,6 +4,7 @@ import com.digdir.issuer.service.VcService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for BaseVC-operations
  */
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class BaseIDController {
     VcService vcService = new VcService();
 
