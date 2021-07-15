@@ -1,49 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView, TouchableOpacity, Text, View, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { signIn } from '../../redux/SignedInSlice';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
+import { color } from 'react-native-reanimated';
+import { signIn } from '../../redux/SignedInSlice';
 
 /**
  * A profile site for administrativ changes on the profile
- * @returns A new site, A logout button and a delete button 
+ * @returns A new site, A logout button and a delete button
  */
 export default function ProfileMenuSlide() {
     const dispatch = useDispatch(); // To call every reducer that we want
     const navigation = useNavigation();
+    const [baseIdIssuer, setBaseIdIssuer] = useState('');
+
+    const getBaseIdIssuer = async () => {
+        // const decoded = jwtDecode(AsyncStorage.getItem('baseId'));
+        const baseIdToken = await AsyncStorage.getItem('baseId');
+        const parsed = JSON.parse(baseIdToken);
+        setBaseIdIssuer(parsed.iss);
+    };
+
+    getBaseIdIssuer();
+
+    const deleteUserPressed = async () => {
+        try {
+            await AsyncStorage.removeItem('baseId'); // removes proof from AsyncStorage
+            await AsyncStorage.removeItem('pin'); // removes pin from AsyncStorage
+            dispatch(signIn(false));
+
+            alert('Din bruker er slettet');
+        } catch (exception) {}
+    };
 
     /**
      * Allert button so that it is not clicked by accident
-     * @returns Allert Button 
+     * @returns Allert Button
      */
-
-    const buttonAlert= () =>
-    Alert.alert(
-      "VARSEL",
-      "Er du sikker på at du vil slette brukeren?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => navigation.navigate('Oversikt'),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ]
-    );
-
+    const buttonAlert = () =>
+        Alert.alert('VARSEL', 'Er du sikker på at du vil slette brukeren?', [
+            {
+                text: 'Cancel',
+                onPress: () => navigation.navigate('Oversikt'),
+                style: 'cancel',
+            },
+            { text: 'OK', onPress: () => deleteUserPressed() },
+        ]);
 
     return (
         <SafeAreaView>
             <View style={styles.container}>
-             <Icon name='user' size={100} color='black' />
+                <Icon name="user" size={100} color="black" />
             </View>
             <Text style={styles.textstyle}>Her kan du administrere profilen din</Text>
+            <Text style={styles.issuerText}>Du har grunnidentitet utstedt fra: {baseIdIssuer}</Text>
+
             <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
-                <Text>Logg ut</Text>
+                <Text style={styles.buttonTextlogOut}>Logg ut</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.logOut} onPress={buttonAlert}>
-                <Text>Slett Bruker</Text>
+            <TouchableOpacity style={styles.deleteUser} onPress={buttonAlert}>
+                <Text style={styles.buttonTextDeleteUser}>Slett Bruker</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -53,13 +72,11 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         alignSelf: 'center',
-
     },
     textstyle: {
         fontSize: 20,
         marginLeft: 30,
         alignSelf: 'center',
-
     },
     logOut: {
         borderRadius: 4,
@@ -67,10 +84,33 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
-        width: 75,
+        width: 250,
         alignSelf: 'center',
         right: 5,
-    }
-})
-
-
+        alignItems: 'center',
+    },
+    deleteUser: {
+        borderRadius: 4,
+        backgroundColor: '#FF5733',
+        padding: 10,
+        marginTop: 10,
+        marginBottom: 30,
+        width: 150,
+        alignSelf: 'center',
+        right: 5,
+        alignItems: 'center',
+    },
+    issuerText: {
+        marginTop: 70,
+        marginBottom: 150,
+        color: 'green',
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    buttonTextlogOut: {
+        fontSize: 20,
+    },
+    buttonTextDeleteUser: {
+        fontSize: 15,
+    },
+});
