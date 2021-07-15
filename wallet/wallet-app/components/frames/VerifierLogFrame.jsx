@@ -29,7 +29,7 @@ export default function VerifierLogFrame({ route }) {
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
             <Text>En tjeneste kan verifisere beviset ditt med QRkoden under</Text>
-            <CreateQR content="digdir.no" /> 
+            <CreateQR content={route.params.props.credential.vc} />
         </SafeAreaView> // content^ could be a jwt, url...
-    ); 
+    );
 }

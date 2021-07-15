@@ -24,6 +24,7 @@ export default function RequestFrame() {
      */
     async function retrieveCredential() {
 
+
         const response = await httpGetCredential(vcType, exampleBaseVc);
         try {
             const decode = jwtDecode(response);
@@ -34,6 +35,7 @@ export default function RequestFrame() {
         }
         catch (error) {
             setFeedback(response);
+
         }
     }
 
@@ -65,6 +67,7 @@ export default function RequestFrame() {
 
             <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
+
                 <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
             </SafeAreaView>
 
