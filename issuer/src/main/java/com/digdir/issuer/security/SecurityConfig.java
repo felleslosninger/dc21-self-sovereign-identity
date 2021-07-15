@@ -14,19 +14,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Method that sets path "/protectedpage" as a protected resource. The resource needs authentication through ID-porten.
      * @param http HttpSecurity
-     * @throws Exception
+     * @throws Exception Exception unknown when thrown
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
+
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/protectedpage").fullyAuthenticated()
                 .anyRequest().permitAll()
                 .and()
                 .oauth2Login();
     }
-
     
 
 }

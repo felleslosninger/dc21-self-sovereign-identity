@@ -35,16 +35,13 @@ public class VDRService {
         } catch (InvalidKeySpecException e) {
             System.out.println("Unable to create key due to invalid key spec.");
         }
-        if (rsaPublicKey == null) {
-            return rsaPublicKey;
-        } else {
-            throw new NullPointerException("Method PEMtoRSAConverter returned a public key with value null");
-        }
+        return rsaPublicKey;
     }
 
 
 
     //
+    @Deprecated
     public RSAPublicKey pemToKey(String key) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String publicKeyPEM = key;
         publicKeyPEM = publicKeyPEM.replace(" ", "+");
