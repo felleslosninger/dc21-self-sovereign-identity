@@ -14,5 +14,4 @@ public class IssuerApplication {
         SpringApplication app = new SpringApplication(IssuerApplication.class);
         app.run(args);
     }
-
 }
