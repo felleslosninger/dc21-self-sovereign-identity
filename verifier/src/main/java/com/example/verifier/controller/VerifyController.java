@@ -29,11 +29,6 @@ public class   VerifyController {
         return verifyService.sendCredential(token);
     }
 
-    @GetMapping("/api/fix")
-    public Constable String(@RequestParam(value= "ingerdo", defaultValue = "fix") String ingerdo){
-        return String.format("Inger %s!", ingerdo);
-
-    }
 
 
 
