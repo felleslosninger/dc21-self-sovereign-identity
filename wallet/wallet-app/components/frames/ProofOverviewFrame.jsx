@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, TouchableOpacity, Text, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
-import { signIn } from '../../redux/SignedInSlice';
 
 /**
  * A frame with an overview of every proof the wallet has
@@ -66,9 +65,6 @@ export default function ProofOverviewFrame() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
-                <Text>Logg ut</Text>
-            </TouchableOpacity>
             <FlatList
                 keyExtractor={(item) => item.jti}
                 data={cred}

@@ -22,14 +22,16 @@ export default function RequestFrame() {
      */
     async function retrieveCredential() {
         // const token = await httpGetCredential(statement);
-        const token = exampleToken;
-        const decode = await jwt_decode(exampleToken);
-        const retrievedCredential = await { ...decode, token };
-        setCredential(retrievedCredential);
-        dispatch(addCredential(retrievedCredential));
-        console.log(credential);
-        console.log(decode.exp);
-        await saveProof(retrievedCredential);
+        if (statement) {
+            const token = exampleToken;
+            const decode = await jwt_decode(exampleToken);
+            const retrievedCredential = await { ...decode, token };
+            setCredential(retrievedCredential);
+            dispatch(addCredential(retrievedCredential));
+            console.log(credential);
+            console.log(decode.exp);
+            await saveProof(retrievedCredential);
+        }
     }
 
     const saveProof = async (cred) => {
@@ -58,7 +60,13 @@ export default function RequestFrame() {
 
             <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
-                <TextInput style={styles.input} onChangeText={setStatement} value={statement} placeholder="Bevis" />
+                <TextInput
+                    style={styles.input}
+                    name="input"
+                    onChangeText={setStatement}
+                    value={statement}
+                    placeholder="Bevis"
+                />
             </SafeAreaView>
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
