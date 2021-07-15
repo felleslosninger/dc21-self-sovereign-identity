@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 
 /**
@@ -66,13 +67,13 @@ public class Requester {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             final String responseString = response.body();
-          //  System.out.println("getKeyByID() response: " + responseString);
-            Gson gson = new Gson();
-            byte[] bytes = gson.fromJson(responseString, byte[].class);
+          System.out.println("getKeyByID() response: " + responseString);
+//            Gson gson = new Gson();
+//            byte[] bytes = gson.fromJson(responseString, byte[].class);
 
 
-            publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
-
+            publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(responseString)));
+            System.out.println(Base64.getEncoder().encodeToString(publicKey.getEncoded()));
         } catch (IOException | InterruptedException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
@@ -105,8 +106,9 @@ public class Requester {
 
 
       //  Requester r = new Requester("http://localhost:8083/api/key/");
-        Requester r2 = new Requester("http://localhost:8083/api/getVC/");
-        System.out.println(r2.getJwt("?type=over-18"));
+        Requester r2 = new Requester("http://localhost:8083/vdr/key/");
+        System.out.println(r2.getKeyByID("GrunnID-portalen.no063b9967-fa86-4168-a142-67beeb0f539e"));
+
        // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
 /*
 
