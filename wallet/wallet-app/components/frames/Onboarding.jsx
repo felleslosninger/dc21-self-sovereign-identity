@@ -5,6 +5,8 @@ import jwtDecode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import { addCredential } from '../../redux/CredentialSlice';
 
 export default function App() {
@@ -37,7 +39,7 @@ export default function App() {
         }
 
         dispatch(addCredential(retrievedCredential));
-        await AsyncStorage.setItem('Grunn-id', JSON.stringify(retrievedCredential));
+        await AsyncStorage.setItem('baseId', JSON.stringify(retrievedCredential));
 
         // alert(JSON.stringify(retrievedCredential));
         // console.log(retrievedCredential);
@@ -52,17 +54,27 @@ export default function App() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.camera}>
-                <BarCodeScanner
-                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
-                />
-                {scanned && <Button title="Tap to Scan Again" onPress={() => setScanned(false)} />}
-            </View>
+            {!scanned && !verified ? (
+                <View style={styles.camera}>
+                    <BarCodeScanner
+                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                        style={StyleSheet.absoluteFillObject}
+                    />
+                    {scanned && <Button title="Tap to Scan Again" onPress={() => setScanned(false)} />}
+                </View>
+            ) : null}
+
             {scanned && verified ? (
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
-                    <Text style={styles.text}>Lagre grunnidentitet</Text>
-                </TouchableOpacity>
+                <View style={styles.done}>
+                    <Text style={styles.verifiedText}>
+                        Grunnidentitet verifisert
+                        <Icon name="check" size={25} color="#3aa797" />
+                    </Text>
+
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
+                        <Text style={styles.text}>Fortsett registrering</Text>
+                    </TouchableOpacity>
+                </View>
             ) : null}
         </View>
     );
@@ -82,13 +94,22 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: '#3aa797',
         padding: 20,
-        marginTop: 10,
-        marginBottom: 10,
         width: '75%',
         alignItems: 'center',
         alignSelf: 'center',
+        marginTop: 350,
     },
     text: {
         fontSize: 25,
+        alignSelf: 'center',
+        marginTop: 10,
+    },
+    done: {
+        flex: 1,
+    },
+    verifiedText: {
+        fontSize: 25,
+        alignSelf: 'center',
+        marginTop: 100,
     },
 });
