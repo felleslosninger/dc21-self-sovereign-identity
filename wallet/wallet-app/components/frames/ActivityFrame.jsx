@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
 
@@ -11,6 +12,7 @@ import createVerifiablePresentationJWT from '../../utils/sign';
  */
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
+    const dispatch = useDispatch();
 
     const { cred } = useSelector((state) => state.credentials);
 
@@ -24,9 +26,20 @@ export default function ActivityFrame() {
     */
 
     async function sendPresentation(creds, audience) {
-        const token = await createVerifiablePresentationJWT(creds, audience);
-        console.log(token);
+        const jwtCreds = creds.map((c) => c.token);
+        const token = await createVerifiablePresentationJWT(jwtCreds, audience);
         const verified = await httpSendPresentation(token);
+        creds
+        .map(c => (dispatch(addCredentialShare({
+            id: Math.random().toString(),
+            credential_id: c.jti,
+            verifier: audience,
+        }))))
+
+
+
+    
+        
         setStatus(verified);
         return verified;
     }
@@ -39,7 +52,7 @@ export default function ActivityFrame() {
                         <Button
                             title={`Send bevis ${credential.type} til tjeneste X`}
                             color="#f1940f"
-                            onPress={() => sendPresentation([credential.token], 'verifier123')}
+                            onPress={() => sendPresentation([credential], 'verifier123')}
                         />
                         <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
                     </View>
@@ -75,5 +88,3 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
 });
-
-// onPress={() => dispatch(signIn(false))

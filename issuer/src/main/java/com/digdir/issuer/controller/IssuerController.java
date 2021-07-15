@@ -1,6 +1,13 @@
 package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VcService;
+import com.digdir.issuer.storage.JwtTypeHandler;
+import com.digdir.issuer.storage.FileHandler;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,4 +31,9 @@ public class IssuerController {
         return vcService.getVC(type, baseVC);
     }
 
+    @GetMapping("/api/types")
+    public Collection<String> getTypes(){
+        JwtTypeHandler jth = new JwtTypeHandler();
+        return jth.getTypes();
 }
+
