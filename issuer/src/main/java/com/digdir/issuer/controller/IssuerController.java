@@ -45,9 +45,10 @@ public class IssuerController {
 
 
     @GetMapping("/api/types")
-    public Collection<String> getTypes(){
+    public Collection<String> getTypes() {
         JwtTypeHandler jth = new JwtTypeHandler();
         return jth.getTypes();
+    }
       
     @GetMapping("/vdr/postKey")
     public String postKey(@RequestParam(value = "id") String id, @RequestParam(value="key") String key) throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -56,8 +57,6 @@ public class IssuerController {
         fileHandler.addPublicKey(id, pk);
 
         return "ok";
-
-
     }
 
     //
