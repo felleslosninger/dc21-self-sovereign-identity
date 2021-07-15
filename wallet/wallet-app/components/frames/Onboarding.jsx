@@ -38,7 +38,7 @@ export default function App() {
             setVerified(true);
         }
 
-        dispatch(addCredential(retrievedCredential));
+        // dispatch(addCredential(retrievedCredential));
         await AsyncStorage.setItem('baseId', JSON.stringify(retrievedCredential));
 
         // alert(JSON.stringify(retrievedCredential));
