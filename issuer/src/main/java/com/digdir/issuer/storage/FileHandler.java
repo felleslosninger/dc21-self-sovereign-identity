@@ -3,6 +3,7 @@ package com.digdir.issuer.storage;
 
 import com.google.gson.Gson;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +61,7 @@ public class FileHandler {
      * @param publicKeyMap HashMap to save.
      */
     private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         HashMap<String, String> map = new HashMap<>();
         publicKeyMap.forEach((key, value) -> map.put(key, Base64.getEncoder().encodeToString(value.getEncoded())));

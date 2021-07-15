@@ -2,12 +2,6 @@ package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VcService;
 import com.digdir.issuer.storage.JwtTypeHandler;
-import com.digdir.issuer.storage.FileHandler;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +13,6 @@ import java.util.Collection;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-
 public class IssuerController {
     private final VcService vcService;
 
@@ -35,6 +28,10 @@ public class IssuerController {
         return vcService.getVC(type, baseVC);
     }
 
+    /**
+     * Endpoint that returns all types one can get from an issuer, atm ther is only one issuer...but you get the point
+     * @return returns all types from this issuer
+     */
     @GetMapping("/api/types")
     public Collection<String> getTypes() {
         JwtTypeHandler jth = new JwtTypeHandler();

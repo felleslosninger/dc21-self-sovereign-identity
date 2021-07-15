@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class IssuerApplication {
 
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(IssuerApplication.class);
         app.run(args);
