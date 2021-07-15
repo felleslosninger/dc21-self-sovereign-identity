@@ -24,7 +24,7 @@ public class FileHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private String path = "verifier/src/main/resources/testFile.json";
+    private String path = "verifier/src/main/resources/PublicKeyFile.json";
 
 
     /**
@@ -112,12 +112,12 @@ public class FileHandler {
      * @throws IllegalArgumentException if the holder id already exists in the file
      */
     public void addPublicKey(String id, PublicKey pk){
-        if(loadFromFile().containsKey(id)) {
-            throw new IllegalArgumentException("id already exists");
-        }
-        HashMap<String, PublicKey> map = loadFromFile();
-        map.put(id, pk);
-        saveToFile(map);
+
+            HashMap<String, PublicKey> map = loadFromFile();
+            map.put(id, pk);
+            saveToFile(map);
+
+
     }
 
     /**

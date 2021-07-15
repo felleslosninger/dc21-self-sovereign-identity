@@ -1,17 +1,19 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, Flatlist } from 'react-native';
-import { addCredential } from '../../redux/CredentialSlice';
+import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
-import { signIn } from '../../redux/SignedInSlice';
-import ProfileMenuSlide from './ProfileMenu';
 
+/**
+ * A frame with an overview of every proof the wallet has
+ * @returns
+ */
 export default function ProofOverviewFrame() {
-    const dispatch = useDispatch(); // To call every reducer that we want
+    const dispatch = useDispatch(); // To call every reducer that we want. Using dispatch to communicate with state management
     const { cred } = useSelector((state) => state.credentials);
 
     const [proofs, setProofs] = useState([]);
@@ -19,13 +21,18 @@ export default function ProofOverviewFrame() {
 
     const isFocused = useIsFocused();
 
+    /**
+     * Adds the keys and the associated information into a list
+     */
     const getProofs = async () => {
         try {
             for (let key = 0; key < keys.length; key++) {
                 const value = await AsyncStorage.getItem(keys[key]);
                 if (value !== null) {
                     if (!proofs.some((item) => item.id === keys[key])) {
+                        // Makes sure that there are no duplicates
                         proofs.push({ id: keys[key], proof: value });
+                        dispatch(addCredential(JSON.parse(value)));
                     }
                 }
             }
@@ -34,8 +41,11 @@ export default function ProofOverviewFrame() {
         }
     };
 
+    /**
+     * Gets all the keys in AsyncStorage, except for the pin key
+     * Adds the keys into a list
+     */
     const getKeys = async () => {
-        console.log(cred);
         try {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
@@ -55,14 +65,18 @@ export default function ProofOverviewFrame() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
-                <Text>Logg ut</Text>
-            </TouchableOpacity>
             <FlatList
                 keyExtractor={(item) => item.jti}
                 data={cred}
                 renderItem={({ item }) => (
-                    <Proof id={item.jti} name={item.vc} issuer={item.iss} issDate={item.iat} expDate={item.exp} />
+                    <Proof
+                        id={item.jti}
+                        name={item.type}
+                        // fix issuer display / handle issuerid
+                        issuer={item.iss.substring(0, item.iss.length - 36)}
+                        issDate={item.iat}
+                        expDate={item.exp}
+                    />
                 )}
             />
         </SafeAreaView>

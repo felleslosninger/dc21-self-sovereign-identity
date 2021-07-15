@@ -2,6 +2,10 @@ import React from 'react';
 import { TouchableOpacity, SafeAreaView, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+/**
+ * The intro page to the app, choose between log in or create a user
+ * @returns Two buttons/options: "access control" or "create user"
+ */
 export default function StartPage() {
     const navigation = useNavigation();
 

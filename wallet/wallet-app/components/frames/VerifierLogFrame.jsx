@@ -6,6 +6,11 @@ import { useSelector } from 'react-redux';
 import Verifier from '../Verifier';
 import CreateQR from '../QRcode';
 
+/**
+ * Page with an overview of which verifiers who have access to a specific proof
+ * @param {proof} param0 a spesific proof
+ * @returns Page with a list of all verifiers a proof is shared with
+ */
 export default function VerifierLogFrame({ route }) {
     const styles = StyleSheet.create({
         shared: {
@@ -17,14 +22,14 @@ export default function VerifierLogFrame({ route }) {
 
     return (
         <SafeAreaView>
-            <Text style={styles.shared}>Du har delt beviset {route.params.item.proof} med disse tjenestene.</Text>
+            <Text style={styles.shared}>Du har delt beviset {route.params.props.name} med disse tjenestene.</Text>
             {shared
-                .filter((share) => share.credential_id === route.params.item.jti)
+                .filter((share) => share.credential_id === route.params.props.id)
                 .map((share) => (
                     <Verifier key={share.id} name={share.verifier} />
                 ))}
             <Text>En tjeneste kan verifisere beviset ditt med QRkoden under</Text>
-            <CreateQR content="digdir.no" /> 
-        </SafeAreaView> // content^ kan være en jwt, url...
-    ); 
+            <CreateQR content={route.params.props.name} />
+        </SafeAreaView> // content^ could be a jwt, url...
+    );
 }

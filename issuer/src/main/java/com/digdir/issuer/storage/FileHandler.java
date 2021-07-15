@@ -23,7 +23,7 @@ import java.util.Objects;
 @Repository
 public class FileHandler {
 
-    private String path = "src/main/resources/PublicKeyFile.json";
+    private String path = "issuer/src/main/resources/PublicKeyFile.json";
     private Writer file;
 
     /**
@@ -34,12 +34,11 @@ public class FileHandler {
      * @param pk Public key to be saved to VDR.
      */
     public void addPublicKey(String id, PublicKey pk){
-        if(loadFromFile().containsKey(id)) {
-            throw new IllegalArgumentException("id already exists");
-        }
-        HashMap<String, PublicKey> map = loadFromFile();
-        map.put(id, pk);
-        saveToFile(map);
+             HashMap<String, PublicKey> map = loadFromFile();
+            map.put(id, pk);
+            saveToFile(map);
+
+
     }
 
     /**
@@ -88,7 +87,6 @@ public class FileHandler {
 
 
     /**
-     * Todo: Change catch to human readable
      * Loads existing HashMap of id and PublicKey from PublicKeyFile.json
      * @return HashMap of id and PublicKey
      */
@@ -103,7 +101,7 @@ public class FileHandler {
                 try {
                     publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value)));
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
-                    invalidKeySpecException.printStackTrace();
+                    System.out.println("Problem in Filehandler. Cant load from file. ");
                 }
             });
             return publicKeyMap;
@@ -114,7 +112,6 @@ public class FileHandler {
         }
 
     }
-
 
     /**
      * Method for removing a public key from VDR(PublicKeyFile.json) with specific id.
@@ -130,20 +127,7 @@ public class FileHandler {
 
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        KeyPairGenerator kpg1 = KeyPairGenerator.getInstance("RSA");
 
-
-        FileHandler fh = new FileHandler();
-        HashMap<String, PublicKey> map;
-        map =  fh.loadFromFile();
-        map.put("id1", kpg1.generateKeyPair().getPublic());
-
-        fh.saveToFile(map);
-        HashMap<String, PublicKey> newMap = fh.loadFromFile();
-        System.out.println(newMap.get("id1").getClass());
-
-    }
 
     // Used in test: -----------------------------------------------------------------------
     public String getPublicKeyAsString(String id){

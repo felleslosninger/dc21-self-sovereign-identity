@@ -61,12 +61,12 @@ public class Requester {
     public PublicKey getKeyByID(String id) {
         PublicKey publicKey;
         HttpRequest request = HttpRequest.newBuilder(requestUri(id)).GET().build();
-        System.out.println(request);
+      //  System.out.println(request);
         try {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             final String responseString = response.body();
-            System.out.println("getKeyByID() response: " + responseString);
+          //  System.out.println("getKeyByID() response: " + responseString);
             Gson gson = new Gson();
             byte[] bytes = gson.fromJson(responseString, byte[].class);
 
@@ -105,8 +105,8 @@ public class Requester {
 
 
       //  Requester r = new Requester("http://localhost:8083/api/key/");
-        Requester r2 = new Requester("http://localhost:8083/api/getCredential/");
-        System.out.println(r2.getJwt("over-18"));
+        Requester r2 = new Requester("http://localhost:8083/api/getVC/");
+        System.out.println(r2.getJwt("?type=over-18"));
        // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
 /*
 
