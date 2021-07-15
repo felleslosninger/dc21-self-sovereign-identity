@@ -53,13 +53,12 @@ export async function httpPostPublicKey(id, key) {
     const url = `${issuerUrl}vdr/postKey`;
 
     try {
-        /*
-        const response = await fetch(url, {
+        
+        const response = await fetch(`${url}?userID=${id}`, {
             method: 'POST',
             body: key,
         });
-        */
-        const response = await fetch(`${url}?id=${id}&key=${key}`);
+        
         if (response.ok) {
             console.log(response.text());
             return true;
@@ -72,10 +71,20 @@ export async function httpPostPublicKey(id, key) {
     }
 }
 
+export async function httpGetIssuerKey(id) {
+    const url = `${issuerUrl}vdr/key/`;
+    const response = await fetch(`${url}${id}`);
+    const payload = await response.text();
+    console.log(payload);
+    return payload;
+
+}
+
 export const exampleCredentialToken =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiaXNzIjoidGVzdElzcyIsImV4cCI6MTYyNjY4MTEwNCwiaWF0IjoxNjI1NDcxNTA0LCJ2YyI6Ik92ZXItMTgiLCJqdGkiOiJodHRwOi8vbG9jYWxob3N0OjgwODMvY3JlZGVudGlhbHMvMSJ9.Qv-dEjixipuDE_StkkmlpXecwOfdG0v6YgNHv5wJ3NQ';
 
 export const examplePresentationToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiYXVkIjoidmVyaWZpZXIiLCJleHAiOjE3MTg0NDU2MDAsImlhdCI6MTYyMzc1MTIwMCwianRpIjoxMDAwMDAwMDAsImNyZWQiOlsiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKMFpYTjBVM1ZpSWl3aWFYTnpJam9pVGxST1ZTSXNJbVY0Y0NJNk1UY3hPRFEwTlRZd01Dd2lhV0YwSWpveE5qSXpOelV4TWpBd0xDSjJZeUk2SW1WeUxYTjVhMlZ3YkdWcFpYSWlMQ0pxZEdraU9pSnlZVzVrYjIxSlJDMXplV3RsY0d4bGFXVnlJbjAuWWllZzRTQWpSMnJ6RmFRZjhJNzdmNnFPbFJuQ1R4Yk1DYTkzazV0MHRObyJdfQ.MFkCcDXQ6rZUJLCq5_tcGPgqkR0JlATlzlfRBUP7yPE';
 
-export const exampleBaseVc = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwODA4OTQwOTM4MiIsImlzcyI6IkdydW5uSUQtcG9ydGFsZW4ubm82NDY0ZmY5ZS03NjFkLTQ0ZDMtODU3Ni0wZDQ0MTY3Yzg1MDkiLCJleHAiOjE2Mjc0Nzk3MDEsImlhdCI6MTYyNjI3MDEwMSwidmMiOnsiY3JlZGVudGlhbFN1YmplY3QiOnsiYmFzZWlkIjp7Im5hbWUiOiJCYXNlSUQiLCJ0eXBlIjoiQmFzZUlEIn19LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiQmFzZUNyZWRlbnRpYWwiXSwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXX0sImp0aSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4My9jcmVkZW50aWFscy8xIn0.FlTiZx0to21bl_w_TZYSbjrVmCtd2Mci37YKQwTgRiQ7gmJEwb2zUTtAQTfpnx0dY6J-EKTcTUfXWTwTwXVNepyQXMVweyCTKW3SlmgQib6q_IeEtq0uVOM0n7qayO87M3g5eVqLZOhJaIj4_7Y7kon7biyIOeOVsuG-y_iTIcBs62NykuCFbybDSzKg3GncsdddgGN_nRWxJvzPZgyZHeNpXhE06gplhKajB3PQOJV_U40GAzGmWwd1lajNDOASeH2gLKuHZIxLKjTVhyYQ4YzN77gGM2Dojc_TJZGhcat29eBOwFlSU1BspjWOqYYIZFxR-C6qMuQvi3Jzq8MqLQ'
+export const exampleBaseVc =
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwODA4OTQwOTM4MiIsImlzcyI6IkdydW5uSUQtcG9ydGFsZW4ubm8wZTQwOWRiZS00ZjI4LTQ2MjItYThhNS1mNjBmMjdhZjg5OWEiLCJleHAiOjE2Mjc1NDUxODMsImlhdCI6MTYyNjMzNTU4MywidmMiOnsiY3JlZGVudGlhbFN1YmplY3QiOnsiYmFzZWlkIjp7Im5hbWUiOiJCYXNlSUQiLCJ0eXBlIjoiQmFzZUlEIn19LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiQmFzZUNyZWRlbnRpYWwiXSwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXX0sImp0aSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4My9jcmVkZW50aWFscy8xIn0.fh1UZG5ERw_PfMR7C3Fjn8vdEjv1QCv2OwKhrIQ9X8QJmR2LDgrDJXpGbD8zI_f03Zk9gEReKkCRHVM5X5IkUhVel3uhIDhVMEn9w2QzNgjrouWoOPC3dlKq51yT6l_QL47pzgxp15bb2Z_yxfHzXYc8V4YCZl1KimyI04McbRrx2eyTHvD_o8SYdKzKymExuc7lsU5j_h5x76ZkfU0EwJIi28zNkaKNofiJwtOaTIWrYa688nRRAbeaeWroA83NFZd-2HUtrqYyNtAvOtra9hzYfzG545P2tq4JJNeuR8i4zzD5hgh3PrNg1P4ZgclM6_FUl-b-UN1ngSf6SrH5Yg';
