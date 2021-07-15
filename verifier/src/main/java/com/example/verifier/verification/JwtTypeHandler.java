@@ -27,7 +27,7 @@ public class JwtTypeHandler {
     /**
      * The path to the file that contains the available jwt types
      */
-    private final String path = "verifier/src/main/resources/JwtTypes.txt";
+    private final String path = "src/main/resources/JwtTypes.txt";
 
 
     /**

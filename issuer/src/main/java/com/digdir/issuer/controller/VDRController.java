@@ -30,8 +30,7 @@ public class VDRController {
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
         try{
-            System.out.println(fileHandler.getPublicKeyAsString(id));
-            return fileHandler.getPublicKeyAsString(id);
+            return Base64.getEncoder().encodeToString(fileHandler.getPublicKey(id).getEncoded());
         }catch (Exception e){
             System.out.println("No key found.");
             return "No key found with this id";
