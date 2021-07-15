@@ -32,8 +32,9 @@ public class IssuerController {
     }
 
     @GetMapping("/api/types")
-    public Collection<String> getTypes(){
+    public Collection<String> getTypes() {
         JwtTypeHandler jth = new JwtTypeHandler();
         return jth.getTypes();
+
 }
 
