@@ -37,8 +37,8 @@ export default function Proof(props) {
 
     return (
         <View style={styles.theProofs}>
-            <Text style={styles.textProofs}>{props.credential.vc}</Text>
-            <Text> Utstedt av: {props.credential.iss}</Text>
+            <Text style={styles.textProofs}>{props.name}</Text>
+            <Text> Utstedt av: {props.issuer}</Text>
             <Text>
                 Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til {new Date(props.expDate * 1000).toLocaleString()}
             </Text>
