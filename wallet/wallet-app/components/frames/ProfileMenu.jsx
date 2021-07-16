@@ -18,10 +18,9 @@ export default function ProfileMenuSlide() {
     const [baseIdIssuer, setBaseIdIssuer] = useState('');
 
     const getBaseIdIssuer = async () => {
-        // const decoded = jwtDecode(AsyncStorage.getItem('baseId'));
         const baseIdToken = await AsyncStorage.getItem('baseId');
-        const parsed = JSON.parse(baseIdToken);
-        setBaseIdIssuer(parsed.iss);
+        const decoded = jwtDecode(baseIdToken);
+        setBaseIdIssuer(decoded.iss);
     };
 
     getBaseIdIssuer();

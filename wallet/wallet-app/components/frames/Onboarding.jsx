@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
-import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { addCredential } from '../../redux/CredentialSlice';
+import { signIn } from '../../redux/SignedInSlice';
 
 export default function App() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [verified, setVerified] = useState(false);
-    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -30,19 +28,10 @@ export default function App() {
         const baseId = jwtDecode(data);
         const types = baseId.vc.type;
 
-        // const retrievedCredential = { ...decode, data, type: 'Grunn-id' };
-        const retrievedCredential = { ...baseId, type: 'Grunn-id' };
-
-        // If checkVerified => setVerified(true)
         if (types.includes('BaseCredential')) {
+            await AsyncStorage.setItem('baseId', data);
             setVerified(true);
         }
-
-        // dispatch(addCredential(retrievedCredential));
-        await AsyncStorage.setItem('baseId', JSON.stringify(retrievedCredential));
-
-        // alert(JSON.stringify(retrievedCredential));
-        // console.log(retrievedCredential);
     };
 
     if (hasPermission === null) {
