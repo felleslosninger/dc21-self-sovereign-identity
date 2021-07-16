@@ -26,12 +26,18 @@ export default function ProfileMenuSlide() {
 
     getBaseIdIssuer();
 
+    const clearAllData = () => {
+        AsyncStorage.getAllKeys()
+            .then((keys) => AsyncStorage.multiRemove(keys))
+            .then(() => alert('success'));
+    };
+
     const deleteUserPressed = async () => {
         try {
             await AsyncStorage.removeItem('baseId'); // removes proof from AsyncStorage
             await AsyncStorage.removeItem('pin'); // removes pin from AsyncStorage
             dispatch(signIn(false));
-
+            clearAllData();
             alert('Din bruker er slettet');
         } catch (exception) {}
     };
