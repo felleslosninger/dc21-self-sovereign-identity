@@ -43,7 +43,7 @@ public class BaseIDController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/protectedpage")
-    public ResponseEntity<byte[]> getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model){
+    public ResponseEntity<byte[]> getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) {
         String QR_TEXT = vcService.getBaseVC(principal);
         byte[] qrImage = vcService.generateByteArray(QR_TEXT);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrImage);
@@ -53,5 +53,6 @@ public class BaseIDController {
         return vcService.getBaseVC(principal);
     }
     */
+    }
 
 }
