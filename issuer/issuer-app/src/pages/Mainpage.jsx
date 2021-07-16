@@ -1,7 +1,9 @@
 import React, {useState} from "react";
-import {Link, useHistory} from "react-router-dom"
+import {useHistory} from "react-router-dom"
 import Select from 'react-select';
 import QRCode from "react-qr-code";
+import OauthPopup from "react-oauth-popup";
+
 
 function Mainpage() {
 
@@ -13,27 +15,31 @@ function Mainpage() {
     let history = useHistory();
 
 
-    async function getCredential() {
-        //console.log(chosenOption)
-
-        let response = await fetch('/api/getCredential/' + selectedOption.value)
-            .then(response => response.json())
-
-
-        console.log(selectedOption.value);
-
-        console.log(response)
-
-    }
-    //const [type, setType] = useState("");
-
-    // function handleSelectChange(event){
-    //     //console.log(event.target.value);
-    //     chosenOption = event.target.value;
-    //
-    // }
-
     const [selectedOption, setSelectedOption] = useState(null);
+    const [bID, setBID] = useState('123');
+    const [param, setParam] = useState('')
+
+
+    async function getBaseID() {
+
+        const baseID = await fetch('http://localhost:8083/'+ param).then(baseID => baseID.text());
+        setBID(baseID);
+    }
+    const onCode = (code, params) => {
+        console.log('wooo a code', code);
+        setParam(params)
+        console.log('hei', params);
+    }
+
+    const onClose = (url) => console.log(url);
+
+
+    function verifyIDPort() {
+        return true;
+    }
+
+
+
 
     return (
         <div className="Mainpage">
@@ -43,12 +49,9 @@ function Mainpage() {
             {/*    <option value={"Over-20"}>Over 20</option>*/}
             {/*    <option value={"Fødselsattest"}>Fødselsattest</option>*/}
             {/*</select>*/}
-
             <br/>
 
-
             <Select
-
                 className="basic-single"
                 classNamePrefix="select"
                 defaultValue={types[0]}
@@ -58,11 +61,17 @@ function Mainpage() {
                 onChange = {setSelectedOption}
             />
             <br/> <br/>
-            <button onClick={getCredential}  >Søk etter bevis</button>
+            <button onClick={() => getBaseID()}  >Søk etter bevis</button>
 
+
+            <OauthPopup
+                url={ 'http://localhost:8083/protectedpage'}
+                onCode={onCode}
+                onClose={onClose}
+            >IDPorten</OauthPopup>
             <br/><br/> <br/>
 
-            <QRCode  value={selectedOption.value} />
+            <QRCode value={bID}/>
         </div>
     )
 }
