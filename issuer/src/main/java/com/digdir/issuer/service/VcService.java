@@ -5,9 +5,12 @@ import com.digdir.issuer.credentials.Jwt;
 import com.digdir.issuer.credentials.JwtVerifier;
 import com.digdir.issuer.storage.FileHandler;
 import com.digdir.issuer.storage.JwtTypeHandler;
+import net.glxn.qrgen.javase.QRCode;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.interfaces.RSAPublicKey;
 
@@ -73,4 +76,24 @@ public class VcService {
         System.out.println("JWT:   " + jwt.getToken());
         return jwt.getToken();
     }
+
+
+    /**
+     * Method that generates a byte array to use for QR-code
+     * @param text = the string that the QR-code will contain
+     * @return the byte array, or null if the text cannot be converted to an output stream
+     */
+    public byte[] generateByteArray(String text) {
+
+        try (ByteArrayOutputStream bos = QRCode.from(text).withSize(400, 400).stream(); ) {
+
+            return bos.toByteArray();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

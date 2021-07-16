@@ -30,43 +30,22 @@ public class BaseIDController {
     VcService vcService = new VcService();
 
     /**
-     * Route that redirects to id-porten and after user login gets an id-porten token.
+     * Route that redirects to id-porten and after user login gets an id-porten token through a QR-code.
      * Token is used to issue a baseId, that is signed to be used and verified by other issuers.
      *
      * @param principal id-token object
      * @param model TODO What is model?
-     * @return baseId token in the format of a jwt-String
-     * @throws Exception If the input to JWT is wrong, a multitude of exceptions can be thrown :)
+     * @return a QR-code containing the baseId token in the format of a jwt-String
      */
-
-    @Autowired
-    private ServletContext servletContext;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/protectedpage")
-    public ResponseEntity<QRCode> getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        /*
-        HttpHeaders headers = new HttpHeaders();
-
-        ServletContext servletContext = null;
-
-        byte[] media = IOUtils.toByteArray(in);
-        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-        ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-        return responseEntity;
-
-         */
-        String value = vcService.getBaseVC(principal);
-        //ByteArrayOutputStream stream = QRCode.from(value).to(ImageType.PNG).stream();
-
-     //   InputStream in = new ByteArrayInputStream(stream.toByteArray());
-
-        //Image bi = ImageIO.read(in);
-QRCode qrCode = QRCode.from(value).to(ImageType.PNG);
-        return ResponseEntity.ok().header("Content-type", "image/svg+xml").body(qrCode);
-
-        //ByteArrayInputStream in = new ByteArrayInputStream(QRCode.from(value).stream().toByteArray());
-        //return ImageIO.read(in);
+    public ResponseEntity<byte[]> getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model){
+        String QR_TEXT = vcService.getBaseVC(principal);
+        byte[] qrImage = vcService.generateByteArray(QR_TEXT);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrImage);
     }
+
+
 
 }
