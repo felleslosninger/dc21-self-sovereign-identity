@@ -67,11 +67,10 @@ export default function AppWrapper() {
                                     iconName = 'plus';
                                 } else if (route.name === 'Aktivitet') {
                                     iconName = 'qrcode';
-                                }
-                                else if (route.name === 'Profil') {
+                                } else if (route.name === 'Profil') {
                                     iconName = 'id-badge';
                                 }
-                    
+
                                 // You can return any component that you like here!
                                 return <Icon name={iconName} size={size} color={color} />;
                             },

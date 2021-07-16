@@ -4,8 +4,13 @@ import com.example.verifier.service.VerifyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.constant.Constable;
+
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class VerifyController {
+
 
 
 
@@ -22,10 +27,14 @@ public class VerifyController {
      * @param token = the jwt token to send
      * @return a response entity containing the token, if it was verified, and a HttpStatus.OK
      */
-    @PostMapping("/api/sendCredential")
-    public ResponseEntity<String> sendCredential(@RequestBody String token) {
-        return verifyService.sendCredential(token);
+    @PostMapping("/api/sendVP")
+    public ResponseEntity<String> sendVP(@RequestBody String token) {
+        return verifyService.sendVP(token);
     }
+
+
+
+
 
 
     /**

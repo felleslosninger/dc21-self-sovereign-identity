@@ -3,6 +3,7 @@ package com.digdir.issuer.storage;
 
 import com.google.gson.Gson;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -34,12 +36,11 @@ public class FileHandler {
      * @param pk Public key to be saved to VDR.
      */
     public void addPublicKey(String id, PublicKey pk){
-        if(loadFromFile().containsKey(id)) {
-            throw new IllegalArgumentException("id already exists");
-        }
-        HashMap<String, PublicKey> map = loadFromFile();
-        map.put(id, pk);
-        saveToFile(map);
+             HashMap<String, PublicKey> map = loadFromFile();
+            map.put(id, pk);
+            saveToFile(map);
+
+
     }
 
     /**
@@ -60,10 +61,11 @@ public class FileHandler {
      * @param publicKeyMap HashMap to save.
      */
     private void saveToFile(HashMap<String, PublicKey> publicKeyMap) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        HashMap<String, byte[]> map = new HashMap<>();
-        publicKeyMap.forEach((key, value) -> map.put(key, value.getEncoded()));
+        HashMap<String, String> map = new HashMap<>();
+        publicKeyMap.forEach((key, value) -> map.put(key, Base64.getEncoder().encodeToString(value.getEncoded())));
+        //publicKeyMap.forEach((key, value) -> map.put(key, value.getEncoded()));
 
         String javaObjectString = gson.toJson(map); // converts to json
 
@@ -95,12 +97,13 @@ public class FileHandler {
         try {
             InputStream inputStream = new FileInputStream(path);
             Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            HashMap<String, byte[]> mapFromFile = new Gson().fromJson(fileReader, new TypeToken<HashMap<String, byte[]>>() {
+            HashMap<String, String> mapFromFile = new Gson().fromJson(fileReader, new TypeToken<HashMap<String, String>>() {
             }.getType());
             HashMap<String, PublicKey> publicKeyMap = new HashMap<>();
             mapFromFile.forEach((key, value) -> {
                 try {
-                    publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value)));
+                    //publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value.getBytes(StandardCharsets.UTF_8))));
+                    publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(value))));
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
                     System.out.println("Problem in Filehandler. Cant load from file. ");
                 }

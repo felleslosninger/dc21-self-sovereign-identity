@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.ui.Model;
@@ -26,8 +27,10 @@ import java.io.*;
  * Controller for BaseVC-operations
  */
 @RestController
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BaseIDController {
-    VcService vcService = new VcService();
+    private final VcService vcService;
 
     /**
      * Route that redirects to id-porten and after user login gets an id-porten token through a QR-code.
@@ -44,8 +47,11 @@ public class BaseIDController {
         String QR_TEXT = vcService.getBaseVC(principal);
         byte[] qrImage = vcService.generateByteArray(QR_TEXT);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrImage);
+  /*
+    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
+        System.out.println(principal.getIdToken().getTokenValue());
+        return vcService.getBaseVC(principal);
     }
-
-
+    */
 
 }

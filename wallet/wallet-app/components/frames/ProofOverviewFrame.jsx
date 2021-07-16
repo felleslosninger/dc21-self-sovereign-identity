@@ -1,18 +1,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
 import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
-import { addCredential } from '../../redux/CredentialSlice';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../Proof';
-import { signIn } from '../../redux/SignedInSlice';
-import ProfileMenuSlide from './ProfileMenu';
 
 /**
  * A frame with an overview of every proof the wallet has
- * @returns 
+ * @returns
  */
 export default function ProofOverviewFrame() {
     const dispatch = useDispatch(); // To call every reducer that we want. Using dispatch to communicate with state management
@@ -31,8 +29,10 @@ export default function ProofOverviewFrame() {
             for (let key = 0; key < keys.length; key++) {
                 const value = await AsyncStorage.getItem(keys[key]);
                 if (value !== null) {
-                    if (!proofs.some((item) => item.id === keys[key])) { // Makes sure that there are no duplicates
+                    if (!proofs.some((item) => item.id === keys[key])) {
+                        // Makes sure that there are no duplicates
                         proofs.push({ id: keys[key], proof: value });
+                        dispatch(addCredential(JSON.parse(value)));
                     }
                 }
             }
@@ -46,12 +46,11 @@ export default function ProofOverviewFrame() {
      * Adds the keys into a list
      */
     const getKeys = async () => {
-        console.log(cred);
         try {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
                 for (let i = 0; i < theKeys.length; i++) {
-                    if (!keys.includes(theKeys[i]) && theKeys[i] !== 'pin') {
+                    if (!keys.includes(theKeys[i]) && theKeys[i] !== 'pin' && theKeys[i] !== 'baseId') {
                         keys.push(theKeys[i]);
                     }
                 }
@@ -66,14 +65,18 @@ export default function ProofOverviewFrame() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
-                <Text>Logg ut</Text>
-            </TouchableOpacity>
             <FlatList
                 keyExtractor={(item) => item.jti}
                 data={cred}
                 renderItem={({ item }) => (
-                    <Proof id={item.jti} name={item.vc} issuer={item.iss} issDate={item.iat} expDate={item.exp} />
+                    <Proof
+                        id={item.jti}
+                        name={item.type}
+                        // fix issuer display / handle issuerid
+                        issuer={item.iss.substring(0, item.iss.length - 36)}
+                        issDate={item.iat}
+                        expDate={item.exp}
+                    />
                 )}
             />
         </SafeAreaView>
