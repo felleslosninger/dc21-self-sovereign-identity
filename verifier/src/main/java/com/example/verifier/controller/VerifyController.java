@@ -46,5 +46,16 @@ public class VerifyController {
         return verifyService.checkVerify();
     }
 
+    @GetMapping("/api/ingunntest")
+    public String ingunntest(@RequestParam(value = "name", defaultValue = "World") String name) {
+        String output;
+        if (name.equals("Gunvor")) {
+            output = "Gunvor prater halling!";
+        }
+        else {
+            output = String.format("Hello %s", name);
+        }
+        return String.format("%s", output);
+    }
 
 }
