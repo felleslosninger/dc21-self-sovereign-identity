@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { exampleBaseVc, httpGetCredential } from '../../utils/httpRequests';
+import { httpGetCredential } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -23,19 +23,17 @@ export default function RequestFrame() {
      * Retrieves proof and saves it
      */
     async function retrieveCredential() {
+        const baseVC = await AsyncStorage.getItem('baseId');
 
-
-        const response = await httpGetCredential(vcType, exampleBaseVc);
+        const response = await httpGetCredential(vcType, baseVC);
         try {
             const decode = jwtDecode(response);
-            const retrievedCredential = { ...decode, token:response, type: vcType };
+            const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
             setFeedback(`hentet ${vcType} bevis`);
             // await saveProof(retrievedCredential);
-        }
-        catch (error) {
+        } catch (error) {
             setFeedback(response);
-
         }
     }
 
@@ -49,7 +47,12 @@ export default function RequestFrame() {
         }
     };
 
-    const issuers = [{name : "NTNU"}, {name : "Statens Vegvesen"}, {name : "Folkeregisteret"}, {name : "UtsederAvBevis.no"}]
+    const issuers = [
+        { name: 'NTNU' },
+        { name: 'Statens Vegvesen' },
+        { name: 'Folkeregisteret' },
+        { name: 'UtsederAvBevis.no' },
+    ];
 
     return (
         <SafeAreaView style={styles.container}>
@@ -59,9 +62,9 @@ export default function RequestFrame() {
                 <Text style={styles.text}>Velg utsteder </Text>
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-
-                    {issuers.map((i) => (<Picker.Item label={i.name} value={i.name} />))}
-                    
+                    {issuers.map((i) => (
+                        <Picker.Item label={i.name} value={i.name} />
+                    ))}
                 </Picker>
             </SafeAreaView>
 
