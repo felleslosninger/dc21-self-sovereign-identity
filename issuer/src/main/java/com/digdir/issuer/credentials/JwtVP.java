@@ -63,6 +63,7 @@ public class JwtVP {
                 .withIssuer(walletId)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiresAt)
+                .withAudience("verifier123")
                 .withClaim("type",type)
                 .withClaim("cred", Arrays.asList(this.VCs))
                 .sign(algorithm);
