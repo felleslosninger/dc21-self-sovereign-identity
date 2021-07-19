@@ -54,8 +54,8 @@ export default function AppWrapper() {
 
     return (
         <NavigationContainer>
-            {signedIn ? (
-                <>
+            {/*{signedIn ? (
+                <>*/}
                     <Tab.Navigator
                         screenOptions={({ route }) => ({
                             tabBarIcon: ({ color, size }) => {
@@ -86,7 +86,7 @@ export default function AppWrapper() {
                         <Tab.Screen name="Aktivitet" component={ActivityFrame} />
                         <Tab.Screen name="Profil" component={ProfileMenuSlide} />
                     </Tab.Navigator>
-                </>
+              {/*  </>
             ) : (
                 <Stack.Navigator
                     screenOptions={{
@@ -94,7 +94,7 @@ export default function AppWrapper() {
                     }}>
                     <Stack.Screen name="Start" component={StartStackScreen} />
                 </Stack.Navigator>
-            )}
+            )}*/}
         </NavigationContainer>
     );
 }
