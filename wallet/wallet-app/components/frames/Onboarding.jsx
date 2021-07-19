@@ -6,9 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { signIn } from '../../redux/SignedInSlice';
-
-export default function App() {
+export default function Onboarding() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [verified, setVerified] = useState(false);
