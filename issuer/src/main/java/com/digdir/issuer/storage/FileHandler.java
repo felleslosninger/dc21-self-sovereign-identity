@@ -2,15 +2,15 @@ package com.digdir.issuer.storage;
 
 
 import com.google.gson.Gson;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -25,7 +25,8 @@ import java.util.Objects;
 @Repository
 public class FileHandler {
 
-    private String path = "issuer/src/main/resources/PublicKeyFile.json";
+    //private String path = "issuer/src/main/resources/PublicKeyFile.json";
+    private Path path = Paths.get("src/main/resources/PublicKeyFile.json");
     private Writer file;
 
     /**
@@ -71,7 +72,7 @@ public class FileHandler {
 
         try {
 
-            FileOutputStream fileStream = new FileOutputStream(path);
+            FileOutputStream fileStream = new FileOutputStream(path.toFile());
             file = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
             file.write(javaObjectString);
 
@@ -95,7 +96,7 @@ public class FileHandler {
      */
     private HashMap<String, PublicKey> loadFromFile() {
         try {
-            InputStream inputStream = new FileInputStream(path);
+            InputStream inputStream = new FileInputStream(path.toFile());
             Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             HashMap<String, String> mapFromFile = new Gson().fromJson(fileReader, new TypeToken<HashMap<String, String>>() {
             }.getType());
@@ -140,7 +141,7 @@ public class FileHandler {
         Gson gson = new Gson();
         return gson.toJson(jsonPk);
     }
-    public void setPath(String path){
+    public void setPath(Path path){
         this.path = path;
     }
 
