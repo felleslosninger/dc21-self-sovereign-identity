@@ -20,20 +20,23 @@ public class IssuerTypesHandler {
     }
 
     public static void main(String[] args) {
+        IssuerTypesHandler ith = new IssuerTypesHandler();
+        System.out.println(ith.getTypesWithIssuer("utsteder2"));
+    }
+
+    public List<String> getTypesWithIssuer(String issuer){
         try {
             InputStream inputStream = new FileInputStream(path);
             Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             HashMap<String, List<String>> mapFromFile = new Gson().fromJson(fileReader, new TypeToken<HashMap<String, List<String>>>() {
             }.getType());
-            System.out.println("Typer: " + mapFromFile.get("utsteder2"));
+            if(mapFromFile.get(issuer) != null){
+                return mapFromFile.get(issuer);
+            }
+            return null;
 
         }catch (Exception e){
-            System.out.println("Error with reading from IssuerTypes.json");
-            e.printStackTrace();
+            throw new NullPointerException("Error with reading from IssuerTypes.json");
         }
     }
-
-//    public List<String> getTypesWithIssuer(String issuer){
-//
-//    }
 }
