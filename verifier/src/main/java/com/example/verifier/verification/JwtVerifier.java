@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.net.URISyntaxException;
+import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,14 @@ public class JwtVerifier {
         return jwt;
     }
 
+    //Method for checking Audience
+    private boolean checkAud(String token){
+        String audience = "verifier123";
+        DecodedJWT jwt = decodeJwt(token);
+        return jwt.getAudience().contains(audience);
+
+    }
+
 
     /**
      * Method that verifies a token
@@ -48,6 +57,7 @@ public class JwtVerifier {
     public boolean verifyToken(String token) {
         try {
             DecodedJWT jwt = decodeJwt(token);
+            System.out.println(jwt.getIssuer());
             Requester r = new Requester("http://localhost:8083/vdr/key/");
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) r.getKeyByID(jwt.getIssuer()), null);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -114,6 +124,12 @@ public class JwtVerifier {
      * @return a boolean, true if the VP was verified, false if not
      */
     public boolean verifyVP(String token, String ... types){
+
+        //Check if Aud is the correct Aud
+        if(checkAud(token)==false){
+            return false;
+        }
+
         try {
             DecodedJWT jwt = decodeJwt(token);
 
@@ -144,6 +160,8 @@ public class JwtVerifier {
     }
 
 
+
+
     public static void main(String[] args) throws URISyntaxException {
 //    /*    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ0ZXN0U3ViIiwiaXNzIjoidGVzdElzc2Q4NzAyNTAyLWJkMTctNGQ3Mi04NGNhLWY3MDY4YTE2YjdiNyIsImV4cCI6MTYyNjc3NTE1NywiaWF0IjoxNjI1NTY1NTU3LCJ2YyI6eyJjcmVkZW50aWFsU3ViamVjdCI6eyJhZ2UiOnsibmFtZSI6Ik92ZXIgMTgiLCJ0eXBlIjoib3Zlci0xOCJ9fSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkFnZUNyZWRlbnRpYWwiXSwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXX0sImp0aSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4My9jcmVkZW50aWFscy8xIn0.mSi6wBHK0Qhr5g_hEKl0mCUbbp0EswQQ5nJsLT45T1DPnYtmAHmtKjqLcyaEk4nzBnzkGo9hnf0PM8qr62D00IWVFyfXoEEJ_btbOOIkw8qjpBzjP3pHxn1Vc4c8Wq85PpkZ9EEFVE-mtWi20cRlWqFyAl9P0R6YibsIdB3H2uwl8K-LKQHIenLQjmDDkQ8pvgwdwBE7TzVnZhgKYRqzglb_Ry9notEa8GEvuqn60dsZJPnWdD8cuiZvCotIQoaEAKxOMXeLVJ97EoarrmXtmxCytCKUeEY6Al8CuJHPIoPAh9FgO6tbxJiGCNV7QqQGItRZPQBunfHBYAWLwESOFA";
 //        JwtVerifier v = new JwtVerifier();
@@ -172,21 +190,20 @@ public class JwtVerifier {
 //        System.out.println(decoded.getClaim("cred").getClass());
 //        System.out.println(decoded.getClaim("cred"));*/
 //
-
-
-        String VCtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwODA4OTQwOTM4MiIsImlzcyI6IlV0c2VkZXJBdkJldmlzLm5vNzY2YjEwZTMtMzJmMi00MDdkLThjNGItMjRjMGQ2NDIxY2VlIiwiZXhwIjoxNjI3MzcwMTExLCJpYXQiOjE2MjYxNjA1MTEsInZjIjp7ImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFnZSI6eyJuYW1lIjoiT3ZlciAxOCIsInR5cGUiOiJvdmVyLTE4In19LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiQWdlQ3JlZGVudGlhbCJdLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdfSwianRpIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgzL2NyZWRlbnRpYWxzLzEifQ.O9GhYrVxrGKlAvcpseL-RGmnPCAbcrepGyOBE8OERPqN7YMsWhPskEtdnWq5YGqfRU9GEm1gGpoLe4rIsgCts8PbBp_W0m-5ANINI_L2XpPAUHF95FJcqbICyOf3ZAJaE1h0QQsfJi7yvUI-M0mqXSNkTk62wM8uMxh7YHUqs0G3jf4fXs_CKETRiiDW9juKMO6sZZPZru36gTfmZ6j5mvDNTTzQI23SOcF7cn0IMUTZw-to1PoT3ry8OIBjaZZXvwxk-FFmDNGwi_M0VbIj8a1HHdcDaHhgVsCVG3SVOeTwhfwAX97glT0BmRXL-9NHB9_DSR-j1-A3cZwSSDjW9Q";
         JwtVerifier v = new JwtVerifier();
+
+
+/*
+        String VCtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwODA4OTQwOTM4MiIsImlzcyI6IlV0c2VkZXJBdkJldmlzLm5vNzY2YjEwZTMtMzJmMi00MDdkLThjNGItMjRjMGQ2NDIxY2VlIiwiZXhwIjoxNjI3MzcwMTExLCJpYXQiOjE2MjYxNjA1MTEsInZjIjp7ImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFnZSI6eyJuYW1lIjoiT3ZlciAxOCIsInR5cGUiOiJvdmVyLTE4In19LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiQWdlQ3JlZGVudGlhbCJdLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdfSwianRpIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgzL2NyZWRlbnRpYWxzLzEifQ.O9GhYrVxrGKlAvcpseL-RGmnPCAbcrepGyOBE8OERPqN7YMsWhPskEtdnWq5YGqfRU9GEm1gGpoLe4rIsgCts8PbBp_W0m-5ANINI_L2XpPAUHF95FJcqbICyOf3ZAJaE1h0QQsfJi7yvUI-M0mqXSNkTk62wM8uMxh7YHUqs0G3jf4fXs_CKETRiiDW9juKMO6sZZPZru36gTfmZ6j5mvDNTTzQI23SOcF7cn0IMUTZw-to1PoT3ry8OIBjaZZXvwxk-FFmDNGwi_M0VbIj8a1HHdcDaHhgVsCVG3SVOeTwhfwAX97glT0BmRXL-9NHB9_DSR-j1-A3cZwSSDjW9Q";
         System.out.println("verify token: " + v.verifyToken(VCtoken));
         System.out.println("verify VC over-18: " + v.verifyVC(VCtoken, "over-18"));
         System.out.println("verify VC er-sykepleier: " + v.verifyVC(VCtoken, "er-sykepleier"));
 
+*/
 
 
-        String VPtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJjcmVkIjpbImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSlNVekkxTmlKOS5leUp6ZFdJaU9pSjBaWE4wVTNWaUlpd2lhWE56SWpvaWRHVnpkRWx6YzJaak5qWTFPV001TFRabU5qWXROR1JrTUMxaVpUWTNMVFF4WVRNeFptTTJZamc1WkNJc0ltVjRjQ0k2TVRZeU56TTNNVEV4TkN3aWFXRjBJam94TmpJMk1UWXhOVEUwTENKMll5STZleUpqY21Wa1pXNTBhV0ZzVTNWaWFtVmpkQ0k2ZXlKaFoyVWlPbnNpYm1GdFpTSTZJazkyWlhJZ01UZ2lMQ0owZVhCbElqb2liM1psY2kweE9DSjlmU3dpZEhsd1pTSTZXeUpXWlhKcFptbGhZbXhsUTNKbFpHVnVkR2xoYkNJc0lrRm5aVU55WldSbGJuUnBZV3dpWFN3aVFHTnZiblJsZUhRaU9sc2lhSFIwY0hNNkx5OTNkM2N1ZHpNdWIzSm5Mekl3TVRndlkzSmxaR1Z1ZEdsaGJITXZkakVpWFgwc0ltcDBhU0k2SW1oMGRIQTZMeTlzYjJOaGJHaHZjM1E2T0RBNE15OWpjbVZrWlc1MGFXRnNjeTh4SW4wLlFtblhMMGtxX01iOUZ4RjdLM1VrVTZ6Wms2ZVNJQXd2UUE0VHA0YlBRX3JjWG5NdE9BNlpMdTc5UVlucmVTMllWZDFqS1B4dzlLSm13SkMzbFFDRVRqT0xjVzA4TDJvNHUtZkJ5U0kwVzFrUk94SkZucnJkMG5EQjJPRldWbE51VWY2MEFySXpYaWVfVGtxUVFSOEtOdDBOWEVjbFFyYk9nc2VlZ0J3b1VaZEtYZmo5VWFya3lQQ3hVaVFmYmxqWUdNWm9mU3ZJMDdoUUNpMTNOeTRmTWFreE5iSHpvYW14NEVFRmtLOV9TdUdUd2dXcGVnUHRyN2Z3LVhabFF4NEVZd2daYW1xWDBaYzU2aHhEbnFaRDRLNVJvTkt5bDFsWjRFWDZISTctdXdzaExVeS1BcEQxWV9WMURmM2hqTDJPRnBFZmVsVktuSTUtOGlvLTI2R3pNUSIsImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSlNVekkxTmlKOS5leUp6ZFdJaU9pSjBaWE4wVTNWaU1pSXNJbWx6Y3lJNkluUmxjM1JKYzNNeU1qSTBaRE00T1dNdE5HUmpZUzAwTkRWaUxXSXhPRGN0TkRFd1pqWXdaakF3TkRobUlpd2laWGh3SWpveE5qSTNNemN4TVRFMExDSnBZWFFpT2pFMk1qWXhOakUxTVRRc0luWmpJanA3SW1OeVpXUmxiblJwWVd4VGRXSnFaV04wSWpwN0ltUmxaM0psWlNJNmV5SnVZVzFsSWpvaVJYSWdjM2xyWlhCc1pXbGxjaUlzSW5SNWNHVWlPaUpsY2kxemVXdGxjR3hsYVdWeUluMTlMQ0owZVhCbElqcGJJbFpsY21sbWFXRmliR1ZEY21Wa1pXNTBhV0ZzSWl3aVJHVm5jbVZsUTNKbFpHVnVkR2xoYkNKZExDSkFZMjl1ZEdWNGRDSTZXeUpvZEhSd2N6b3ZMM2QzZHk1M015NXZjbWN2TWpBeE9DOWpjbVZrWlc1MGFXRnNjeTkyTVNKZGZTd2lhblJwSWpvaWFIUjBjRG92TDJ4dlkyRnNhRzl6ZERvNE1EZ3pMMk55WldSbGJuUnBZV3h6THpFaWZRLlBxZWFnSVVteUxzZmRET29PbkgtV1FGVzFCdDBaTEd5TlJ2WmJaVFdzVXBQN1BaeTE2UWlOdnN2WWkwZEFzdVRteDhid1k3TWVZN3cteThvWDZyZmRPQVcxZ3d3bTRLMGVMbWNReUF5cUw0SHRGNi1oTHVVdUY5elhsb0xldFlrbzJsS29XM2kzaC13NFVWNm1jWjM4YS1NcmxDbTRpYlhyek42OHJfbU1rNVdDOTI2UU1rai1yak95MENDOTZtVEpmbDd3OWVFVFhDNDdiMDVKSmVNZURaeHNOckFwR1JDckl2M3RYQmItLW1VMnU4WFJmMDZFZDYzcnhaeTd0UmJlTjFOOGY0aHZ0djk5R2thQmtfWXhoeUhDeTdTQlBQa01zVjVsZGsyeUVfQ3VIY1ZYUTlxSHIybFdTQW56bkViUDF6b002cGQ0bkZjZWF3QzZ2LVRkUSJdLCJpc3MiOiJ3YWxsZXRJZDY2YmMxNzg5LTg2NTMtNGJhYS1hM2NhLTk4OTQxMDNiYTViYSIsImV4cCI6MTYyNzM3MTExNSwidHlwZSI6IlZlcmlmaWFibGUgUHJlc2VudGF0aW9uIiwiaWF0IjoxNjI2MTYxNTE1fQ.tHRrL7QnqiLJedpA4xeerALn9SiR6pQiX3OcD2w0YD5gOkghdfF2bGuyLboq5fqVm9yC0F99rEEGUGqCBwocIwYpM4Ml6HXlgWF4qnJdxFM0U2Sex_JAPjA3syuchX-E0jCbrrUVNC4jLp9_GAYYOKShoLgrQuWP88LDq8LfTwkecJ1G6EciyQaDnR7oLAptgvbMAB4vzKh-lo1Xgxb3wcRatOGf4_yO8f3pX0YWUPHm0Dx7hJLKggSpWUSe40S_pNkFujHnqvAr3E-y0d63j8KybtlMBXKtUoWH-CA-lJa_bAjOOPxXQ9682b-arjNjJ6rZqxATu-gyyYkKRv71UA";    System.out.println(v.decodeJwt(VPtoken).getIssuer());
-        System.out.println(v.verifyToken(VPtoken));
-        System.out.println("verify VP over-18 og er-sykepleier: " + v.verifyVP(VPtoken, "over-18", "er-sykepleier"));
-        System.out.println("verify VP over-18 og er-sykepleier og over-21: " + v.verifyVP(VPtoken, "over-18", "er-sykepleier", "over-21"));
-        System.out.println("verify VP over-21: " + v.verifyVP(VPtoken, "over-21"));
+        String VPtoken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJjcmVkIjpbImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSlNVekkxTmlKOS5leUp6ZFdJaU9pSjBaWE4wVTNWaUlpd2lhWE56SWpvaWRHVnpkRWx6Y3pJMU1EQXpZelF6TFRSbU4yVXROR1prWkMwNFpUVm1MVEl5TkRGbVlqQmxaV1UxTkNJc0ltVjRjQ0k2TVRZeU56WXlPVEExTXl3aWFXRjBJam94TmpJMk5ERTVORFV6TENKMll5STZleUpqY21Wa1pXNTBhV0ZzVTNWaWFtVmpkQ0k2ZXlKaFoyVWlPbnNpYm1GdFpTSTZJazkyWlhJZ01UZ2lMQ0owZVhCbElqb2liM1psY2kweE9DSjlmU3dpZEhsd1pTSTZXeUpXWlhKcFptbGhZbXhsUTNKbFpHVnVkR2xoYkNJc0lrRm5aVU55WldSbGJuUnBZV3dpWFN3aVFHTnZiblJsZUhRaU9sc2lhSFIwY0hNNkx5OTNkM2N1ZHpNdWIzSm5Mekl3TVRndlkzSmxaR1Z1ZEdsaGJITXZkakVpWFgwc0ltcDBhU0k2SW1oMGRIQTZMeTlzYjJOaGJHaHZjM1E2T0RBNE15OWpjbVZrWlc1MGFXRnNjeTh4SW4wLk56MmxmY05nSGt0NzlOX2JZSExOSEpubHNRamNBYmZIQmpzX2ZfZGtsQ2FldW5xN2RZN1pGU0psX0lSc19qWEM4N3c5UzVJcmFTVERUWGR6VVlEUmVJZjJ3SkhOV3Q2clZjSTlzM2pMSzJVbkZKbW50OG1KdXZQeld6VVpwaThzRkVQeXBHdm5ydEthdHZFQXVkT2E3RkZLYzlUZmJYMjh3cGN0QlN0SEtLNHhWWmd6R2RBVmZoMExycW0xbkpWejVMak1EaVpULTU4UkpaRm90eEQtN2hhNGxxTjNBcGZYM3VwNXUwZDFWVG54clk0WS1MUDVJSzFKRTNYWVVHeXFZZDJhZHJjWjBmM0s4cWxUNFRFMy10aXhRekJqdng5RnZIdEtqUUtFV0UwRXIyeWVZMjVrTGFMYVFYdWtQYVFZNDRfb2dianBsN01wNi0yUUVhekRfQSIsImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSlNVekkxTmlKOS5leUp6ZFdJaU9pSjBaWE4wVTNWaU1pSXNJbWx6Y3lJNkluUmxjM1JKYzNNeVpqUTRaRFZsWkRrdFkyRTJOaTAwT1RJeExUaGxaR1V0TmpBMVpHRTRaRFV6TnpKaElpd2laWGh3SWpveE5qSTNOakk1TURVMExDSnBZWFFpT2pFMk1qWTBNVGswTlRRc0luWmpJanA3SW1OeVpXUmxiblJwWVd4VGRXSnFaV04wSWpwN0ltUmxaM0psWlNJNmV5SnVZVzFsSWpvaVJYSWdjM2xyWlhCc1pXbGxjaUlzSW5SNWNHVWlPaUpsY2kxemVXdGxjR3hsYVdWeUluMTlMQ0owZVhCbElqcGJJbFpsY21sbWFXRmliR1ZEY21Wa1pXNTBhV0ZzSWl3aVJHVm5jbVZsUTNKbFpHVnVkR2xoYkNKZExDSkFZMjl1ZEdWNGRDSTZXeUpvZEhSd2N6b3ZMM2QzZHk1M015NXZjbWN2TWpBeE9DOWpjbVZrWlc1MGFXRnNjeTkyTVNKZGZTd2lhblJwSWpvaWFIUjBjRG92TDJ4dlkyRnNhRzl6ZERvNE1EZ3pMMk55WldSbGJuUnBZV3h6THpFaWZRLklUNkNEUmxzR3k1VUl2bF9qdzZSQTgtbDdXSXlHTnRNc1hsLUxkUFpJZUVvV1VRN1NLT0RQT1gxRXNUbGxEWEl3U0VucVlFVE82eHNxZHpETndFenRWM2NrVEJERUd6bXN6TFpxaFJ4RmhFWGdyWkQwdkwwWXZaWkg2LVBfY2FmTnMyUjBjMGszQWE1a2p2U1pqcFI3dzBfUkhib1JNT2cxSEkzcnVlRXJ0TE1rWVZFMTE0ZVdhcDVYUDhLNFJqU1B3SmR1QVpzZmFPQW1LVDJoQ244MDVwOS15Q194VTBHRTJJOHVGczUzTVo0RXk2N25JZUNFR3BmdXhiMEFqWDBjMjJnMjdjWi1tUWJTd3NONHJULVVZbVRuUDRqZ2JMWDFNZzRCdHBfaW9XeW1wTGtoM2RYYlpxaEF4TEZrME4wQnR4NlRjbE14Qjd6cDhGZWFBc1pwUSJdLCJhdWQiOiJ2ZXJpZmllcjEyMyIsImlzcyI6IndhbGxldElkNTQzMWZjZDQtM2ZhNS00MTk0LTk3MzgtMjNhZTBiNGUwYTRkIiwiZXhwIjoxNjI3NjI5MDU0LCJ0eXBlIjoiVmVyaWZpYWJsZSBQcmVzZW50YXRpb24iLCJpYXQiOjE2MjY0MTk0NTR9.XExgh1C0v7sHGLPLKEkrqjQnrUUr_AS2rW7jESc0x4hDBN_Z_nv1LQb3jhAZlHKdHAjgnrdH4_hL3De9tpuQqnDJx48ZmxbpvtIFlc90Ymc9tcee75U2TQWKeOHuI069jZXhacWqDai_Mb5zNCQywZbrM3rkp5kRxLMo59FO-DkkgVbAx6CZFjSiGXVOFACPbovUlXiYHbYmZxe6odKOJrAOYHKei6gckFoQWmiQVz0ZTBtxts06s28F1Pk7UaD-L2JSNFuuCkmr11bNzDodhMoOoUqXXDszSQIgMl4B5xvXpmFjdawY6oSIx6p5SjtFCVVpn4pUPuM61Or4yAjLeQ";
+        System.out.println("verify VP over-21: " + v.verifyVP(VPtoken, "over-18"));
 
     }
 
