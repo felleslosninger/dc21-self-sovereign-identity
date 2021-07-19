@@ -2,7 +2,6 @@ import React from "react";
 import {Link, useHistory} from "react-router-dom";
 import QRCode from "react-qr-code";
 import localIpUrl from 'local-ip-url';
-import prepareUrls from "local-ip-url/prepareUrls";
 
 function VerifyAge() {
 
@@ -30,7 +29,10 @@ function VerifyAge() {
     return (
         <div className="VerifyAge">
             <p>You must be over 18 to continue</p>
-            <QRCode value={path + '|' + 'over-18' + '|' + userID}/>
+            <QRCode value={path + '| over-18 |' + userID}/>
+            <br/>
+            <br/>
+            <br/>
             <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
         </div>
     );
