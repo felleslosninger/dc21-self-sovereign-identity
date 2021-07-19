@@ -24,12 +24,13 @@ function VerifyAge() {
     }
 
     const path = localIpUrl() + ':3000/api/sendVP'
+    const userID = Math.random() * 100
 
 
     return (
         <div className="VerifyAge">
             <p>You must be over 18 to continue</p>
-            <QRCode value={path + '|' + 'over-18'}/>
+            <QRCode value={path + '|' + 'over-18' + '|' + userID}/>
             <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
         </div>
     );
