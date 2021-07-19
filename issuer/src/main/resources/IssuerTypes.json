@@ -1,4 +1,5 @@
 {
-  "utsteder1": ["over-18", "er-sykepleier", "over-20"],
-  "utsteder2": ["er-lege",  "over-20"]
+  "folkeregisteret": ["over-18", "over-20"],
+  "ntnu": ["er-lege"],
+  "vegvesenet": ["har-førerkort-type-b"]
 }
