@@ -80,7 +80,7 @@ public class JwtTypeHandler {
             e.printStackTrace();
         }
 
-    return types;
+        return types;
     }
 
 
