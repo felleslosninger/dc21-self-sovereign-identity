@@ -24,6 +24,7 @@ function VerifyAge() {
 
     const path = localIpUrl() + ':3000/api/sendVP'
     const userID = Math.random() * 100
+    sessionStorage.setItem('userID', userID.toString())
 
 
     return (
