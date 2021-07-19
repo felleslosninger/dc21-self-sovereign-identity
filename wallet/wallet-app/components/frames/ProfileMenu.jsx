@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
-import { color } from 'react-native-reanimated';
 import { signIn } from '../../redux/SignedInSlice';
 
 /**
@@ -18,20 +17,23 @@ export default function ProfileMenuSlide() {
     const [baseIdIssuer, setBaseIdIssuer] = useState('');
 
     const getBaseIdIssuer = async () => {
-        // const decoded = jwtDecode(AsyncStorage.getItem('baseId'));
         const baseIdToken = await AsyncStorage.getItem('baseId');
-        const parsed = JSON.parse(baseIdToken);
-        setBaseIdIssuer(parsed.iss);
+        const decoded = jwtDecode(baseIdToken);
+        setBaseIdIssuer(decoded.iss);
     };
 
     getBaseIdIssuer();
+
+    const clearAllData = () => {
+        AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
+    };
 
     const deleteUserPressed = async () => {
         try {
             await AsyncStorage.removeItem('baseId'); // removes proof from AsyncStorage
             await AsyncStorage.removeItem('pin'); // removes pin from AsyncStorage
             dispatch(signIn(false));
-
+            clearAllData();
             alert('Din bruker er slettet');
         } catch (exception) {}
     };

@@ -2,6 +2,10 @@ package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VDRService;
 import com.digdir.issuer.storage.FileHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,7 @@ public class VDRController {
      * @param id issuerId for a given signature to get the corresponding Public key.
      * @return Public RSA key in string format
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/vdr/key/{id}")
     public String getKey(@PathVariable String id) {
         FileHandler fileHandler = new FileHandler();
