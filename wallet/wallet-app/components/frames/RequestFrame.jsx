@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { httpGetCredential } from '../../utils/httpRequests';
+import { httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -14,10 +14,19 @@ import { addCredential } from '../../redux/CredentialSlice';
  * @returns Buttons and menus to select the issuer and type of proof
  */
 export default function RequestFrame() {
-    const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
+    const [selectedIssuer, setSelectedIssuer] = useState('ntnu');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
+    const [issuerTypes, setIssuerTypes] = useState('');
+
+    async function issuerChanged(itemValue) {
+        setSelectedIssuer(itemValue);
+        const types = JSON.parse(await httpGetTypesFromIssuer(itemValue));
+        setIssuerTypes(types);
+    }
+
+    // issuerChanged('ntnu');
 
     /**
      * Retrieves proof and saves it
@@ -48,9 +57,9 @@ export default function RequestFrame() {
     };
 
     const issuers = [
-        { name: 'NTNU' },
-        { name: 'Statens Vegvesen' },
-        { name: 'Folkeregisteret' },
+        { name: 'ntnu' },
+        { name: 'statensvegvesen' },
+        { name: 'folkeregisteret' },
         { name: 'UtsederAvBevis.no' },
     ];
 
@@ -61,10 +70,21 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
 
-                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => issuerChanged(itemValue)}>
                     {issuers.map((i) => (
                         <Picker.Item label={i.name} value={i.name} />
                     ))}
+                </Picker>
+            </SafeAreaView>
+
+            <Text>{issuerTypes[1]}</Text>
+
+            <SafeAreaView style={styles.issuer}>
+                <Text style={styles.text}>Velg bevis </Text>
+
+                <Picker selectedValue={issuerTypes[0]} onValueChange={(itemValue) => issuerChanged(itemValue)}>
+                    <Picker.Item label={issuerTypes[0]} value={issuerTypes[0]} />
+                    <Picker.Item label={issuerTypes[1]} value={issuerTypes[1]} />
                 </Picker>
             </SafeAreaView>
 
