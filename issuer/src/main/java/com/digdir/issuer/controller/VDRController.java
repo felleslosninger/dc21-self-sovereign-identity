@@ -2,6 +2,7 @@ package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VDRService;
 import com.digdir.issuer.storage.FileHandler;
+import com.digdir.issuer.storage.IssuerTypesHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+import java.util.Collection;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ import java.util.Base64;
 public class VDRController {
     private final VDRService vdrService;
     private final FileHandler fileHandler;
+    private final IssuerTypesHandler issuerTypesHandler;
 
     /**
      * Route to get a public key based on the issuer id.
@@ -55,5 +58,10 @@ public class VDRController {
         System.out.println(body);
         fileHandler.addPublicKey(userID, vdrService.PEMtoRSAConverter(body));
         return new ResponseEntity<>("Hello overlord", HttpStatus.OK);
+    }
+
+    @GetMapping("/vdr/getTypes/{issuer}")
+    public Collection<String> getTypesWithIssuer(@PathVariable String issuer){
+        return issuerTypesHandler.getTypesWithIssuer(issuer);
     }
 }
