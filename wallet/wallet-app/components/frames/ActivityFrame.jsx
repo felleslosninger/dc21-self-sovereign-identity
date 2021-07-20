@@ -17,6 +17,9 @@ export default function ActivityFrame() {
     const dispatch = useDispatch();
     const [scanned, setScanned] = useState(false);
     const [verified, setVerified] = useState(false);
+    const [verifier, setVerifier] = useState('')
+    const [vc, setVc] = useState('')
+    const [userID, setUserID] = useState('')
 
     const { cred } = useSelector((state) => state.credentials);
 
@@ -39,19 +42,15 @@ export default function ActivityFrame() {
             credential_id: c.jti,
             verifier: audience,
         }))))
-
-
-
-    
-        
         setStatus(verified);
         return verified;
     }
 
     const handleBarCodeScanned  = async ({ type, data }) => {
         setScanned(true);
-        const verifierInfo =data
-        alert(verifierInfo)
+        setVerifier(data.split('|')[0])
+        setVc(data.split('|')[1])
+        setUserID(data.split('|')[2])
     }
 
     return (
@@ -62,7 +61,7 @@ export default function ActivityFrame() {
                         <Button
                             title={`Send bevis ${credential.type} til tjeneste X`}
                             color="#f1940f"
-                            onPress={() => sendPresentation([credential], 'verifier123', userID)}
+                            onPress={() => sendPresentation([credential], verifier, userID)}
                         />
 
                         <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
