@@ -23,7 +23,7 @@ import java.util.Collection;
 public class VDRController {
     private final VDRService vdrService;
     private final FileHandler fileHandler;
-    private final IssuerTypesHandler issuerTypesHandler;
+
 
     /**
      * Route to get a public key based on the issuer id.
@@ -62,6 +62,7 @@ public class VDRController {
 
     @GetMapping("/vdr/getTypes/{issuer}")
     public Collection<String> getTypesWithIssuer(@PathVariable String issuer){
+        IssuerTypesHandler issuerTypesHandler = new IssuerTypesHandler();
         return issuerTypesHandler.getTypesWithIssuer(issuer);
     }
 }
