@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { generateKeys } from '../../utils/sign';
 
 export default function Onboarding() {
     const [hasPermission, setHasPermission] = useState(null);
@@ -28,6 +29,7 @@ export default function Onboarding() {
 
         if (types.includes('BaseCredential')) {
             await AsyncStorage.setItem('baseId', data);
+            generateKeys();
             setVerified(true);
         }
     };

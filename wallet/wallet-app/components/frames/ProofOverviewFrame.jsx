@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -50,7 +50,13 @@ export default function ProofOverviewFrame() {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
                 for (let i = 0; i < theKeys.length; i++) {
-                    if (!keys.includes(theKeys[i]) && theKeys[i] !== 'pin' && theKeys[i] !== 'baseId') {
+                    if (
+                        !keys.includes(theKeys[i]) &&
+                        theKeys[i] !== 'pin' &&
+                        theKeys[i] !== 'baseId' &&
+                        theKeys[i] !== 'privateKey' &&
+                        theKeys[i] !== 'walletID'
+                    ) {
                         keys.push(theKeys[i]);
                     }
                 }
