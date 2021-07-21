@@ -14,16 +14,20 @@ import { addCredential } from '../../redux/CredentialSlice';
  * @returns Buttons and menus to select the issuer and type of proof
  */
 export default function RequestFrame() {
-    const [selectedIssuer, setSelectedIssuer] = useState('ntnu');
+    const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
-    const [issuerTypes, setIssuerTypes] = useState('');
+    const [issuerTypes, setIssuerTypes] = useState([]);
 
     async function issuerChanged(itemValue) {
         setSelectedIssuer(itemValue);
-        const types = JSON.parse(await httpGetTypesFromIssuer(itemValue));
-        setIssuerTypes(types);
+        setIssuerTypes(JSON.parse(await httpGetTypesFromIssuer(itemValue)));
+        console.log(typeof issuerTypes);
+    }
+
+    function typeChanged(type) {
+        setVcType(type);
     }
 
     // issuerChanged('ntnu');
@@ -32,6 +36,7 @@ export default function RequestFrame() {
      * Retrieves proof and saves it
      */
     async function retrieveCredential() {
+        console.log(vcType);
         const baseVC = await AsyncStorage.getItem('baseId');
 
         const response = await httpGetCredential(vcType, baseVC);
@@ -60,7 +65,7 @@ export default function RequestFrame() {
         { name: 'ntnu' },
         { name: 'statensvegvesen' },
         { name: 'folkeregisteret' },
-        { name: 'UtsederAvBevis.no' },
+        // { name: 'UtsederAvBevis.no' },
     ];
 
     return (
@@ -71,28 +76,29 @@ export default function RequestFrame() {
                 <Text style={styles.text}>Velg utsteder </Text>
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => issuerChanged(itemValue)}>
+                    <Picker.Item label="Velg utsteder..." value="" />
                     {issuers.map((i) => (
                         <Picker.Item label={i.name} value={i.name} />
                     ))}
                 </Picker>
             </SafeAreaView>
 
-            <Text>{issuerTypes[1]}</Text>
-
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg bevis </Text>
 
-                <Picker selectedValue={issuerTypes[0]} onValueChange={(itemValue) => issuerChanged(itemValue)}>
-                    <Picker.Item label={issuerTypes[0]} value={issuerTypes[0]} />
-                    <Picker.Item label={issuerTypes[1]} value={issuerTypes[1]} />
+                <Picker selectedValue={vcType} onValueChange={(itemValue) => typeChanged(itemValue)}>
+                    <Picker.Item label="Velg bevis..." value="" />
+                    {issuerTypes.map((i) => (
+                        <Picker.Item label={i} value={i} />
+                    ))}
                 </Picker>
             </SafeAreaView>
 
-            <SafeAreaView style={styles.proof}>
+            {/*   <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
 
                 <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
-            </SafeAreaView>
+            </SafeAreaView> */}
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
                 <SafeAreaView style={styles.button}>
