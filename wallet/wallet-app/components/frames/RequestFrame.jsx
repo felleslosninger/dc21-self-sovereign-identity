@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { httpGetCredential } from '../../utils/httpRequests';
+import { httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -14,15 +14,29 @@ import { addCredential } from '../../redux/CredentialSlice';
  * @returns Buttons and menus to select the issuer and type of proof
  */
 export default function RequestFrame() {
-    const [selectedIssuer, setSelectedIssuer] = useState('NTNU');
+    const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
+    const [issuerTypes, setIssuerTypes] = useState([]);
+
+    async function issuerChanged(itemValue) {
+        setSelectedIssuer(itemValue);
+        setIssuerTypes(JSON.parse(await httpGetTypesFromIssuer(itemValue)));
+        console.log(typeof issuerTypes);
+    }
+
+    function typeChanged(type) {
+        setVcType(type);
+    }
+
+    // issuerChanged('ntnu');
 
     /**
      * Retrieves proof and saves it
      */
     async function retrieveCredential() {
+        console.log(vcType);
         const baseVC = await AsyncStorage.getItem('baseId');
 
         const response = await httpGetCredential(vcType, baseVC);
@@ -48,10 +62,10 @@ export default function RequestFrame() {
     };
 
     const issuers = [
-        { name: 'NTNU' },
-        { name: 'Statens Vegvesen' },
-        { name: 'Folkeregisteret' },
-        { name: 'UtsederAvBevis.no' },
+        { name: 'ntnu' },
+        { name: 'statensvegvesen' },
+        { name: 'folkeregisteret' },
+        // { name: 'UtsederAvBevis.no' },
     ];
 
     return (
@@ -61,18 +75,30 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.issuer}>
                 <Text style={styles.text}>Velg utsteder </Text>
 
-                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
+                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => issuerChanged(itemValue)}>
+                    <Picker.Item label="Velg utsteder..." value="" />
                     {issuers.map((i) => (
                         <Picker.Item label={i.name} value={i.name} />
                     ))}
                 </Picker>
             </SafeAreaView>
 
-            <SafeAreaView style={styles.proof}>
+            <SafeAreaView style={styles.issuer}>
+                <Text style={styles.text}>Velg bevis </Text>
+
+                <Picker selectedValue={vcType} onValueChange={(itemValue) => typeChanged(itemValue)}>
+                    <Picker.Item label="Velg bevis..." value="" />
+                    {issuerTypes.map((i) => (
+                        <Picker.Item label={i} value={i} />
+                    ))}
+                </Picker>
+            </SafeAreaView>
+
+            {/*   <SafeAreaView style={styles.proof}>
                 <Text style={styles.text}>Ønsket bevis</Text>
 
                 <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
-            </SafeAreaView>
+            </SafeAreaView> */}
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
                 <SafeAreaView style={styles.button}>
