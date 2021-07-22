@@ -53,6 +53,13 @@ export default function Onboarding() {
 
     return (
         <View style={styles.container}>
+            {!scanned ? (
+                <View>
+                    <Text style={styles.instructionText}>1. Gå inn på grunnidportalen.no</Text>
+                    <Text style={styles.instructionText}>2. Logg inn med id-porten</Text>
+                    <Text style={styles.instructionText}>3. Skann deretter QR-koden</Text>
+                </View>
+            ) : null}
             {!scanned && !verified ? (
                 <View style={styles.camera}>
                     <BarCodeScanner
@@ -110,5 +117,9 @@ const styles = StyleSheet.create({
         fontSize: 25,
         alignSelf: 'center',
         marginTop: 100,
+    },
+    instructionText: {
+        fontSize: 20,
+        alignSelf: 'flex-start',
     },
 });
