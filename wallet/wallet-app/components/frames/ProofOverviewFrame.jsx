@@ -69,6 +69,10 @@ export default function ProofOverviewFrame() {
 
     isFocused ? getKeys() : null;
 
+    function getVcName(item) {
+        return Object.values(item.vc.credentialSubject)[0].name;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -77,7 +81,7 @@ export default function ProofOverviewFrame() {
                 renderItem={({ item }) => (
                     <Proof
                         id={item.jti}
-                        name={item.type}
+                        name={getVcName(item)}
                         // fix issuer display / handle issuerid
                         issuer={item.iss.substring(0, item.iss.length - 36)}
                         issDate={item.iat}
