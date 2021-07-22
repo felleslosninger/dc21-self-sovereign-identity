@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 // import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 import { httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -69,7 +70,7 @@ export default function RequestFrame() {
     ];
 
     return (
-        <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>Forespørsel om nytt bevis </Text>
 
             <SafeAreaView style={styles.issuer}>
@@ -108,7 +109,7 @@ export default function RequestFrame() {
             <SafeAreaView style={styles.credential}>
                 <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
-        </SafeAreaView>
+        </ScrollView>
     );
 }
 
@@ -116,11 +117,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: '18%',
-        width: '80%',
         alignSelf: 'center',
     },
     title: {
-        fontSize: 30,
+        fontSize: 32,
         alignSelf: 'center',
         marginBottom: 13,
     },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         paddingBottom: '1%',
     },
     input: {
-        borderColor: '#add8e6',
+        borderColor: '#3aa797',
         borderWidth: 2,
         borderRadius: 5,
         padding: 7,
@@ -142,15 +142,15 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: '5%',
-        backgroundColor: '#add8e6',
+        backgroundColor: '#3aa797',
         borderRadius: 5,
-        paddingTop: '2%',
-        paddingBottom: '2%',
+        height: 40,
         width: '80%',
         alignSelf: 'center',
     },
     buttonText: {
-        fontSize: 20,
+        fontSize: 22,
+        marginTop: 7,
         alignSelf: 'center',
     },
     credential: {
