@@ -2,6 +2,8 @@ package com.example.verifier.controller;
 
 import com.example.verifier.service.VerifyService;
 import com.example.verifier.verification.JwtVerifier;
+import com.example.verifier.verification.UserIdHandler;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +52,9 @@ public class VerifyController {
 
     @PostMapping("/api/sendUserID")
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
-
+        UserIdHandler idH = new UserIdHandler();
+        idH.addUserId(id, false);
+        return new ResponseEntity<>("test completed", HttpStatus.OK);
     }
 
 }

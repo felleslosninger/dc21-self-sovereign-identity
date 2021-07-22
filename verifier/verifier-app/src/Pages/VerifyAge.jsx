@@ -6,9 +6,11 @@ import localIpUrl from 'local-ip-url';
 function VerifyAge() {
 
     let history = useHistory()
+    const path = localIpUrl() + ':3000/api/sendVP'
+    const userID = (Math.random() * 100).toString()
 
     async function checkAge() {
-        let response = await fetch('/api/sendVP')
+        let response = await fetch('/api/checkVerified')
             .then(response => response.json())
             //.catch(err => console.log('There was an error:' + err))
         console.log(response)
@@ -22,9 +24,28 @@ function VerifyAge() {
         }
     }
 
-    const path = localIpUrl() + ':3000/api/sendVP'
-    const userID = Math.random() * 100
-    sessionStorage.setItem('userID', userID.toString())
+
+
+    async function httpSendUserId(userID) {
+        try {
+            const response = await fetch("/api/sendUserID", {
+                method: "POST",
+                body: userID
+
+            })
+            console.log(response.text())
+            if (response.ok) {
+                return true;
+            }
+            return false;
+        }
+        catch (error) {
+            console.log("feil");
+            return false;
+        }
+    }
+
+
 
 
     return (
@@ -34,7 +55,7 @@ function VerifyAge() {
             <br/>
             <br/>
             <br/>
-            <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
+            <Link className="btn" to={history} onClick={ httpSendUserId}>Verify age</Link>
         </div>
     );
 }
