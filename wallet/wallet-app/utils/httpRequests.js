@@ -1,5 +1,7 @@
+
 const issuerUrl = 'http://192.168.137.86:8083/';
 const verifierUrl = 'http://192.168.137.86:8080/api/';
+const vdrUrl = 'http://192.168.137.86:8083/vdr';
 
 export async function httpGetCredential(vcType, baseVC) {
     const url = `${issuerUrl}api/getVC/`;
@@ -47,6 +49,13 @@ export async function httpSendPresentation(token) {
         alert('Noe gikk galt...');
         return false;
     }
+}
+
+export async function httpGetTypesFromIssuer(issuer) {
+    const url = `${vdrUrl}/getTypes/${issuer}`;
+    const response = await fetch(url);
+    const payload = await response.text();
+    return payload;
 }
 
 export async function httpPostPublicKey(id, key) {

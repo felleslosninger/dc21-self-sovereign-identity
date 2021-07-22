@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class IssuerTypesHandler {
-    private static String path = "issuer/src/main/resources/IssuerTypes.json";
+    private static String path = "src/main/resources/IssuerTypes.json";
 
 
     public IssuerTypesHandler() {
