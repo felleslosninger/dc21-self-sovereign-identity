@@ -23,19 +23,15 @@ export default function RequestFrame() {
      * Retrieves proof and saves it
      */
     async function retrieveCredential() {
-
-
         const response = await httpGetCredential(vcType, exampleBaseVc);
         try {
             const decode = jwtDecode(response);
-            const retrievedCredential = { ...decode, token:response, type: vcType };
+            const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
             setFeedback(`hentet ${vcType} bevis`);
             // await saveProof(retrievedCredential);
-        }
-        catch (error) {
+        } catch (error) {
             setFeedback(response);
-
         }
     }
 
@@ -49,7 +45,12 @@ export default function RequestFrame() {
         }
     };
 
-    const issuers = [{name : "NTNU"}, {name : "Statens Vegvesen"}, {name : "Folkeregisteret"}, {name : "UtsederAvBevis.no"}]
+    const issuers = [
+        { name: 'NTNU' },
+        { name: 'Statens Vegvesen' },
+        { name: 'Folkeregisteret' },
+        { name: 'UtsederAvBevis.no' },
+    ];
 
     return (
         <SafeAreaView style={styles.container}>
@@ -59,9 +60,9 @@ export default function RequestFrame() {
                 <Text style={styles.text}>Velg utsteder </Text>
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => setSelectedIssuer(itemValue)}>
-
-                    {issuers.map((i) => (<Picker.Item label={i.name} value={i.name} />))}
-                    
+                    {issuers.map((i) => (
+                        <Picker.Item key={i.name} label={i.name} value={i.name} />
+                    ))}
                 </Picker>
             </SafeAreaView>
 

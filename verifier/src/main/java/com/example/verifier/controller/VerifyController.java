@@ -1,6 +1,7 @@
 package com.example.verifier.controller;
 
 import com.example.verifier.service.VerifyService;
+import com.example.verifier.verification.JwtVerifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +33,11 @@ public class VerifyController {
         return verifyService.sendVP(token);
     }
 
-
-
-
-
+    @GetMapping("/api/tester")
+    public String test(@RequestParam String token) {
+        JwtVerifier jwtv = new JwtVerifier();
+        return jwtv.verifySubUser(token);
+    }
 
     /**
      * Route that gets if the sent jwt token was verified
@@ -46,16 +48,9 @@ public class VerifyController {
         return verifyService.checkVerify();
     }
 
-    @GetMapping("/api/ingunntest")
-    public String ingunntest(@RequestParam(value = "name", defaultValue = "World") String name) {
-        String output;
-        if (name.equals("Gunvor")) {
-            output = "Gunvor prater halling!";
-        }
-        else {
-            output = String.format("Hello %s", name);
-        }
-        return String.format("%s", output);
+    @PostMapping("/api/sendUserID")
+    public ResponseEntity<String> sendUserID(@RequestBody String id) {
+
     }
 
 }

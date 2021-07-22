@@ -8,7 +8,7 @@ import { httpPostPublicKey } from './httpRequests';
  * @param {string} audience The intended receiver of the verifiable presentation.
  * @returns A verifiable presentation JWT signed with RS256.
  */
-export default async function createVerifiablePresentationJWT(jwtCredentialsList, audience = 'testVerifier', userID) {
+export default async function createVerifiablePresentationJWT(jwtCredentialsList, audience, user) {
     // Convert encode with base64 and sign using RSA SHA256.
     // Taken from 'react-native-jwt-rsa', https://github.com/alvarorece/react-native-jwt-rsa/blob/master/index.js
 
@@ -31,7 +31,7 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     const payload = {
         // TODO: Assign proper subject
         iss: 'walletId5547981c-9477-4a83-918b-b22fe89bd3cb',
-        sub: 'testSub',
+        sub: user,
         aud: audience,
         // Will expire in 5 minutes
         exp: time + 300,
@@ -39,7 +39,6 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
         // TODO: Improve random generation of unique ID
         jti: Math.floor(Math.random() * 100000000),
         cred: jwtCredentialsList,
-        userID: userID,
     };
 
     const strHeader = JSON.stringify(header);

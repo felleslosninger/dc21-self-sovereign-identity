@@ -63,6 +63,8 @@ public class JwtVerifier {
         }
     }
 
+
+
     /**
      * Method that verifies a VC, including the type of the VC
      * @param token = the VC token to verify
@@ -86,6 +88,14 @@ public class JwtVerifier {
         DecodedJWT jwt = decodeJwt(token);
         ArrayList<String> typeList = (ArrayList<String>) jwt.getClaim("vc").as(HashMap.class).get("type");
         return typeList.contains(jth.getVcType(type));
+    }
+
+    public String verifySubUser(String token){
+        DecodedJWT jwt = decodeJwt(token);
+        System.out.println(jwt.getSubject());
+        return jwt.getSubject();
+
+
     }
 
 
@@ -122,6 +132,7 @@ public class JwtVerifier {
 
             //verifies the VCs in the VP
             String[] VCs = jwt.getClaim("cred").asArray(String.class);
+            
 
             boolean allTypesFound = true;
             for (String type : types) {

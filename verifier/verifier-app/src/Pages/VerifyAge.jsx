@@ -8,7 +8,7 @@ function VerifyAge() {
     let history = useHistory()
 
     async function checkAge() {
-        let response = await fetch('/api/checkVerified')
+        let response = await fetch('/api/sendVP')
             .then(response => response.json())
             //.catch(err => console.log('There was an error:' + err))
         console.log(response)
@@ -30,7 +30,7 @@ function VerifyAge() {
     return (
         <div className="VerifyAge">
             <p>You must be over 18 to continue</p>
-            <QRCode value={path + '| over-18 |' + userID}/>
+            <QRCode value={path + '|over-18|' + userID}/>
             <br/>
             <br/>
             <br/>
