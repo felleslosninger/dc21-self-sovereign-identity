@@ -1,6 +1,6 @@
 ## Wallet
 
-Hvordan kjøre applikasjonen?
+### Hvordan kjøre applikasjonen?
 
 1. last ned Expo Go på mobilen og node på datamaskinen
 2. cd wallet/wallet-app
