@@ -37,8 +37,8 @@ public class VerifyController {
 
     @GetMapping("/api/tester")
     public String test(@RequestParam String token) {
-        JwtVerifier jwtv = new JwtVerifier();
-        return jwtv.verifySubUser(token);
+        JwtVerifier jwt = new JwtVerifier();
+        return jwt.verifySubUser(token);
     }
 
     /**
@@ -50,6 +50,7 @@ public class VerifyController {
         return verifyService.checkVerify();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/sendUserID")
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
         UserIdHandler idH = new UserIdHandler();

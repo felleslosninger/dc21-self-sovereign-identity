@@ -27,11 +27,11 @@ function VerifyAge() {
 
 
     async function httpSendUserId(userID) {
+        console.log(userID)
         try {
             const response = await fetch("/api/sendUserID", {
                 method: "POST",
-                body: userID
-
+                body: JSON.stringify(userID)
             })
             console.log(response.text())
             if (response.ok) {
@@ -45,7 +45,7 @@ function VerifyAge() {
         }
     }
 
-
+    httpSendUserId(userID).then(r => r.toString());
 
 
     return (
@@ -55,7 +55,7 @@ function VerifyAge() {
             <br/>
             <br/>
             <br/>
-            <Link className="btn" to={history} onClick={ httpSendUserId}>Verify age</Link>
+            <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
         </div>
     );
 }
