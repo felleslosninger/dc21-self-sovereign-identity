@@ -45,7 +45,7 @@ public class UserIdHandler {
 
     private HashMap<String, Boolean> loadFromFile() {
         try {
-            InputStream inputStream = new FileInputStream("src/main/resources/userID.json");
+            InputStream inputStream = new FileInputStream("verifier/src/main/resources/userID.json");
             Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             HashMap<String, Boolean> userIDMap = new HashMap<>();
 
@@ -74,7 +74,7 @@ public class UserIdHandler {
 
         try {
 
-            FileOutputStream fileStream = new FileOutputStream("src/main/resources/userID.json");
+            FileOutputStream fileStream = new FileOutputStream("verifier/src/main/resources/userID.json");
             file = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
             file.write(javaObjectString);
 
@@ -98,10 +98,18 @@ public class UserIdHandler {
     }
 
     //getIsUserVerified(id) return true/false, kalle i checkVerified
+    public boolean getIsUserVerified(String id) {
+        if (loadFromFile().get(id).equals(true)) {
+            return true;
+        } return false;
+    }
+
 
     public static void main(String[] args) {
         UserIdHandler uih = new UserIdHandler();
         uih.addUserId("gunvor", false);
         uih.addUserId("Ingunn", true);
+        uih.getIsUserVerified("Ingunn");
+        uih.getIsUserVerified("gunvor");
     }
 }
