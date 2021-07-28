@@ -3,14 +3,15 @@ import {Link, useHistory} from "react-router-dom";
 import QRCode from "react-qr-code";
 import localIpUrl from 'local-ip-url';
 
+
 function VerifyAge() {
 
     let history = useHistory()
     const path = localIpUrl() + ':3000/api/sendVP'
-    const userID = (Math.random() * 100).toString()
+    const userID = Math.floor((Math.random() * 100000))
 
-    async function checkAge() {
-        let response = await fetch('/api/checkVerified')
+    async function checkAge(id) {
+        let response = await fetch('/api/checkVerified?id='+ id)
             .then(response => response.json())
             //.catch(err => console.log('There was an error:' + err))
         console.log(response)
@@ -24,14 +25,12 @@ function VerifyAge() {
         }
     }
 
-
-
-    async function httpSendUserId(userID) {
+    async function httpSendUserId(id) {
         console.log(userID)
         try {
             const response = await fetch("/api/sendUserID", {
                 method: "POST",
-                body: JSON.stringify(userID)
+                body: JSON.stringify(id)
             })
             console.log(response.text())
             if (response.ok) {
@@ -45,8 +44,6 @@ function VerifyAge() {
         }
     }
 
-    httpSendUserId(userID).then(r => r.toString());
-
 
     return (
         <div className="VerifyAge">
@@ -55,7 +52,11 @@ function VerifyAge() {
             <br/>
             <br/>
             <br/>
-            <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
+            <button className="btn" onClick={() => httpSendUserId(userID)}>Send proof</button>
+            <br/>
+            <br/>
+            <br/>
+            <Link className="btn" to={history} onClick={() => checkAge(userID)}>Verify age</Link>
         </div>
     );
 }

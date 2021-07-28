@@ -43,9 +43,9 @@ public class UserIdHandler {
         return false;
     }
 
-    private HashMap<String, Boolean> loadFromFile() {
+    public HashMap<String, Boolean> loadFromFile() {
         try {
-            InputStream inputStream = new FileInputStream("verifier/src/main/resources/userID.json");
+            InputStream inputStream = new FileInputStream("src/main/resources/userID.json");
             Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             HashMap<String, Boolean> userIDMap = new HashMap<>();
 
@@ -74,7 +74,7 @@ public class UserIdHandler {
 
         try {
 
-            FileOutputStream fileStream = new FileOutputStream("verifier/src/main/resources/userID.json");
+            FileOutputStream fileStream = new FileOutputStream("src/main/resources/userID.json");
             file = new OutputStreamWriter(fileStream, StandardCharsets.UTF_8);
             file.write(javaObjectString);
 
@@ -91,7 +91,7 @@ public class UserIdHandler {
         }
     }
     //legg til bruker, userID: false
-    public void addUserId(String id, boolean verified){
+    public void addUserId(String id, boolean verified) {
         HashMap<String, Boolean> map = loadFromFile();
         map.put(id, verified);
         saveToFile(map);

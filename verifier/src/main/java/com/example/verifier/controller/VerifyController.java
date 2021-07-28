@@ -46,8 +46,8 @@ public class VerifyController {
      * @return a boolean true if the token was verified, false if not
      */
     @GetMapping("/api/checkVerified")
-    public boolean checkVerify() {
-        return verifyService.checkVerify();
+    public boolean checkVerify(@RequestParam(value = "id") String id) {
+        return verifyService.checkVerify(id);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -55,7 +55,7 @@ public class VerifyController {
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
         UserIdHandler idH = new UserIdHandler();
         idH.addUserId(id, false);
-        return new ResponseEntity<>("test completed", HttpStatus.OK);
+        return new ResponseEntity<>("user added", HttpStatus.OK);
     }
 
 }
