@@ -44,7 +44,7 @@ export async function httpSendPresentation(token) {
         return false;
     } catch (error) {
         // eslint-disable-next-line no-alert
-        alert('Noe gikk galt...');
+        alert('Noe gikk galt med presentation');
         return false;
     }
 }
@@ -65,7 +65,7 @@ export async function httpPostPublicKey(id, key) {
         return false;
     } catch (error) {
         // eslint-disable-next-line no-alert
-        alert('Noe gikk galt...');
+        alert('Noe gikk galt med public key')
         return false;
     }
 }
