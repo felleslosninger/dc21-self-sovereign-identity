@@ -37,8 +37,8 @@ public class VerifyController {
 
     @GetMapping("/api/tester")
     public String test(@RequestParam String token) {
-        JwtVerifier jwtv = new JwtVerifier();
-        return jwtv.verifySubUser(token);
+        JwtVerifier jwt = new JwtVerifier();
+        return jwt.verifySubUser(token);
     }
 
     /**
@@ -46,15 +46,16 @@ public class VerifyController {
      * @return a boolean true if the token was verified, false if not
      */
     @GetMapping("/api/checkVerified")
-    public boolean checkVerify() {
-        return verifyService.checkVerify();
+    public boolean checkVerify(@RequestParam(value = "id") String id) {
+        return verifyService.checkVerify(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/sendUserID")
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
         UserIdHandler idH = new UserIdHandler();
         idH.addUserId(id, false);
-        return new ResponseEntity<>("test completed", HttpStatus.OK);
+        return new ResponseEntity<>("user added", HttpStatus.OK);
     }
 
 }
