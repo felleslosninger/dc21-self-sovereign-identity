@@ -17,30 +17,16 @@ export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
     const dispatch = useDispatch();
     const [scanned, setScanned] = useState(false);
-    // const [verifier, setVerifier] = useState('');
-    // const [vc, setVc] = useState('');
-    // const [userID, setUserID] = useState('');
 
     const navigation = useNavigation();
 
     const { cred } = useSelector((state) => state.credentials);
 
-    console.log(cred);
-
-    /* UTDATERT
-    async function sendCredential() {
-        const verified = await httpSendCredential(credential.token);
-        setStatus(verified);
-        return verified;
-    }
-                   
-    */
-
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
-        alert(jwtCreds);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
+        alert(verified);
         creds.map((c) =>
             dispatch(
                 addCredentialShare({
@@ -59,6 +45,7 @@ export default function ActivityFrame() {
         const verifier = data.split('|')[0];
         const vc = data.split('|')[1];
         const userID = data.split('|')[2];
+        console.log(userID)
         let proof = '';
         for (let i = 0; i < cred.length; i++) {
             if (cred[i].vc.credentialSubject.age.type === vc) {
