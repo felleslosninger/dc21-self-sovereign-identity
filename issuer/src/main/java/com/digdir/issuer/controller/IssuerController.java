@@ -16,7 +16,7 @@ import java.util.Collection;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class IssuerController {
     private final VcService vcService;
-    private final IssuerTypesHandler issuerTypesHandler;
+   // private final IssuerTypesHandler issuerTypesHandler;
 
     /**
      * Route that handles issuance of certain VC, it requires a valid baseVC to be input
@@ -28,6 +28,7 @@ public class IssuerController {
      */
     @GetMapping("/api/getVC")
     public String getVCOverload(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC, @RequestParam(value = "issuer", defaultValue = "defaultIss") String issuer) {
+        IssuerTypesHandler issuerTypesHandler = new IssuerTypesHandler();
         if (issuer.equals("defaultIss")){
             return "No issuer input";
         }
