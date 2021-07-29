@@ -27,7 +27,7 @@ public class IssuerController {
      * @return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by getting that key from the VDR
      */
     @GetMapping("/api/getVC")
-    public String getVCOverload(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC, @RequestParam(value = "issuer", defaultValue = "defaultIss") String issuer) {
+    public String getVC2(@RequestParam(value = "type", defaultValue = "defaultType") String type, @RequestParam(value = "baseVC", defaultValue = "defaultVC") String baseVC, @RequestParam(value = "issuer", defaultValue = "defaultIss") String issuer) {
         IssuerTypesHandler issuerTypesHandler = new IssuerTypesHandler();
         if (issuer.equals("defaultIss")){
             return "No issuer input";
