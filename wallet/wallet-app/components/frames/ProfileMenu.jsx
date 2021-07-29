@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { SafeAreaView, TouchableOpacity, Text, View, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView, TouchableOpacity, Text, View, StyleSheet, Alert, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,7 +12,7 @@ import { signIn } from '../../redux/SignedInSlice';
  * @returns A new site, A logout button and a delete button
  */
 export default function ProfileMenuSlide() {
-    const dispatch = useDispatch(); // To call every reducer that we want
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const [baseIdIssuer, setBaseIdIssuer] = useState('');
 
@@ -24,33 +24,54 @@ export default function ProfileMenuSlide() {
 
     getBaseIdIssuer();
 
-    const clearAllData = () => {
-        AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
+    const clearAllData = async () => {
+        const keys = await AsyncStorage.getAllKeys();
+        keys.map((key) => AsyncStorage.removeItem(key));
     };
 
     const deleteUserPressed = async () => {
         try {
             await AsyncStorage.removeItem('baseId'); // removes proof from AsyncStorage
             await AsyncStorage.removeItem('pin'); // removes pin from AsyncStorage
+            await AsyncStorage.removeItem('privateKey');
+            await AsyncStorage.removeItem('walletID');
             dispatch(signIn(false));
-            clearAllData();
-            alert('Din bruker er slettet');
-        } catch (exception) {}
+            if (await AsyncStorage.getAllKeys()) {
+                clearAllData();
+            }
+            alert('Din bruker er slettet.');
+        } catch (exception) {
+            alert('Noe gikk galt...');
+        }
     };
 
     /**
      * Allert button so that it is not clicked by accident
      * @returns Allert Button
      */
-    const buttonAlert = () =>
-        Alert.alert('VARSEL', 'Er du sikker på at du vil slette brukeren?', [
-            {
-                text: 'Cancel',
-                onPress: () => navigation.navigate('Oversikt'),
-                style: 'cancel',
-            },
-            { text: 'OK', onPress: () => deleteUserPressed() },
-        ]);
+    const buttonAlert = async () => {
+        if (Platform.OS === 'ios' || Platform.OS === 'android') {
+            // Should add PIN code confirmation to delete user
+            Alert.alert('VARSEL', 'Er du sikker på at du vil slette brukeren?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => navigation.navigate('Oversikt'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => deleteUserPressed() },
+            ]);
+        } else {
+            alert('VARSEL: Brukeren din vil nå bli slettet!');
+            /*
+            const attemptedPin = prompt('Oppgi PIN-kode for å slette bruker:');
+            const actualPin = await AsyncStorage.getItem('pin');
+            if (attemptedPin === actualPin) {
+                deleteUserPressed();
+            }
+            */
+            deleteUserPressed();
+        }
+    };
 
     return (
         <SafeAreaView>
