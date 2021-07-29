@@ -1,6 +1,18 @@
-## Issuer
+# Issuer
 
+---Introduksjon---
 
-### Hvordan kjøre applikasjonen?
+## Getting started (example)
 
-1. Springboot:run
+To use this package within your project simply run
+
+  npm install @digdir/issuer-app
+  
+Or with Yarn
+
+  yarn add @digdir/issuer app
+  
+## Sample
+ ----Eksempel---
+ 
+## Examples
