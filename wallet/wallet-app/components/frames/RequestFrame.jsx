@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
+import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -20,6 +20,7 @@ export default function RequestFrame() {
     const [vcType, setVcType] = useState('');
     const dispatch = useDispatch();
     const [issuerTypes, setIssuerTypes] = useState([]);
+    const [availableIssuers, setAvailableIssuers] = useState([]);
 
     async function issuerChanged(itemValue) {
         setSelectedIssuer(itemValue);
@@ -31,21 +32,30 @@ export default function RequestFrame() {
         setVcType(type);
     }
 
+    async function getAllIssuers() {
+        setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
+    }
+    getAllIssuers();
+    // console.log(availableIssuers);
     // issuerChanged('ntnu');
 
     /**
      * Retrieves proof and saves it
      */
     async function retrieveCredential() {
-        console.log(vcType);
         const baseVC = await AsyncStorage.getItem('baseId');
 
-        const response = await httpGetCredential(vcType, baseVC);
+        const response = await httpGetCredential(vcType, baseVC, selectedIssuer);
         try {
             const decode = jwtDecode(response);
             const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
-            setFeedback(`hentet ${vcType} bevis`);
+            if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
+                setFeedback(`hentet ${vcType} bevis`);
+            } else {
+                setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
+            }
+
             // await saveProof(retrievedCredential);
         } catch (error) {
             setFeedback(response);
@@ -62,12 +72,12 @@ export default function RequestFrame() {
         }
     };
 
-    const issuers = [
+    /* const issuers = [
         { name: 'ntnu' },
         { name: 'statensvegvesen' },
         { name: 'folkeregisteret' },
         // { name: 'UtsederAvBevis.no' },
-    ];
+    ]; */
 
     return (
         <ScrollView style={styles.container}>
@@ -78,8 +88,8 @@ export default function RequestFrame() {
 
                 <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => issuerChanged(itemValue)}>
                     <Picker.Item label="Velg utsteder..." value="" />
-                    {issuers.map((i) => (
-                        <Picker.Item label={i.name} value={i.name} />
+                    {availableIssuers.map((i) => (
+                        <Picker.Item label={i} value={i} />
                     ))}
                 </Picker>
             </SafeAreaView>

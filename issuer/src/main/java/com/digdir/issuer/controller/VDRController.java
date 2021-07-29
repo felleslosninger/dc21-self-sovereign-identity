@@ -65,4 +65,10 @@ public class VDRController {
         IssuerTypesHandler issuerTypesHandler = new IssuerTypesHandler();
         return issuerTypesHandler.getTypesWithIssuer(issuer);
     }
+
+    @GetMapping("/vdr/getAllIssuers")
+    public Collection<String> getAllIssuers(){
+        IssuerTypesHandler issuerTypesHandler = new IssuerTypesHandler();
+        return issuerTypesHandler.getAllIssuers();
+    }
 }
