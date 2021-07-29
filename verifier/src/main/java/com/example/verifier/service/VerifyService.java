@@ -21,7 +21,7 @@ public class VerifyService {
         String userID = verifier.verifySubUser(token);
         if (isVerified) {
             if (uih.loadFromFile().get(userID)) {
-                uih.loadFromFile().put(userID, true);
+                uih.addUserId(userID, true);
             }
         }
         return new ResponseEntity<>("token: " + token + ", verified: " + isVerified + ", userID:" + userID, HttpStatus.OK);
