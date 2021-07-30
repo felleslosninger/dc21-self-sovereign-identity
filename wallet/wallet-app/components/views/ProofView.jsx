@@ -5,7 +5,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { removeCredential } from '../redux/CredentialSlice';
+import { removeCredential } from '../../redux/CredentialSlice';
 
 /**
  * A proof object/card with info about the issuer, validity, shared with and deletion option.
@@ -40,7 +40,8 @@ export default function Proof(props) {
             <Text style={styles.textProofs}>{props.name}</Text>
             <Text> Utstedt av: {props.issuer}</Text>
             <Text>
-                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til {new Date(props.expDate * 1000).toLocaleString()}
+                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til{' '}
+                {new Date(props.expDate * 1000).toLocaleString()}
             </Text>
             <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
                 <Text>Delt med</Text>

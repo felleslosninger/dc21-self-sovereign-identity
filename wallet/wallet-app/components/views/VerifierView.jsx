@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import ConsentButton from './ConsentButton';
+import ConsentButton from '../other/ConsentButton';
 
 /**
- * A card for a verifier 
+ * A card for a verifier
  * (VerifierLogFrame shows all Verifier cards that belong to a proof)
  * @param {string} props props is from VerifierLogFrame with corresponding props
  * @returns A card for a verifier
