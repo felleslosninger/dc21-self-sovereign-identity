@@ -1,16 +1,23 @@
 # Issuer
 
----Introduksjon---
+A SpringBoot serverapp that simulates a Issuer in a SSI-ecosystem.
 
-## Getting started (example)
 
-To use this package within your project simply run
+## Insallation
+This project requires Maven v3.6.3. To install maven:
 
-  npm install @digdir/issuer-app
-  
-Or with Yarn
+Go to: https://maven.apache.org/download.cgi
 
-  yarn add @digdir/issuer app
-  
+or
+
+`npm install maven
+
+## Usage
+
+
+## Endpoints
+
  
 ## Examples
+
+
