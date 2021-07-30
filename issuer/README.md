@@ -1,16 +1,17 @@
-# Issuer and Verifiable Data Registry(VDR) [DIGDIR LOGO]()
+<img src="https://github.com/felleslosninger/digdir-camp-2021-VC/blob/issuer-readme/issuer/digdirlogo_01.png" alt="drawing" width="200" align="right"/>
 
+# Issuer and Verifiable Data Registry(VDR)
 A SpringBoot serverapp that simulates an Issuer and a VDR in a SSI-ecosystem.
 
 
 ## Installation
 This project requiers:
-* Maven v3.6.3
-* Java v16
-* Spring boot 2.5.1
+* [Maven v3.6.3](https://maven.apache.org/)
+* [Java v16](https://www.java.com/)
+* [Spring boot 2.5.1](https://spring.io/)
 
 
-If maven isn't preinstalled in your IDE 
+If maven isn't preinstalled in your IDE:
 
 install maven [here](https://maven.apache.org/download.cgi):
 
