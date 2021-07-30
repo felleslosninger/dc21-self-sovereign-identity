@@ -31,6 +31,9 @@ export default function RequestFrame() {
 
     getAllIssuers();
 
+    /**
+     * Retrieves the types of proofs the selected issuer is offering
+     */
     useEffect(() => {
         async function fetchTypes() {
             const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
@@ -40,7 +43,7 @@ export default function RequestFrame() {
     }, [selectedIssuer]);
 
     /**
-     * Retrieves proof
+     * Retrieves a verifiable credential and adds it to state
      */
     async function retrieveCredential() {
         const baseVC = await AsyncStorage.getItem('baseId');
@@ -62,6 +65,7 @@ export default function RequestFrame() {
         }
     }
 
+    /*
     const saveProof = async (cred) => {
         if (vcType && cred.jti !== undefined) {
             try {
@@ -71,6 +75,7 @@ export default function RequestFrame() {
             }
         }
     };
+    */
 
     return loading ? (
         <LoaderScreen color={Colors.blue30} message="Loading..." overlay />
