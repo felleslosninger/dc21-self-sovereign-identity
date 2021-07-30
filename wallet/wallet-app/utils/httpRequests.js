@@ -1,6 +1,8 @@
-const issuerUrl = 'http://localhost:8083/';
-const verifierUrl = 'http://localhost:8080/api/';
-const vdrUrl = 'http://localhost:8083/vdr';
+const host = 'localhost';
+
+const issuerUrl = `http://${host}:8083/`;
+const verifierUrl = `http://${host}:8080/api/`;
+const vdrUrl = `http://${host}:8083/vdr`;
 
 export async function httpGetCredential(vcType, baseVC, issuer) {
     const url = `${issuerUrl}api/getVC/`;

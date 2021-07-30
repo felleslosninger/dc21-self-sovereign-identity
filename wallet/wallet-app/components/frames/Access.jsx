@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { signIn } from '../../redux/SignedInSlice';
 
-
 /**
  * Creates a PIN code and a login page where you enter the pin and one delete pin button
  * @returns Log-in page
@@ -85,7 +84,7 @@ export default function Access() {
     };
 
     /**
-     * Clears the inputarea 
+     * Clears the inputarea
      */
     const clearPin = () => {
         if (text === 'Opprett personlig kode') {
@@ -128,18 +127,18 @@ export default function Access() {
                     inputViewEmptyStyle={{
                         backgroundColor: 'transparent',
                         borderWidth: 1,
-                        borderColor: '#3aa797',
+                        borderColor: 'rgb(30,46,60)',
                     }}
                     inputViewFilledStyle={{
-                        backgroundColor: '#3aa797',
+                        backgroundColor: 'rgb(30,46,60)',
                     }}
                     buttonViewStyle={{
                         borderWidth: 1,
-                        borderColor: '#3aa797',
+                        borderColor: 'rgb(30,46,60)',
                         backgroundColor: 'rgb(242, 242, 242)',
                     }}
                     buttonTextStyle={{
-                        color:'#3aa797', 
+                        color: 'rgb(30,46,60)',
                     }}
                     onButtonPress={(key) => {
                         if (key === 'custom_left') {
@@ -147,14 +146,14 @@ export default function Access() {
                         }
                     }}
                     customLeftButton={
-                        showRemoveButton ? <Icon name="ios-backspace" size={36} color="#3aa797" /> : undefined
+                        showRemoveButton ? <Icon name="ios-backspace" size={36} color="rgb(30,46,60)" /> : undefined
                     }
                     customRightButton={
                         showCompletedButton ? (
                             <Icon
                                 name="arrow-forward-outline"
                                 size={36}
-                                color="#3aa797"
+                                color="rgb(30,46,60)"
                                 onPress={() => checkPin() && checkHasPin() && clearPin()}
                             />
                         ) : undefined
@@ -164,7 +163,7 @@ export default function Access() {
             <TouchableOpacity
                 style={{
                     borderRadius: 4,
-                    backgroundColor: '#3aa797',
+                    backgroundColor: 'rgb(30,46,60)',
                     alignItems: 'center',
                     width: 150,
                     marginBottom: 10,

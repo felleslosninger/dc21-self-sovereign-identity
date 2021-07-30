@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { SafeAreaView, TouchableOpacity, Text, View, StyleSheet, Alert, Platform } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Alert, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
+import { Button, Text } from 'react-native-ui-lib';
+import { func } from 'prop-types';
 import { signIn } from '../../redux/SignedInSlice';
-
+import { getWalletID } from '../../utils/sign';
 /**
  * A profile site for administrativ changes on the profile
  * @returns A new site, A logout button and a delete button
@@ -74,36 +76,46 @@ export default function ProfileMenuSlide() {
     };
 
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
-                <Icon name="user" size={100} color="black" />
+        <SafeAreaView style={{ display: 'flex', flexDirection: 'column', flexWrap: 'nowrap', alignContent: 'center' }}>
+            <View style={{ alignItems: 'flex-end', marginRight: 20, marginTop: 20 }}>
+                <Button
+                    label="Slett bruker"
+                    backgroundColor="rgb(194,19,44)"
+                    size={Button.sizes.small}
+                    onPress={buttonAlert}
+                    text90
+                />
             </View>
-            <Text style={styles.textstyle}>Her kan du administrere profilen din</Text>
+            <View>
+                <View style={styles.container} marginTop={40}>
+                    <Icon name="user" size={200} color="rgb(30,46,60)" />
+                </View>
+                <Text style={styles.textstyle}>Kari Nordman</Text>
+            </View>
             <Text style={styles.issuerText}>Du har grunnidentitet utstedt fra: {baseIdIssuer}</Text>
-
-            <TouchableOpacity style={styles.logOut} onPress={() => dispatch(signIn(false))}>
-                <Text style={styles.buttonTextlogOut}>Logg ut</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteUser} onPress={buttonAlert}>
-                <Text style={styles.buttonTextDeleteUser}>Slett Bruker</Text>
-            </TouchableOpacity>
+            <View width={320} style={{ alignSelf: 'center' }}>
+                <Button backgroundColor="rgb(0,98,184)" onPress={() => dispatch(signIn(false))}>
+                    <Text style={styles.buttonTextlogOut}>Logg ut</Text>
+                </Button>
+            </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        paddingTop: 30,
         alignSelf: 'center',
     },
     textstyle: {
         fontSize: 20,
-        marginLeft: 30,
+        paddingHorizontal: 20,
         alignSelf: 'center',
+        color: 'rgb(30,46,60)',
     },
     logOut: {
         borderRadius: 4,
-        backgroundColor: '#3aa797',
+        backgroundColor: 'rgb(0,98,184)',
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
@@ -125,13 +137,15 @@ const styles = StyleSheet.create({
     },
     issuerText: {
         marginTop: 70,
-        marginBottom: 150,
-        color: 'green',
+        marginBottom: 100,
+        paddingHorizontal: 20,
+        color: 'rgb(30,46,60)',
         textAlign: 'center',
         fontSize: 20,
     },
     buttonTextlogOut: {
         fontSize: 20,
+        color: 'white',
     },
     buttonTextDeleteUser: {
         fontSize: 15,

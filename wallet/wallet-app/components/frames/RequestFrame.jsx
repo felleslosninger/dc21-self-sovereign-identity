@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+/* eslint-disable no-unused-expressions */
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
-// import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Text, Colors, Picker } from 'react-native-ui-lib';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -15,32 +15,33 @@ import { addCredential } from '../../redux/CredentialSlice';
  * @returns Buttons and menus to select the issuer and type of proof
  */
 export default function RequestFrame() {
+    const dispatch = useDispatch();
+
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
-    const dispatch = useDispatch();
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
-
-    async function issuerChanged(itemValue) {
-        setSelectedIssuer(itemValue);
-        setIssuerTypes(JSON.parse(await httpGetTypesFromIssuer(itemValue)));
-        console.log(typeof issuerTypes);
-    }
-
-    function typeChanged(type) {
-        setVcType(type);
-    }
 
     async function getAllIssuers() {
         setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
     }
+
     getAllIssuers();
-    // console.log(availableIssuers);
-    // issuerChanged('ntnu');
 
     /**
-     * Retrieves proof and saves it
+     * Retrieves the types of proofs the selected issuer is offering
+     */
+    useEffect(() => {
+        async function fetchTypes() {
+            const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
+            setIssuerTypes(types);
+        }
+        fetchTypes();
+    }, [selectedIssuer]);
+
+    /**
+     * Retrieves a verifiable credential and adds it to state
      */
     async function retrieveCredential() {
         const baseVC = await AsyncStorage.getItem('baseId');
@@ -62,6 +63,7 @@ export default function RequestFrame() {
         }
     }
 
+    /*
     const saveProof = async (cred) => {
         if (vcType && cred.jti !== undefined) {
             try {
@@ -71,45 +73,50 @@ export default function RequestFrame() {
             }
         }
     };
-
-    /* const issuers = [
-        { name: 'ntnu' },
-        { name: 'statensvegvesen' },
-        { name: 'folkeregisteret' },
-        // { name: 'UtsederAvBevis.no' },
-    ]; */
+    */
 
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Forespørsel om nytt bevis </Text>
 
-            <SafeAreaView style={styles.issuer}>
-                <Text style={styles.text}>Velg utsteder </Text>
-
-                <Picker selectedValue={selectedIssuer} onValueChange={(itemValue) => issuerChanged(itemValue)}>
-                    <Picker.Item label="Velg utsteder..." value="" />
+            <SafeAreaView>
+                <Picker
+                    placeholder="Velg utsteder"
+                    floatingPlaceholder
+                    value={{ value: selectedIssuer, label: selectedIssuer }}
+                    enableModalBlur={false}
+                    onChange={(item) => setSelectedIssuer(item.value)}
+                    topBarProps={{ title: 'Utstedere' }}
+                    showSearch
+                    searchPlaceholder="Søk etter utsteder"
+                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                    // onSearchChange={value => console.warn('value', value)}
+                >
                     {availableIssuers.map((i) => (
-                        <Picker.Item label={i} value={i} />
+                        <Picker.Item key={i} label={i} value={i} />
                     ))}
                 </Picker>
             </SafeAreaView>
-
-            <SafeAreaView style={styles.issuer}>
-                <Text style={styles.text}>Velg bevis </Text>
-
-                <Picker selectedValue={vcType} onValueChange={(itemValue) => typeChanged(itemValue)}>
-                    <Picker.Item label="Velg bevis..." value="" />
-                    {issuerTypes.map((i) => (
-                        <Picker.Item label={i} value={i} />
-                    ))}
-                </Picker>
-            </SafeAreaView>
-
-            {/*   <SafeAreaView style={styles.proof}>
-                <Text style={styles.text}>Ønsket bevis</Text>
-
-                <TextInput style={styles.input} onChangeText={setVcType} value={vcType} placeholder="Bevis" />
-            </SafeAreaView> */}
+            {selectedIssuer ? (
+                <SafeAreaView style={styles.issuer}>
+                    <Picker
+                        placeholder="Velg type bevis"
+                        floatingPlaceholder
+                        value={{ value: vcType, label: vcType }}
+                        enableModalBlur={false}
+                        onChange={(item) => setVcType(item.value)}
+                        topBarProps={{ title: 'Type bevis' }}
+                        showSearch
+                        searchPlaceholder="Søk etter bevis"
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                        // onSearchChange={value => console.warn('value', value)}
+                    >
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
+                    </Picker>
+                </SafeAreaView>
+            ) : null}
 
             <TouchableOpacity onPress={() => retrieveCredential()}>
                 <SafeAreaView style={styles.button}>
@@ -134,15 +141,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 13,
     },
-    issuer: {
-        marginTop: '1%',
-    },
     text: {
         fontSize: 25,
         paddingBottom: '1%',
     },
     input: {
-        borderColor: '#3aa797',
+        borderColor: 'rgb(0,98,184)',
         borderWidth: 2,
         borderRadius: 5,
         padding: 7,
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: '5%',
-        backgroundColor: '#3aa797',
+        backgroundColor: 'rgb(0,98,184)',
         borderRadius: 5,
         height: 40,
         width: '80%',
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         marginTop: 7,
         alignSelf: 'center',
+        color: 'black',
     },
     credential: {
         alignSelf: 'center',

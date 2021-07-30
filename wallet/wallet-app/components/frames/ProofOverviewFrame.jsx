@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     },
     logOut: {
         borderRadius: 4,
-        backgroundColor: '#3aa797',
+        backgroundColor: 'rgb(0,98,184)',
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
