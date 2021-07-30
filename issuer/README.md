@@ -10,7 +10,7 @@ Go to: https://maven.apache.org/download.cgi
 
 or
 
-`npm install maven
+```npm install maven
 
 ## Usage
 
