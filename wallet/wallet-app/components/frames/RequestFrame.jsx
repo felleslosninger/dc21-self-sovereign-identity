@@ -8,8 +8,7 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, Colors, Picker } from 'react-native-ui-lib';
-import _ from 'lodash';
-import { httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
+import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -23,6 +22,7 @@ export default function RequestFrame() {
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
     const [issuerTypes, setIssuerTypes] = useState([]);
+    const [availableIssuers, setAvailableIssuers] = useState([]);
 
     async function issuerChanged(itemValue) {
         alert(`${itemValue}itemvalue`);
@@ -32,18 +32,31 @@ export default function RequestFrame() {
         setIssuerTypes(JSON.parse(typesString));
     }
 
+    async function getAllIssuers() {
+        setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
+    }
+    getAllIssuers();
+    // console.log(availableIssuers);
+    // issuerChanged('ntnu');
+
     /**
      * Retrieves proof
      */
     async function retrieveCredential() {
         const baseVC = await AsyncStorage.getItem('baseId');
-        const response = await httpGetCredential(vcType, baseVC);
 
+        const response = await httpGetCredential(vcType, baseVC, selectedIssuer);
         try {
             const decode = jwtDecode(response);
             const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
-            setFeedback(`hentet ${vcType} bevis`);
+            if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
+                setFeedback(`hentet ${vcType} bevis`);
+            } else {
+                setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
+            }
+
+            // await saveProof(retrievedCredential);
         } catch (error) {
             setFeedback(response);
         }
@@ -59,12 +72,12 @@ export default function RequestFrame() {
         }
     };
 
-    const issuers = [
+    /* const issuers = [
         { name: 'ntnu' },
         { name: 'statensvegvesen' },
         { name: 'folkeregisteret' },
         // { name: 'UtsederAvBevis.no' },
-    ];
+    ]; */
 
     return (
         <ScrollView style={styles.container}>
@@ -83,8 +96,8 @@ export default function RequestFrame() {
                     searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
                     // onSearchChange={value => console.warn('value', value)}
                 >
-                    {issuers.map((issuer) => (
-                        <Picker.Item key={issuer.name} label={issuer.name} value={issuer.name} />
+                    {availableIssuers.map((i) => (
+                        <Picker.Item key={i.name} label={i.name} value={i.name} />
                     ))}
                 </Picker>
             </SafeAreaView>

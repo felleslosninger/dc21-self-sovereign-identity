@@ -13,3 +13,4 @@ spring:
           issuer-uri: https://oidc-test1.difi.eon.no/idporten-oidc-provider/
 server:
   port: 8083
+

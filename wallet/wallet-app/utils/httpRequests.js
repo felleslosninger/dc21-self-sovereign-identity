@@ -2,10 +2,11 @@ const issuerUrl = 'http://localhost:8083/';
 const verifierUrl = 'http://localhost:8080/api/';
 const vdrUrl = 'http://localhost:8083/vdr';
 
-export async function httpGetCredential(vcType, baseVC) {
+export async function httpGetCredential(vcType, baseVC, issuer) {
     const url = `${issuerUrl}api/getVC/`;
-    const response = await fetch(`${url}?type=${vcType}&baseVC=${baseVC}`); // , requestOptions);
+    const response = await fetch(`${url}?type=${vcType}&baseVC=${baseVC}&issuer=${issuer}`); // , requestOptions);
     const payload = await response.text();
+
     return payload;
 }
 
@@ -52,6 +53,13 @@ export async function httpSendPresentation(token) {
 
 export async function httpGetTypesFromIssuer(issuer) {
     const url = `${vdrUrl}/getTypes/${issuer}`;
+    const response = await fetch(url);
+    const payload = await response.text();
+    return payload;
+}
+
+export async function httpGetAllIssuers() {
+    const url = `${vdrUrl}/getAllIssuers`;
     const response = await fetch(url);
     const payload = await response.text();
     return payload;
