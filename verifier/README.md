@@ -28,4 +28,27 @@ npm start
 
 ## Endpoints for Backend
 
-**api/checkVerified**
+**api/checkVerified - GET**
+* This route is called when the sent jwt token is verified. If the jwt token is not verified, return false.
+
+**api/sendVP - POST**
+* Recieves a jwt token from the user and verifies the credential. 
+
+
+### Stor
+## Større
+# Størst
+
+1. Test i **bold**, test i *kursiv*, test ~~som er feil~~
+* [Her](nrk.no) er en link
+
+2. Her er litt kode
+```python
+npm install 
+```
+3.
+```javascript
+def hello() {
+return true;
+}
+```
