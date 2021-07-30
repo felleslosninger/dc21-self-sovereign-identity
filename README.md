@@ -1,3 +1,5 @@
+<img src="https://github.com/felleslosninger/digdir-camp-2021-VC/blob/main/images/digdirlogo_01.png" alt="drawing" width="125" align="right"/>
+
 # SSI Ecosystem 
 DigdirCamp 2021
 
