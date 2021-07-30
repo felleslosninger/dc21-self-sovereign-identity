@@ -6,7 +6,7 @@ import jwtDecode from 'jwt-decode';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, Colors, Picker, LoaderScreen } from 'react-native-ui-lib';
+import { Text, Colors, Picker } from 'react-native-ui-lib';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -22,8 +22,6 @@ export default function RequestFrame() {
     const [vcType, setVcType] = useState('');
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
-
-    const [loading, setLoading] = useState(false);
 
     async function getAllIssuers() {
         setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
@@ -77,9 +75,7 @@ export default function RequestFrame() {
     };
     */
 
-    return loading ? (
-        <LoaderScreen color={Colors.blue30} message="Loading..." overlay />
-    ) : (
+    return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Forespørsel om nytt bevis </Text>
 
@@ -87,7 +83,7 @@ export default function RequestFrame() {
                 <Picker
                     placeholder="Velg utsteder"
                     floatingPlaceholder
-                    value={selectedIssuer}
+                    value={{ value: selectedIssuer, label: selectedIssuer }}
                     enableModalBlur={false}
                     onChange={(item) => setSelectedIssuer(item.value)}
                     topBarProps={{ title: 'Utstedere' }}
@@ -106,7 +102,7 @@ export default function RequestFrame() {
                     <Picker
                         placeholder="Velg type bevis"
                         floatingPlaceholder
-                        value={vcType}
+                        value={{ value: vcType, label: vcType }}
                         enableModalBlur={false}
                         onChange={(item) => setVcType(item.value)}
                         topBarProps={{ title: 'Type bevis' }}
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         marginTop: 7,
         alignSelf: 'center',
-        color: 'white',
+        color: 'black',
     },
     credential: {
         alignSelf: 'center',
