@@ -1,2 +1,6 @@
 over-18:AgeCredential:age:Over 18
+over-20:AgeCredential:age:Over 20
 er-sykepleier:DegreeCredential:degree:Er sykepleier
+er-lege:DegreeCredential:degree:Er lege
+er-student:StudentCredential:student:Er student
+har-forerkort-type-b:DriverCredential:driverlicence: Har forerkort type B

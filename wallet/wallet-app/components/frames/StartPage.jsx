@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
-import { TouchableOpacity, SafeAreaView, Text, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity, SafeAreaView, Text, StyleSheet, Platform } from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
@@ -9,20 +10,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  */
 export default function StartPage() {
     const navigation = useNavigation();
-    const [hasBaseId, setBaseID] = useState(false);
+    const isFocused = useIsFocused();
+    const [onboarded, setOnboarded] = useState(false);
 
-    const checkBaseId = async () => {
-        const value = await AsyncStorage.getItem('baseId');
-        if (value !== null) {
-            setBaseID(true);
+    const checkOnboarded = async () => {
+        const baseId = await AsyncStorage.getItem('baseId');
+        const walletId = await AsyncStorage.getItem('walletID');
+        const privateKey = await AsyncStorage.getItem('privateKey');
+        const pin = await AsyncStorage.getItem('pin');
+
+        if (baseId && walletId && privateKey && pin) {
+            setOnboarded(true);
+        } else {
+            setOnboarded(false);
         }
     };
 
-    checkBaseId();
+    isFocused ? checkOnboarded() : null;
 
     return (
         <SafeAreaView style={styles.container}>
-            {hasBaseId ? (
+            {onboarded ? (
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
                     <Text style={styles.text}>Logg inn i lommeboka</Text>
                 </TouchableOpacity>

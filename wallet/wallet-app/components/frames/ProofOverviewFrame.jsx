@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
-import { SafeAreaView, StyleSheet, Button, TouchableOpacity, Text, View, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { addCredential } from '../../redux/CredentialSlice';
-import Proof from '../Proof';
+import Proof from '../views/ProofView';
 
 /**
  * A frame with an overview of every proof the wallet has
@@ -50,7 +50,13 @@ export default function ProofOverviewFrame() {
             const theKeys = await AsyncStorage.getAllKeys();
             if (theKeys !== null) {
                 for (let i = 0; i < theKeys.length; i++) {
-                    if (!keys.includes(theKeys[i]) && theKeys[i] !== 'pin' && theKeys[i] !== 'baseId') {
+                    if (
+                        !keys.includes(theKeys[i]) &&
+                        theKeys[i] !== 'pin' &&
+                        theKeys[i] !== 'baseId' &&
+                        theKeys[i] !== 'privateKey' &&
+                        theKeys[i] !== 'walletID'
+                    ) {
                         keys.push(theKeys[i]);
                     }
                 }
@@ -63,6 +69,10 @@ export default function ProofOverviewFrame() {
 
     isFocused ? getKeys() : null;
 
+    function getVcName(item) {
+        return Object.values(item.vc.credentialSubject)[0].name;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -71,7 +81,7 @@ export default function ProofOverviewFrame() {
                 renderItem={({ item }) => (
                     <Proof
                         id={item.jti}
-                        name={item.type}
+                        name={getVcName(item)}
                         // fix issuer display / handle issuerid
                         issuer={item.iss.substring(0, item.iss.length - 36)}
                         issDate={item.iat}

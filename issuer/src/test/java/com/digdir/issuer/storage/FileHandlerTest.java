@@ -22,7 +22,6 @@ class FileHandlerTest {
     static void before() throws NoSuchAlgorithmException {
         keyGenerator = new KeyGenerator();
         fileHandler = new FileHandler();
-        fileHandler.setPath("src/test/resources/testfile.json");
         publicKey = keyGenerator.getPublicKey();
         fileHandler.addPublicKey(issuerId, publicKey);
 

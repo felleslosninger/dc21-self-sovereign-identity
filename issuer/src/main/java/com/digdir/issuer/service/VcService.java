@@ -29,7 +29,7 @@ public class VcService {
      *@param baseVC The VC gotten from the baseId issuer by logging in through id-porten.
      *@return A VC in the format of a JWT, this is signed with issuer public key and can be verified by verifier by gettting that key from the VDR
      */
-    public String getVC(String type, String baseVC){
+    public String getVC(String type, String baseVC, String issuer){
 
         if (type.equals("defaultType") || baseVC.equals("defaultVC")){
             return "Error - Missing URL-parameters";
@@ -51,7 +51,7 @@ public class VcService {
 
         if (verified){
             try {
-                Jwt jwt = new Jwt(decodedJWT.getSubject(), "UtsederAvBevis.no", jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
+                Jwt jwt = new Jwt(decodedJWT.getSubject(), issuer, jth.getVcType(type), jth.getClaimType(type), type, jth.getName(type));
                 return jwt.getToken();
 
             } catch(Exception e) {
@@ -85,7 +85,7 @@ public class VcService {
      */
     public byte[] generateByteArray(String text) {
 
-        try (ByteArrayOutputStream bos = QRCode.from(text).withSize(400, 400).stream(); ) {
+        try (ByteArrayOutputStream bos = QRCode.from(text).withSize(400, 400).stream()) {
 
             return bos.toByteArray();
 

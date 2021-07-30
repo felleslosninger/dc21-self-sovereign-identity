@@ -3,8 +3,8 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
-import Verifier from '../Verifier';
-import CreateQR from '../QRcode';
+import Verifier from '../views/VerifierView';
+import CreateQR from '../other/QRCode';
 
 /**
  * Page with an overview of which verifiers who have access to a specific proof
