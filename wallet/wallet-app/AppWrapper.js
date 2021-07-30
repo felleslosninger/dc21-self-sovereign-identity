@@ -54,39 +54,39 @@ export default function AppWrapper() {
 
     return (
         <NavigationContainer>
-            {/* {signedIn ? (
-                <> */}
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ color, size }) => {
-                        let iconName;
+            {signedIn ? (
+                <>
+                    <Tab.Navigator
+                        screenOptions={({ route }) => ({
+                            tabBarIcon: ({ color, size }) => {
+                                let iconName;
 
-                        if (route.name === 'Oversikt') {
-                            iconName = 'vcard';
-                        } else if (route.name === 'Forespørsler') {
-                            iconName = 'plus';
-                        } else if (route.name === 'Aktivitet') {
-                            iconName = 'qrcode';
-                        } else if (route.name === 'Profil') {
-                            iconName = 'id-badge';
-                        }
+                                if (route.name === 'Oversikt') {
+                                    iconName = 'vcard';
+                                } else if (route.name === 'Forespørsler') {
+                                    iconName = 'plus';
+                                } else if (route.name === 'Aktivitet') {
+                                    iconName = 'qrcode';
+                                } else if (route.name === 'Profil') {
+                                    iconName = 'id-badge';
+                                }
 
-                        // You can return any component that you like here!
-                        return <Icon name={iconName} size={size} color={color} />;
-                    },
-                })}
-                tabBarOptions={{
-                    activeBackgroundColor: '#3aa797',
-                    inactiveBackgroundColor: '#3aa797',
-                    activeTintColor: 'white',
-                    inactiveTintColor: '#1E2B3C',
-                }}>
-                <Tab.Screen name="Oversikt" component={OverviewStackScreen} />
-                <Tab.Screen name="Forespørsler" component={RequestFrame} />
-                <Tab.Screen name="Aktivitet" component={ActivityFrame} />
-                <Tab.Screen name="Profil" component={ProfileMenuSlide} />
-            </Tab.Navigator>
-            {/* </>
+                                // You can return any component that you like here!
+                                return <Icon name={iconName} size={size} color={color} />;
+                            },
+                        })}
+                        tabBarOptions={{
+                            activeBackgroundColor: '#3aa797',
+                            inactiveBackgroundColor: '#3aa797',
+                            activeTintColor: 'white',
+                            inactiveTintColor: '#1E2B3C',
+                        }}>
+                        <Tab.Screen name="Oversikt" component={OverviewStackScreen} />
+                        <Tab.Screen name="Forespørsler" component={RequestFrame} />
+                        <Tab.Screen name="Aktivitet" component={ActivityFrame} />
+                        <Tab.Screen name="Profil" component={ProfileMenuSlide} />
+                    </Tab.Navigator>
+                </>
             ) : (
                 <Stack.Navigator
                     screenOptions={{
@@ -94,7 +94,7 @@ export default function AppWrapper() {
                     }}>
                     <Stack.Screen name="Start" component={StartStackScreen} />
                 </Stack.Navigator>
-            )} */}
+            )}
         </NavigationContainer>
     );
 }

@@ -25,7 +25,7 @@ export default function ActivityFrame() {
 
     const { cred } = useSelector((state) => state.credentials);
 
-    console.log(cred);
+    console.log('Cred: ', cred);
 
     /* UTDATERT
     async function sendCredential() {
@@ -38,9 +38,10 @@ export default function ActivityFrame() {
 
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
-        alert(jwtCreds);
+
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
+        alert(verified);
         creds.map((c) =>
             dispatch(
                 addCredentialShare({

@@ -1,5 +1,5 @@
-const issuerUrl = 'http://localhost:8083/';
-const verifierUrl = 'http://localhost:8080/api/';
+const issuerUrl = 'http://192.168.137.1:8083/';
+const verifierUrl = 'http://192.168.137.1:8080/api/';
 
 export async function httpGetCredential(vcType, baseVC) {
     const url = `${issuerUrl}api/getVC/`;
@@ -59,13 +59,13 @@ export async function httpPostPublicKey(id, key) {
         });
 
         if (response.ok) {
-            console.log(response.text());
+            console.log('Respons: ', response.text());
             return true;
         }
         return false;
     } catch (error) {
         // eslint-disable-next-line no-alert
-        alert('Noe gikk galt...');
+        alert('Noe gikk galt... PK');
         return false;
     }
 }
@@ -74,7 +74,7 @@ export async function httpGetIssuerKey(id) {
     const url = `${issuerUrl}vdr/key/`;
     const response = await fetch(`${url}${id}`);
     const payload = await response.text();
-    console.log(payload);
+    console.log('Payload', payload);
     return payload;
 }
 

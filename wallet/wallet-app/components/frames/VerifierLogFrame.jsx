@@ -15,6 +15,7 @@ export default function VerifierLogFrame({ route }) {
     const styles = StyleSheet.create({
         shared: {
             fontSize: 20,
+            marginBottom: 40,
         },
     });
 
