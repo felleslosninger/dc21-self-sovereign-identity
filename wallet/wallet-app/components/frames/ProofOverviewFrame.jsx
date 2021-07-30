@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { addCredential } from '../../redux/CredentialSlice';
-import Proof from '../Proof';
+import Proof from '../views/ProofView';
 
 /**
  * A frame with an overview of every proof the wallet has

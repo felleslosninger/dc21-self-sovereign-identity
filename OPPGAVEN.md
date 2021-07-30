@@ -1,5 +1,5 @@
 
-#Digdir-camp-oppgåve om eigenkontrollert identitet og digital lommebok
+# Digdir-camp-oppgåve om eigenkontrollert identitet og digital lommebok
 
 
 ## Motivasjon
@@ -14,7 +14,7 @@ For **kontroll med egne data** ser man videre for seg å putte "bevis" inn i lom
 
 Vi trur at W3C-standarden **Verifiable Credentials** er vesentleg for å kunne realisere SSI.  I denne inngår følgjande aktørar:
 
-![image](vc.png)
+![image](https://www.w3.org/TR/vc-data-model/diagrams/ecosystem.svg)
 
 * **Issuer** - utsteder av bevis
 * **Holder** - slutt-bruker med ei digital lommebok

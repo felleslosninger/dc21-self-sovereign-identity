@@ -5,7 +5,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { removeCredential } from '../redux/CredentialSlice';
+import { removeCredential } from '../../redux/CredentialSlice';
 
 /**
  * A proof object/card with info about the issuer, validity, shared with and deletion option.
