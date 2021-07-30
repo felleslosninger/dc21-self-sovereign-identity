@@ -1,4 +1,4 @@
-<img src="https://github.com/felleslosninger/digdir-camp-2021-VC/blob/main/images/digdirlogo_01.png" alt="drawing" width="200" align="right"/>
+<img src="https://github.com/felleslosninger/digdir-camp-2021-VC/blob/main/images/digdirlogo_01.png" alt="drawing" width="125" align="right"/>
 
 # Issuer and Verifiable Data Registry(VDR)
 A SpringBoot serverapp that simulates an Issuer and a VDR in a SSI-ecosystem.
