@@ -30,6 +30,7 @@ export async function httpSendCredential(token) {
 }
 */
 
+
 export async function httpSendPresentation(token) {
     const url = `${verifierUrl}sendVP`;
 

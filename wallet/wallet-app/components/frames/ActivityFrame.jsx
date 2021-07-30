@@ -31,15 +31,16 @@ export default function ActivityFrame() {
         return verified;
     }
                    
+
     */
 
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
-
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
         alert(verified);
-        creds.map((c) =>
+        if (verified) {
+            creds.map((c) =>
             dispatch(
                 addCredentialShare({
                     id: Math.random().toString(),
@@ -48,6 +49,7 @@ export default function ActivityFrame() {
                 })
             )
         );
+        }
         setStatus(verified);
         return verified;
     }

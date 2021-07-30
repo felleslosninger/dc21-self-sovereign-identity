@@ -26,6 +26,7 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
         alg: 'RS256',
         typ: 'JWT',
     };
+    
 
     // Create the payload using the provided parameters
     const payload = {
