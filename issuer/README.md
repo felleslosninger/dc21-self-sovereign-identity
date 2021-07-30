@@ -17,7 +17,7 @@ npm install maven
 ## Usage
 To run this project:
 
-```Maven
+```java
 mvn spring-boot:run
 ```
 
