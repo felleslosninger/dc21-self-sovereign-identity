@@ -20,7 +20,7 @@ public class VerifyService {
         boolean isVerified = verifier.verifyVP(token, "over-18");
         String userID = verifier.verifySubUser(token);
         if (isVerified) {
-            if (uih.loadFromFile().get(userID)) {
+            if (uih.loadFromFile().get(userID).equals(false)) {
                 uih.addUserId(userID, true);
             }
         }
