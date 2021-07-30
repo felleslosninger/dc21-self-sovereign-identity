@@ -12,7 +12,5 @@ Or with Yarn
 
   yarn add @digdir/issuer app
   
-## Sample
- ----Eksempel---
  
 ## Examples
