@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-expressions */
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
-// import JWT from 'jsonwebtoken';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, Colors, Picker } from 'react-native-ui-lib';
+import { Text, Colors, Picker, LoaderScreen } from 'react-native-ui-lib';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -24,20 +23,21 @@ export default function RequestFrame() {
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
 
-    async function issuerChanged(itemValue) {
-        alert(`${itemValue}itemvalue`);
-        setSelectedIssuer(itemValue);
-        const typesString = await httpGetTypesFromIssuer(itemValue);
-        alert(typesString);
-        setIssuerTypes(JSON.parse(typesString));
-    }
+    const [loading, setLoading] = useState(false);
 
     async function getAllIssuers() {
         setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
     }
+
     getAllIssuers();
-    // console.log(availableIssuers);
-    // issuerChanged('ntnu');
+
+    useEffect(() => {
+        async function fetchTypes() {
+            const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
+            setIssuerTypes(types);
+        }
+        fetchTypes();
+    }, [selectedIssuer]);
 
     /**
      * Retrieves proof
@@ -72,14 +72,9 @@ export default function RequestFrame() {
         }
     };
 
-    /* const issuers = [
-        { name: 'ntnu' },
-        { name: 'statensvegvesen' },
-        { name: 'folkeregisteret' },
-        // { name: 'UtsederAvBevis.no' },
-    ]; */
-
-    return (
+    return loading ? (
+        <LoaderScreen color={Colors.blue30} message="Loading..." overlay />
+    ) : (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Forespørsel om nytt bevis </Text>
 
@@ -89,7 +84,7 @@ export default function RequestFrame() {
                     floatingPlaceholder
                     value={selectedIssuer}
                     enableModalBlur={false}
-                    onChange={(item) => issuerChanged(item)}
+                    onChange={(item) => setSelectedIssuer(item.value)}
                     topBarProps={{ title: 'Utstedere' }}
                     showSearch
                     searchPlaceholder="Søk etter utsteder"
@@ -97,27 +92,27 @@ export default function RequestFrame() {
                     // onSearchChange={value => console.warn('value', value)}
                 >
                     {availableIssuers.map((i) => (
-                        <Picker.Item key={i.name} label={i.name} value={i.name} />
+                        <Picker.Item key={i} label={i} value={i} />
                     ))}
                 </Picker>
             </SafeAreaView>
-            {issuerTypes ? (
+            {selectedIssuer ? (
                 <SafeAreaView style={styles.issuer}>
                     <Picker
                         placeholder="Velg type bevis"
                         floatingPlaceholder
                         value={vcType}
                         enableModalBlur={false}
-                        onChange={(item) => setVcType(item)}
+                        onChange={(item) => setVcType(item.value)}
                         topBarProps={{ title: 'Type bevis' }}
                         showSearch
                         searchPlaceholder="Søk etter bevis"
                         searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
                         // onSearchChange={value => console.warn('value', value)}
                     >
-                        {issuerTypes.map((type) => (
-                            <Picker.Item key={type.name} label={type.name} value={type.name} />
-                        ))}
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
                     </Picker>
                 </SafeAreaView>
             ) : null}
