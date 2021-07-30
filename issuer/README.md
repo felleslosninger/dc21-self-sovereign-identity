@@ -21,6 +21,10 @@ To run this project:
 mvn spring-boot:run
 ```
 
+```bash
+pip install foobar
+```
+
 
 ## Endpoints
 
