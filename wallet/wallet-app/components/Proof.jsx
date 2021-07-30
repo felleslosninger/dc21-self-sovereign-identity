@@ -40,7 +40,8 @@ export default function Proof(props) {
             <Text style={styles.textProofs}>{props.name}</Text>
             <Text> Utstedt av: {props.issuer}</Text>
             <Text>
-                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til {new Date(props.expDate * 1000).toLocaleString()}
+                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til{' '}
+                {new Date(props.expDate * 1000).toLocaleString()}
             </Text>
             <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
                 <Text>Delt med</Text>

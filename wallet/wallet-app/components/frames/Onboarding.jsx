@@ -74,7 +74,7 @@ export default function Onboarding() {
                 <View style={styles.done}>
                     <Text style={styles.verifiedText}>
                         Grunnidentitet verifisert
-                        <Icon name="check" size={25} color="#3aa797" />
+                        <Icon name="check" size={25} color="rgb(0,98,184)" />
                     </Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 4,
-        backgroundColor: '#3aa797',
+        backgroundColor: 'rgb(0,98,184)',
         padding: 20,
         width: '75%',
         alignItems: 'center',
