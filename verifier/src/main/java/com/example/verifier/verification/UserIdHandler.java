@@ -99,9 +99,12 @@ public class UserIdHandler {
 
     //getIsUserVerified(id) return true/false, kalle i checkVerified
     public boolean getIsUserVerified(String id) {
-        if (loadFromFile().get(id).equals(true)) {
+        try {
+            loadFromFile().get(id).equals(true);
             return true;
-        } return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 
