@@ -38,7 +38,7 @@ export default function ActivityFrame() {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
-        alert(verified);
+        alert("Bevis sendt");
         if (verified) {
             creds.map((c) =>
             dispatch(
