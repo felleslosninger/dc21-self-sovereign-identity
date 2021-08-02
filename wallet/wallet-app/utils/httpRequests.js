@@ -67,7 +67,7 @@ export async function httpGetTypesFromIssuer(issuer) {
 export async function httpGetAllIssuers() {
     const url = `${vdrUrl}/getAllIssuers`;
     const response = await fetch(url);
-    const payload = JSON.parse(await response.text());
+    const payload = await response.text();
     return payload;
 }
 
