@@ -1,10 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Card, Text } from 'react-native-ui-lib';
 import { removeCredential } from '../../redux/CredentialSlice';
 
 /**
@@ -36,16 +37,26 @@ export default function Proof(props) {
     }
 
     return (
-        <View style={styles.theProofs}>
-            <Text style={styles.textProofs}>{props.name}</Text>
-            <Text> Utstedt av: {props.issuer}</Text>
-            <Text>
-                Gyldig fra {new Date(props.issDate * 1000).toLocaleString()} til{' '}
-                {new Date(props.expDate * 1000).toLocaleString()}
-            </Text>
-            <TouchableOpacity style={styles.proofLog} onPress={() => navigation.navigate('Delt med', { props })}>
-                <Text>Delt med</Text>
-            </TouchableOpacity>
+        <Card
+            style={{ marginHorizontal: 25, marginVertical: 5 }}
+            onPress={() => navigation.navigate('Delt med', { props })}>
+            <Card.Section
+                content={[
+                    { text: props.name, text50: true, grey10: true },
+                    { text: `Utstedt av: ${props.issuer}`, text100: true, grey40: true },
+                    {
+                        text: `Gyldighet: ${new Date(props.issDate * 1000).toLocaleDateString()} - ${new Date(
+                            props.expDate * 1000
+                        ).toLocaleDateString()}`,
+                        text100: true,
+                        grey40: true,
+                    },
+                ]}
+                style={{ padding: 30 }}
+            />
+
+            {/*
+
             <Button
                 title="Fjern bevis"
                 onPress={() => {
@@ -53,7 +64,8 @@ export default function Proof(props) {
                     removeItemValue(props.id);
                 }}
             />
-        </View>
+            */}
+        </Card>
     );
 }
 
@@ -61,15 +73,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: '12%',
-    },
-    theProofs: {
-        backgroundColor: '#CDE8C5',
-        padding: 10,
-        fontSize: 20,
-        marginVertical: 3,
-        marginHorizontal: 16,
-        borderRadius: 4,
-        alignItems: 'center',
     },
     textProofs: {
         fontSize: 40,

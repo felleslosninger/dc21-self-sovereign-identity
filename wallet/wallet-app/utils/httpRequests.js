@@ -1,4 +1,4 @@
-const host = 'localhost';
+const host = '192.168.137.191';
 
 const issuerUrl = `http://${host}:8083/`;
 const verifierUrl = `http://${host}:8080/api/`;
