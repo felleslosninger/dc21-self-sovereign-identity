@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import jwtDecode from 'jwt-decode';
+import { exampleCredentialToken } from '../utils/httpRequests';
 /*
 const credentialsReducer = createReducer([], (builder) => {
   builder
@@ -14,7 +15,7 @@ const credentialsReducer = createReducer([], (builder) => {
 export const credentialSlice = createSlice({
     name: 'credentials',
     initialState: {
-        cred: [],
+        cred: [{ ...jwtDecode(exampleCredentialToken), token: exampleCredentialToken }],
     },
     reducers: {
         addCredential: (state, action) => {
