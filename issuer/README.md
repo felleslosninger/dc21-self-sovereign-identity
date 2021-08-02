@@ -85,9 +85,10 @@ Example-VC:
 
 {
   "sub": "08089409382",
-  "iss": "folkeregisteret699296c6-c2b3-4b64-ba8e-3c394e8c00ea",
-  "exp": 1628838216,
-  "iat": 1627628616,
+  "nbf": 1627893505,
+  "iss": "folkeregisteret4283afdc-9f54-45b7-a7e2-5ee965b18f9c",
+  "exp": 1629103105,
+  "iat": 1627893505,
   "vc": {
     "credentialSubject": {
       "age": {
@@ -103,7 +104,8 @@ Example-VC:
       "https://www.w3.org/2018/credentials/v1"
     ]
   },
-  "jti": "http://localhost:8083/credentials/1"
+  "nonce": "b433ab30-0977-450",
+  "jti": "WMuTzBzx401m24pHWZUsna9Ov531FcArrGpO6o/ZN+Y="
 }
 
 ```
