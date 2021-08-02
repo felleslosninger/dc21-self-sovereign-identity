@@ -1,7 +1,8 @@
 import forge from 'node-forge';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
-import { httpPostPublicKey } from './httpRequests';
+import { exampleCredentialToken, httpPostPublicKey } from './httpRequests';
 
 export async function generateKeys() {
     // Generates a RSA keypair, should perhaps be moved to global state
@@ -42,36 +43,57 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     // Could be extracted as a separate util function
     const time = Math.floor(Date.now() / 1000);
 
+    // ### HEADER
+
     // Header for the JWT token, will always be the same
     const header = {
         alg: 'RS256',
         typ: 'JWT',
     };
 
-    // Create the payload using the provided parameters
-    const payload = {
-        // TODO: Assign proper subject
+    const strHeader = JSON.stringify(header);
+    const header64 = encodeB64(strHeader);
+
+    // ### END HEADER
+
+    // ### PAYLOAD
+
+    // Payload lacking JTI
+    const tempPayload = {
+        nbf: time,
         iss: await getWalletID(),
-        sub: 'testSub',
-        aud: audience,
         // Will expire in 5 minutes
-        exp: time + 300,
+        exp: time + 5 * 60,
         iat: time,
-        // TODO: Improve random generation of unique ID
-        jti: Math.floor(Math.random() * 100000000),
         cred: jwtCredentialsList,
+        aud: audience,
+        nonce: uuid.v4(),
     };
 
-    const strHeader = JSON.stringify(header);
-    const strPayload = JSON.stringify(payload);
+    // Create JTI as base64 encoded hash of the payload
+    const tempStrPayload = JSON.stringify(tempPayload);
+    const tempPayload64 = encodeB64(tempStrPayload);
+    const hashedJTI = forge.md.sha256.create().update(tempPayload64, 'utf8');
+    const hashedJTI64 = encodeB64(hashedJTI);
 
-    const header64 = encodeB64(strHeader);
+    // Add the JTI to the payload
+    const payload = {
+        ...tempPayload,
+        jti: hashedJTI64,
+    };
+
+    alert(hashedJTI64);
+
+    const strPayload = JSON.stringify(payload);
     const payload64 = encodeB64(strPayload);
 
+    // ### END PAYLOAD
+
+    // ### SIGNATURE
+
     // The message to be signed
-    const preHash = `${header64}.${payload64}`;
     const md = forge.md.sha256.create();
-    md.update(preHash, 'utf8');
+    md.update(`${header64}.${payload64}`, 'utf8');
 
     const privateKeyPem = await AsyncStorage.getItem('privateKey');
     const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
@@ -79,6 +101,8 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     // The signature for the header and payload message
     const signature = privateKey.sign(md);
     const signature64 = encodeB64(signature);
+
+    // ### END SIGNATURE
 
     // Concatenate the base64 encoded header, payload and signature as a JWT.
     const token = `${header64}.${payload64}.${signature64}`;
