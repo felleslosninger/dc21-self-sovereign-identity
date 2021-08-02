@@ -15,7 +15,7 @@ const credentialsReducer = createReducer([], (builder) => {
 export const credentialSlice = createSlice({
     name: 'credentials',
     initialState: {
-        cred: [{ ...jwtDecode(exampleCredentialToken), token: exampleCredentialToken }],
+        cred: [],
     },
     reducers: {
         addCredential: (state, action) => {

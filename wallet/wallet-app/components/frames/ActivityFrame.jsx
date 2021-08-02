@@ -25,8 +25,8 @@ export default function ActivityFrame() {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
-        alert("Bevis sendt");
         if (verified) {
+            alert("Bevis sendt");
             creds.map((c) =>
             dispatch(
                 addCredentialShare({
@@ -35,8 +35,9 @@ export default function ActivityFrame() {
                     verifier: audience,
                 })
             )
-        );
-        }
+        ) } else {
+            alert("Bevis ble ikke sendt")
+        };
         setStatus(verified);
         return verified;
     }
