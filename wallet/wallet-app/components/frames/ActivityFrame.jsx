@@ -17,28 +17,15 @@ export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
     const dispatch = useDispatch();
     const [scanned, setScanned] = useState(false);
-
     const navigation = useNavigation();
-
     const { cred } = useSelector((state) => state.credentials);
 
-    console.log('Cred: ', cred);
-
-    /* UTDATERT
-    async function sendCredential() {
-        const verified = await httpSendCredential(credential.token);
-        setStatus(verified);
-        return verified;
-    }
-                   
-
-    */
-
+   
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
-        alert(verified);
+        alert("Bevis sendt");
         if (verified) {
             creds.map((c) =>
             dispatch(
@@ -67,7 +54,7 @@ export default function ActivityFrame() {
             }
         }
 
-        Alert.alert('VARSEL', `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`, [
+        Alert.alert('TJENESTE SPØR OM BEVIS', `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`, [
             {
                 text: 'Ikke godkjenn',
                 onPress: () => navigation.navigate('Oversikt'),
