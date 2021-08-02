@@ -2,9 +2,11 @@ package com.digdir.issuer.credentials;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.digdir.issuer.util.KeyGenerator;
 import com.digdir.issuer.storage.FileHandler;
+import com.digdir.issuer.util.KeyGenerator;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -47,7 +49,7 @@ public class Jwt {
 
 
     public Jwt(String subjectId, String issuerId, String vcType, String claimType, String type, String name, long expOffset) {
-        long baseIdOffset = 2629800000L;
+        // long baseIdOffset = 2629800000L;
         this.issuedAt = new Date();
         this.expiresAt = new Date(issuedAt.getTime() + expOffset);
         this.token = constructJwt(subjectId, issuerId, vcType, claimType, type,name);
@@ -92,17 +94,46 @@ public class Jwt {
         FileHandler fileHandler = new FileHandler();
         fileHandler.addPublicKey(issuerId, rsaPublicKey);
 
+        // Date and nonce needs to be the same for both tokens, so these variables are defined outside the token generating methods.
+        final String nonce = UUID.randomUUID().toString().substring(0,17);
+        final Date notBefore = new Date();
         System.out.println("PK:   " + Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded()));
-        // Creates JWT based on public & private keypair. Standard naming is used when possible.
-        Algorithm algorithm = Algorithm.RSA256(null, rsaPrivateKey);
 
+        // Creates temp token to be hashed, then used as the actual tokens jti.
+        Algorithm algorithm = Algorithm.RSA256(null, rsaPrivateKey);
+        String tempToken = JWT.create()
+                .withIssuer(issuerId)
+                .withIssuedAt(issuedAt)
+                .withExpiresAt(expiresAt)
+                .withSubject(subjectId)
+                .withClaim("vc", vc.getVCMap())
+                .withClaim("nonce", nonce)
+                .withNotBefore(notBefore)
+                .withKeyId("123")
+                .sign(algorithm);
+
+        String[] tokenForJTI = tempToken.split("\\.");
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Problems in jwt.java");
+        }
+        assert digest != null;
+        byte[] encodedhash = digest.digest(
+                tokenForJTI[1].getBytes(StandardCharsets.UTF_8));
+
+        // Creates JWT based on public & private keypair. Standard naming is used when possible.
         return token = JWT.create()
                 .withIssuer(issuerId)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiresAt)
-                .withJWTId("http://localhost:8083/credentials/1")
+                .withJWTId(Base64.getEncoder().encodeToString(encodedhash))
                 .withSubject(subjectId)
                 .withClaim("vc", vc.getVCMap())
+                .withClaim("nonce", nonce)
+                .withNotBefore(notBefore)
+                .withKeyId("keyNumber x")
                 .sign(algorithm);
     }
     // Returns the instantiated JWT.
@@ -114,8 +145,5 @@ public class Jwt {
     public static void main(String[] args) {
         Jwt jwt = new Jwt("testSub", "testIss11", "AgeCredential", "age", "over-18","Over 18");
         System.out.println(jwt.getToken());
-//        long lo = 2629800000L;
-//        Jwt jwt1 = new Jwt("testSub", "testIss", "AgeCredential", "age", "over-18", "Over 18", lo);
-//        System.out.println(jwt1.getToken());
     }
 }

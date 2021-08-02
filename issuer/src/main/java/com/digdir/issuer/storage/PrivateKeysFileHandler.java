@@ -1,6 +1,6 @@
 package com.digdir.issuer.storage;
 
-import com.digdir.issuer.util.KeyGenerator;
+import com.digdir.issuer.util.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 
 public class PrivateKeysFileHandler {
-    private String path = "issuer/src/main/resources/PrivateKeys.json";
+    private String path = "src/main/resources/PrivateKeys.json";
     private Writer file;
 
     /**

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import { View, Button, Text, StyleSheet, Alert } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useDispatch, useSelector } from 'react-redux';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import jwtDecode from 'jwt-decode';
+import { useNavigation } from '@react-navigation/native';
 import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
+
 
 /**
  * A frame with a botton to send proof to a verifier if you choose to share
@@ -13,53 +17,80 @@ import createVerifiablePresentationJWT from '../../utils/sign';
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
     const dispatch = useDispatch();
-
+    const [scanned, setScanned] = useState(false);
+    const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
-
-    /* UTDATERT
-    async function sendCredential() {
-        const verified = await httpSendCredential(credential.token);
-        setStatus(verified);
-        return verified;
-    }
-
-    */
-
-    async function sendPresentation(creds, audience) {
+   
+    async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
-        const token = await createVerifiablePresentationJWT(jwtCreds, audience);
+        const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
-        creds
-        .map(c => (dispatch(addCredentialShare({
-            id: Math.random().toString(),
-            credential_id: c.jti,
-            verifier: audience,
-        }))))
-
-
-
-    
-        
+        if (verified) {
+            alert("Bevis sendt");
+            creds.map((c) =>
+            dispatch(
+                addCredentialShare({
+                    id: Math.random().toString(),
+                    credential_id: c.jti,
+                    verifier: audience,
+                })
+            )
+        ) } else {
+            alert("Bevis ble ikke sendt")
+        };
         setStatus(verified);
         return verified;
     }
+
+    const handleBarCodeScanned = async ({ type, data }) => {
+        setScanned(true);
+        const verifier = data.split('|')[0];
+        const vc = data.split('|')[1];
+        const userID = data.split('|')[2];
+        console.log(userID);
+        let proof = '';
+        for (let i = 0; i < cred.length; i++) {
+            if (cred[i].vc.credentialSubject.age.type === vc) {
+                proof = cred[i];
+            }
+        }
+
+        Alert.alert('TJENESTE SPØR OM BEVIS', `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`, [
+            {
+                text: 'Ikke godkjenn',
+                onPress: () => navigation.navigate('Oversikt'),
+                style: 'cancel',
+            },
+            { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) },
+        ]);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
-            {cred.length > 0 ? (
+            {/* {cred.length > 0 ? (
                 cred.map((credential) => (
                     <View>
                         <Button
                             title={`Send bevis ${credential.type} til tjeneste X`}
                             color="#f1940f"
-                            onPress={() => sendPresentation([credential], 'verifier123')}
+                            onPress={() => sendPresentation([credential], verifier, userID)}
                         />
+
                         <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
                     </View>
                 ))
             ) : (
                 <Text>Du har ingen bevis</Text>
-            )}
+            )} */}
+            <View>
+                <Text style = {styles.instructionText}>Skann QR-koden til en tjeneste du ønsker å dele et bevis med:</Text>
+            </View>
+            <View style={styles.camera}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+            </View>
         </SafeAreaView>
     );
 }
@@ -86,5 +117,16 @@ const styles = StyleSheet.create({
     },
     sharedProofText: {
         alignSelf: 'center',
+    },
+    camera: {
+        flex: 1,
+        marginTop: 80,
+        marginBottom: 80,
+        alignItems: 'center',
+    },
+    instructionText: {
+        marginTop: 20,
+        fontSize: 20,
+        alignSelf: 'flex-start',
     },
 });
