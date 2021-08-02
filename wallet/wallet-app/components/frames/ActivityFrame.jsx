@@ -9,6 +9,7 @@ import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
 
+
 /**
  * A frame with a botton to send proof to a verifier if you choose to share
  * @returns A frame, sending the proof
@@ -19,7 +20,6 @@ export default function ActivityFrame() {
     const [scanned, setScanned] = useState(false);
     const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
-
    
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
@@ -82,11 +82,15 @@ export default function ActivityFrame() {
             ) : (
                 <Text>Du har ingen bevis</Text>
             )} */}
-
-            <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
-            />
+            <View>
+                <Text style = {styles.instructionText}>Skann QR-koden til en tjeneste du ønsker å dele et bevis med:</Text>
+            </View>
+            <View style={styles.camera}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+            </View>
         </SafeAreaView>
     );
 }
@@ -113,5 +117,16 @@ const styles = StyleSheet.create({
     },
     sharedProofText: {
         alignSelf: 'center',
+    },
+    camera: {
+        flex: 1,
+        marginTop: 80,
+        marginBottom: 80,
+        alignItems: 'center',
+    },
+    instructionText: {
+        marginTop: 20,
+        fontSize: 20,
+        alignSelf: 'flex-start',
     },
 });
