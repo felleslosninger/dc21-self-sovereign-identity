@@ -74,8 +74,9 @@ export default function ProofOverviewFrame() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView>
             <FlatList
+                marginTop={25}
                 keyExtractor={(item) => item.jti}
                 data={cred}
                 renderItem={({ item }) => (

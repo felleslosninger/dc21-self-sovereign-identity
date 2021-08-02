@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, Colors, Picker } from 'react-native-ui-lib';
+import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -16,6 +17,7 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
@@ -53,6 +55,7 @@ export default function RequestFrame() {
             dispatch(addCredential(retrievedCredential));
             if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
                 setFeedback(`hentet ${vcType} bevis`);
+                navigation.navigate('Oversikt');
             } else {
                 setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
             }
@@ -77,8 +80,9 @@ export default function RequestFrame() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Forespørsel om nytt bevis </Text>
-
+            <Text text40 style={{ paddingBottom: 30 }}>
+                Forespør et nytt bevis
+            </Text>
             <SafeAreaView>
                 <Picker
                     placeholder="Velg utsteder"
@@ -118,11 +122,16 @@ export default function RequestFrame() {
                 </SafeAreaView>
             ) : null}
 
-            <TouchableOpacity onPress={() => retrieveCredential()}>
-                <SafeAreaView style={styles.button}>
-                    <Text style={styles.buttonText}>Send forespørsel</Text>
-                </SafeAreaView>
-            </TouchableOpacity>
+            <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
+                <Button
+                    label="Send foresørsel"
+                    backgroundColor="rgb(0,98,184)"
+                    onPress={() => {
+                        retrieveCredential();
+                    }}
+                />
+            </View>
+
             <SafeAreaView style={styles.credential}>
                 <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
