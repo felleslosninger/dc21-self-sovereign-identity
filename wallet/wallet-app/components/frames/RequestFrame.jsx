@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -16,7 +17,8 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-
+    const navigation = useNavigation();
+    // const [enabled, setEnabled] = useState(false);
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
@@ -64,6 +66,8 @@ export default function RequestFrame() {
             // await saveProof(retrievedCredential);
         } catch (error) {
             setFeedback(response);
+        } finally {
+            alert(feedback);
         }
     }
 
@@ -95,6 +99,7 @@ export default function RequestFrame() {
                     showSearch
                     searchPlaceholder="Søk etter utsteder"
                     searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+
                     // onSearchChange={value => console.warn('value', value)}
                 >
                     {availableIssuers.map((i) => (
@@ -103,25 +108,45 @@ export default function RequestFrame() {
                 </Picker>
             </SafeAreaView>
 
-            <SafeAreaView style={styles.issuer}>
-                <Picker
-                    placeholder="Velg type bevis"
-                    floatingPlaceholder
-                    value={{ value: vcType, label: vcType }}
-                    enableModalBlur={false}
-                    onChange={(item) => setVcType(item.value)}
-                    topBarProps={{ title: 'Type bevis' }}
-                    showSearch
-                    disabled={issuerTypes.length === 0}
-                    searchPlaceholder="Søk etter bevis"
-                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                    // onSearchChange={value => console.warn('value', value)}
-                >
-                    {issuerTypes.length > 0
-                        ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
-                        : null}
-                </Picker>
-            </SafeAreaView>
+            {selectedIssuer === '' ? (
+                <SafeAreaView style={{ opacity: 0 }}>
+                    <Picker
+                        placeholder="Velg type bevis"
+                        floatingPlaceholder
+                        value={{ value: vcType, label: vcType }}
+                        enableModalBlur={false}
+                        onChange={(item) => setVcType(item.value)}
+                        topBarProps={{ title: 'Type bevis' }}
+                        showSearch
+                        searchPlaceholder="Søk etter bevis"
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                        // onSearchChange={value => console.warn('value', value)}
+                    >
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
+                    </Picker>
+                </SafeAreaView>
+            ) : (
+                <SafeAreaView>
+                    <Picker
+                        placeholder="Velg type bevis"
+                        floatingPlaceholder
+                        value={{ value: vcType, label: vcType }}
+                        enableModalBlur={false}
+                        onChange={(item) => setVcType(item.value)}
+                        topBarProps={{ title: 'Type bevis' }}
+                        showSearch
+                        searchPlaceholder="Søk etter bevis"
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                        // onSearchChange={value => console.warn('value', value)}
+                    >
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
+                    </Picker>
+                </SafeAreaView>
+            )}
 
             <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
                 <Button
@@ -134,9 +159,11 @@ export default function RequestFrame() {
                 />
             </View>
 
-            <SafeAreaView style={styles.credential}>
+            {/** <SafeAreaView style={styles.credential}>
                 <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
+          * 
+         */}
         </ScrollView>
     );
 }
