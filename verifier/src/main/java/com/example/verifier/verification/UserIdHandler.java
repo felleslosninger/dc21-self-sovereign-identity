@@ -90,6 +90,7 @@ public class UserIdHandler {
             }
         }
     }
+
     //legg til bruker, userID: false
     public void addUserId(String id, boolean verified) {
         HashMap<String, Boolean> map = loadFromFile();
@@ -99,9 +100,14 @@ public class UserIdHandler {
 
     //getIsUserVerified(id) return true/false, kalle i checkVerified
     public boolean getIsUserVerified(String id) {
-        if (loadFromFile().get(id).equals(true)) {
+        if (loadFromFile().get(id) == null) {
+            return false;
+        }
+        else if (loadFromFile().get(id).equals(true)) {
+            System.out.println("true");
             return true;
-        } return false;
+        }
+        return false;
     }
 
 

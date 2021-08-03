@@ -26,6 +26,7 @@ export default function ActivityFrame() {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
+
         if (verified) {
             alert('Bevis sendt');
             creds.map((c) =>
@@ -63,10 +64,10 @@ export default function ActivityFrame() {
             [
                 {
                     text: 'Ikke godkjenn',
-                    onPress: () => navigation.navigate('Oversikt'),
+                    onPress: () => navigation.navigate('Oversikt') && setScanned(false),
                     style: 'cancel',
                 },
-                { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) },
+                { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) && setScanned(false) },
             ]
         );
     };
@@ -98,6 +99,7 @@ export default function ActivityFrame() {
                 <Icon name="question-circle" size={25} color="rgb(30,46,60)" />
                 <Text text60 style={{ marginLeft: 10 }}>
                     Skann QR-kode til tjeneste
+
                 </Text>
             </View>
 
