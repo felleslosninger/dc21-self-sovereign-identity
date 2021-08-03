@@ -63,5 +63,5 @@ mvn spring-boot:run
 ```
 
 ## Acknowledgements 
-- Symfoni AS ved Jon Ramvi og Robin Pedersen 
-- [DIN](https://www.din.foundation/) ved Snorre Lothar von Gohren Edwin
+- Jon Ramvi and Robin Pedersen at Symfoni AS
+- Snorre Lothar von Gohren Edwin at [DIN](https://www.din.foundation/) 
