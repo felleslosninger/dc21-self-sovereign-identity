@@ -9,7 +9,6 @@ import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
 
-
 /**
  * A frame with a botton to send proof to a verifier if you choose to share
  * @returns A frame, sending the proof
@@ -20,24 +19,26 @@ export default function ActivityFrame() {
     const [scanned, setScanned] = useState(false);
     const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
-   
+
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
+
         if (verified) {
-            alert("Bevis sendt");
+            alert('Bevis sendt');
             creds.map((c) =>
-            dispatch(
-                addCredentialShare({
-                    id: Math.random().toString(),
-                    credential_id: c.jti,
-                    verifier: audience,
-                })
-            )
-        ) } else {
-            alert("Bevis ble ikke sendt")
-        };
+                dispatch(
+                    addCredentialShare({
+                        id: Math.random().toString(),
+                        credential_id: c.jti,
+                        verifier: audience,
+                    })
+                )
+            );
+        } else {
+            alert('Bevis ble ikke sendt');
+        }
         setStatus(verified);
         return verified;
     }
@@ -55,14 +56,18 @@ export default function ActivityFrame() {
             }
         }
 
-        Alert.alert('TJENESTE SPØR OM BEVIS', `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`, [
-            {
-                text: 'Ikke godkjenn',
-                onPress: () => navigation.navigate('Oversikt'),
-                style: 'cancel',
-            },
-            { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) },
-        ]);
+        Alert.alert(
+            'TJENESTE SPØR OM BEVIS',
+            `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`,
+            [
+                {
+                    text: 'Ikke godkjenn',
+                    onPress: () => navigation.navigate('Oversikt') && setScanned(false),
+                    style: 'cancel',
+                },
+                { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) && setScanned(false) },
+            ]
+        );
     };
 
     return (
@@ -83,7 +88,9 @@ export default function ActivityFrame() {
                 <Text>Du har ingen bevis</Text>
             )} */}
             <View>
-                <Text style = {styles.instructionText}>Skann QR-koden til en tjeneste du ønsker å dele et bevis med:</Text>
+                <Text style={styles.instructionText}>
+                    Skann QR-koden til en tjeneste du ønsker å dele et bevis med:
+                </Text>
             </View>
             <View style={styles.camera}>
                 <BarCodeScanner
