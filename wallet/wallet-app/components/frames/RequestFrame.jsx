@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, Colors, Picker } from 'react-native-ui-lib';
+import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -16,7 +17,8 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-
+    const navigation = useNavigation();
+    // const [enabled, setEnabled] = useState(false);
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
     const [vcType, setVcType] = useState('');
@@ -35,6 +37,7 @@ export default function RequestFrame() {
     useEffect(() => {
         async function fetchTypes() {
             const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
+            setVcType('');
             setIssuerTypes(types);
         }
         fetchTypes();
@@ -53,6 +56,9 @@ export default function RequestFrame() {
             dispatch(addCredential(retrievedCredential));
             if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
                 setFeedback(`hentet ${vcType} bevis`);
+                setSelectedIssuer('');
+                setVcType('');
+                //  navigation.navigate('Oversikt');
             } else {
                 setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
             }
@@ -60,6 +66,8 @@ export default function RequestFrame() {
             // await saveProof(retrievedCredential);
         } catch (error) {
             setFeedback(response);
+        } finally {
+            alert(feedback);
         }
     }
 
@@ -77,8 +85,9 @@ export default function RequestFrame() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Forespørsel om nytt bevis </Text>
-
+            <Text text40 style={{ paddingBottom: 30, paddingTop: 20 }}>
+                Forespør et nytt bevis
+            </Text>
             <SafeAreaView>
                 <Picker
                     placeholder="Velg utsteder"
@@ -90,6 +99,7 @@ export default function RequestFrame() {
                     showSearch
                     searchPlaceholder="Søk etter utsteder"
                     searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+
                     // onSearchChange={value => console.warn('value', value)}
                 >
                     {availableIssuers.map((i) => (
@@ -97,8 +107,9 @@ export default function RequestFrame() {
                     ))}
                 </Picker>
             </SafeAreaView>
-            {selectedIssuer ? (
-                <SafeAreaView style={styles.issuer}>
+
+            {selectedIssuer === '' ? (
+                <SafeAreaView style={{ opacity: 0 }}>
                     <Picker
                         placeholder="Velg type bevis"
                         floatingPlaceholder
@@ -116,16 +127,43 @@ export default function RequestFrame() {
                             : null}
                     </Picker>
                 </SafeAreaView>
-            ) : null}
-
-            <TouchableOpacity onPress={() => retrieveCredential()}>
-                <SafeAreaView style={styles.button}>
-                    <Text style={styles.buttonText}>Send forespørsel</Text>
+            ) : (
+                <SafeAreaView>
+                    <Picker
+                        placeholder="Velg type bevis"
+                        floatingPlaceholder
+                        value={{ value: vcType, label: vcType }}
+                        enableModalBlur={false}
+                        onChange={(item) => setVcType(item.value)}
+                        topBarProps={{ title: 'Type bevis' }}
+                        showSearch
+                        searchPlaceholder="Søk etter bevis"
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                        // onSearchChange={value => console.warn('value', value)}
+                    >
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
+                    </Picker>
                 </SafeAreaView>
-            </TouchableOpacity>
-            <SafeAreaView style={styles.credential}>
+            )}
+
+            <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
+                <Button
+                    label="Send foresørsel"
+                    backgroundColor="rgb(0,98,184)"
+                    onPress={() => {
+                        retrieveCredential();
+                    }}
+                    disabled={vcType === ''}
+                />
+            </View>
+
+            {/** <SafeAreaView style={styles.credential}>
                 <Text style={styles.buttonText}>{feedback}</Text>
             </SafeAreaView>
+          * 
+         */}
         </ScrollView>
     );
 }
