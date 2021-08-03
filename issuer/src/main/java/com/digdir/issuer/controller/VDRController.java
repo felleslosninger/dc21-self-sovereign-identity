@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import java.util.Collection;
 
@@ -43,14 +41,6 @@ public class VDRController {
             return "No key found with this id";
         }
     }
-
-    @Deprecated
-    @GetMapping("/vdr/postKeyOld")
-    public String postKey(@RequestParam(value = "id") String id, @RequestParam(value="key") String key) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        fileHandler.addPublicKey(id, vdrService.pemToKey(key));
-        return "ok";
-    }
-
 
     @PostMapping(value = "vdr/postKey")
     ResponseEntity<String> postKeyToVDR(@RequestBody String body, @RequestParam(value="userID")String userID) {

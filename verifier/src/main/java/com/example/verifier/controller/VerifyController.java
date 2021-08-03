@@ -1,21 +1,15 @@
 package com.example.verifier.controller;
 
 import com.example.verifier.service.VerifyService;
-import com.example.verifier.verification.JwtVerifier;
 import com.example.verifier.verification.UserIdHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.constant.Constable;
-
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 
 public class VerifyController {
-
-
-
 
     private final VerifyService verifyService = new VerifyService();
 

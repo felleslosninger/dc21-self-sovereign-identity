@@ -2,21 +2,11 @@ package com.example.verifier.verification;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.function.BiConsumer;
-import java.util.function.BooleanSupplier;
 
 
 /**
@@ -76,7 +66,7 @@ public class UserIdHandler {
 
     /**
      * Saves to file a hashmap that maps userIDs to corresponding boolean values
-     * @param publicKeyMap = the map to save to file
+     * @param userIDMap = the map to save to file
      */
     private void saveToFile(HashMap<String, Boolean> userIDMap) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
