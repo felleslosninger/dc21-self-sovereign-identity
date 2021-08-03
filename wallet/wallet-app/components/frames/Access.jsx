@@ -22,7 +22,6 @@ export default function Access() {
     const [text, setText] = useState('');
 
     const dispatch = useDispatch();
-    // const { signedIn } = useSelector((state) => state.signedInStatus);
 
     const isFocused = useIsFocused();
 
@@ -56,9 +55,6 @@ export default function Access() {
 
     const changeText = () => {
         check ? setText('Skriv inn personlig kode') : setText('Opprett personlig kode');
-        // if (check === true) {
-        //     setText('Skriv inn personlig kode');
-        // } else setText('Opprett personlig kode');
     };
 
     isFocused ? checkHasPin() : null;

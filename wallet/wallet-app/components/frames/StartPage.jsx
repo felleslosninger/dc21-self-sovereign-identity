@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
-import { TouchableOpacity, SafeAreaView, Text, StyleSheet, Platform } from 'react-native';
+import { TouchableOpacity, SafeAreaView, Text, StyleSheet } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

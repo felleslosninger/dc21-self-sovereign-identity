@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ConsentButton from '../other/ConsentButton';

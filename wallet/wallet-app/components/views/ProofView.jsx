@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { removeCredential } from '../../redux/CredentialSlice';
 
@@ -15,7 +15,6 @@ import { removeCredential } from '../../redux/CredentialSlice';
  */
 export default function Proof(props) {
     const navigation = useNavigation();
-    // const { cred } = useSelector((state) => state.credentials);
 
     const dispatch = useDispatch(); // To call every reducer that we want
 
@@ -49,7 +48,6 @@ export default function Proof(props) {
             <Button
                 title="Fjern bevis"
                 onPress={() => {
-                    // dispatch(removeCredential(props.id));
                     removeItemValue(props.id);
                 }}
             />
