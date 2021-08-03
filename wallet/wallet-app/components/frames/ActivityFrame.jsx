@@ -6,6 +6,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-ui-lib';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
@@ -87,10 +88,18 @@ export default function ActivityFrame() {
             ) : (
                 <Text>Du har ingen bevis</Text>
             )} */}
-
-            <Text text90 style={{ paddingTop: 40 }}>
-                Skann QR-koden til en tjeneste du ønsker å dele et bevis med:
-            </Text>
+            <View
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                    marginTop: 25,
+                }}>
+                <Icon name="question-circle" size={25} color="rgb(30,46,60)" />
+                <Text text60 style={{ marginLeft: 10 }}>
+                    Skann QR-kode til tjeneste
+                </Text>
+            </View>
 
             <View style={styles.camera}>
                 <BarCodeScanner
