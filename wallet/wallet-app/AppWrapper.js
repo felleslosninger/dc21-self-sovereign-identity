@@ -64,9 +64,9 @@ export default function AppWrapper() {
 
                                 if (route.name === 'Oversikt') {
                                     iconName = 'vcard';
-                                } else if (route.name === 'Forespørsler') {
+                                } else if (route.name === 'Hent bevis') {
                                     iconName = 'plus';
-                                } else if (route.name === 'Aktivitet') {
+                                } else if (route.name === 'Skann QR') {
                                     iconName = 'qrcode';
                                 } else if (route.name === 'Profil') {
                                     iconName = 'id-badge';
@@ -88,8 +88,8 @@ export default function AppWrapper() {
                             },
                         }}>
                         <Tab.Screen style={styles.textNavBar} name="Oversikt" component={OverviewStackScreen} />
-                        <Tab.Screen name="Forespørsler" component={RequestFrame} />
-                        <Tab.Screen name="Aktivitet" component={ActivityFrame} />
+                        <Tab.Screen name="Hent bevis" component={RequestFrame} />
+                        <Tab.Screen name="Skann QR" component={ActivityFrame} />
                         <Tab.Screen name="Profil" component={ProfileMenuSlide} />
                     </Tab.Navigator>
                 </>

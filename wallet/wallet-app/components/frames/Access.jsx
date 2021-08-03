@@ -100,25 +100,27 @@ export default function Access() {
                 }}>
                 <Text
                     style={{
-                        paddingTop: 24,
+                        paddingTop: 10,
                         paddingBottom: 20,
-                        color: '#7B7676',
+                        color: 'rgb(30,46,60)',
                         fontSize: 30,
                     }}>
                     {text}
                 </Text>
 
                 <ReactNativePinView
-                    inputSize={32}
+                    inputSize={10}
                     ref={pinView}
                     pinLength={4}
                     buttonSize={60}
                     onValueChange={(value) => setEnteredPin(value)}
                     buttonAreaStyle={{
-                        marginTop: 24,
+                        marginTop: 10,
+
+                        marginHorizontal: 40,
                     }}
                     inputAreaStyle={{
-                        marginBottom: 15,
+                        marginBottom: 10,
                     }}
                     inputViewEmptyStyle={{
                         backgroundColor: 'transparent',
@@ -131,7 +133,7 @@ export default function Access() {
                     buttonViewStyle={{
                         borderWidth: 1,
                         borderColor: 'rgb(30,46,60)',
-                        backgroundColor: 'rgb(242, 242, 242)',
+                        backgroundColor: 'transparent',
                     }}
                     buttonTextStyle={{
                         color: 'rgb(30,46,60)',
@@ -156,7 +158,8 @@ export default function Access() {
                     }
                 />
             </SafeAreaView>
-            <TouchableOpacity
+            {/*
+             <TouchableOpacity
                 style={{
                     borderRadius: 4,
                     backgroundColor: 'rgb(30,46,60)',
@@ -168,6 +171,7 @@ export default function Access() {
                 onPress={() => AsyncStorage.removeItem('pin') && checkHasPin() && alert('Personlig kode slettet')}>
                 <Text style={{ color: 'white' }}>Slett personlig kode</Text>
             </TouchableOpacity>
+            */}
         </>
     );
 }
