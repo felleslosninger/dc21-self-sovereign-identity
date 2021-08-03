@@ -11,9 +11,6 @@ import java.lang.reflect.Array;
 @Service
 public class VerifyService {
 
-    //private boolean verified = false;
-
-
     public ResponseEntity<String> sendVP(String token) {
         JwtVerifier verifier = new JwtVerifier();
         UserIdHandler uih = new UserIdHandler();
@@ -25,13 +22,8 @@ public class VerifyService {
             }
         }
         return new ResponseEntity<>("token: " + token + ", verified: " + isVerified + ", userID:" + userID, HttpStatus.OK);
-
     }
 
-
-//    public boolean checkVerify() {
-//        return this.verified;
-//    }
 
     public boolean checkVerify(String id) {
         UserIdHandler uih = new UserIdHandler();
