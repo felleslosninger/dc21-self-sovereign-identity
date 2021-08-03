@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-
 import { Card, Button } from 'react-native-ui-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CreateQR from '../other/QRCode';
