@@ -2,15 +2,10 @@
 /* eslint-disable no-alert */
 import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import { Text } from 'react-native-ui-lib';
-
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { NavigationActions } from 'react-navigation';
-import { addCredential } from '../../redux/CredentialSlice';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import Proof from '../views/ProofView';
 
 /**
@@ -18,62 +13,8 @@ import Proof from '../views/ProofView';
  * @returns
  */
 export default function ProofOverviewFrame() {
-    const dispatch = useDispatch(); // To call every reducer that we want. Using dispatch to communicate with state management
     const { cred } = useSelector((state) => state.credentials);
     const navigation = useNavigation();
-
-    const [proofs, setProofs] = useState([]);
-    const [keys, setKeys] = useState([]);
-
-    const isFocused = useIsFocused();
-
-    /**
-     * Adds the keys and the associated information into a list
-     */
-    const getProofs = async () => {
-        try {
-            for (let key = 0; key < keys.length; key++) {
-                const value = await AsyncStorage.getItem(keys[key]);
-                if (value !== null) {
-                    if (!proofs.some((item) => item.id === keys[key])) {
-                        // Makes sure that there are no duplicates
-                        proofs.push({ id: keys[key], proof: value });
-                        dispatch(addCredential(JSON.parse(value)));
-                    }
-                }
-            }
-        } catch (error) {
-            alert(error);
-        }
-    };
-
-    /**
-     * Gets all the keys in AsyncStorage, except for the pin key
-     * Adds the keys into a list
-     */
-    const getKeys = async () => {
-        try {
-            const theKeys = await AsyncStorage.getAllKeys();
-            if (theKeys !== null) {
-                for (let i = 0; i < theKeys.length; i++) {
-                    if (
-                        !keys.includes(theKeys[i]) &&
-                        theKeys[i] !== 'pin' &&
-                        theKeys[i] !== 'baseId' &&
-                        theKeys[i] !== 'privateKey' &&
-                        theKeys[i] !== 'walletID'
-                    ) {
-                        keys.push(theKeys[i]);
-                    }
-                }
-            }
-            getProofs();
-        } catch (error) {
-            alert(error);
-        }
-    };
-
-    isFocused ? getKeys() : null;
 
     function getVcName(item) {
         return Object.values(item.vc.credentialSubject)[0].name;
