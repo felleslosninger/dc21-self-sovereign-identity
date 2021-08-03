@@ -2,14 +2,11 @@
 /* eslint-disable no-alert */
 import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import { Text } from 'react-native-ui-lib';
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { NavigationActions } from 'react-navigation';
 import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../views/ProofView';
 

@@ -33,7 +33,7 @@ export default function Onboarding() {
         })();
     }, []);
 
-    const handleBarCodeScanned = async ({ type, data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         setLoading(true);
         setScanned(true);
         const baseId = jwtDecode(data);

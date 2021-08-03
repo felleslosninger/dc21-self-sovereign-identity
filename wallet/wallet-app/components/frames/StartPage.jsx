@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
-import { TouchableOpacity, SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, Button } from 'react-native-ui-lib';
+import { Button } from 'react-native-ui-lib';
 
 /**
  * The intro page to the app, choose between log in or create a user
