@@ -20,7 +20,7 @@ export default function RequestFrame() {
     const navigation = useNavigation();
     // const [enabled, setEnabled] = useState(false);
     const [selectedIssuer, setSelectedIssuer] = useState('');
-    const [feedback, setFeedback] = useState('');
+    const [feedback, setFeedback] = useState('hentet bevis');
     const [vcType, setVcType] = useState('');
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
@@ -55,7 +55,7 @@ export default function RequestFrame() {
             const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
             if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
-                setFeedback(`hentet ${vcType} bevis`);
+                setFeedback(`hentet bevis`);
                 setSelectedIssuer('');
                 setVcType('');
                 //  navigation.navigate('Oversikt');
@@ -150,7 +150,7 @@ export default function RequestFrame() {
 
             <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
                 <Button
-                    label="Send foresørsel"
+                    label="Hent bevis"
                     backgroundColor="rgb(0,98,184)"
                     onPress={() => {
                         retrieveCredential();
