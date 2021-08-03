@@ -41,6 +41,11 @@ public class JwtVerifier {
     }
 
     //Method for checking Audience
+    /**
+     * Method that checks if audience matches verifier
+     * @param token = the token to verify
+     * @return 
+     */
     private boolean checkAud(String token){
         String audience = "127.0.0.1:3000/api/sendVP";
         DecodedJWT jwt = decodeJwt(token);
@@ -99,6 +104,11 @@ public class JwtVerifier {
         return typeList.contains(jth.getVcType(type));
     }
 
+    /**
+     * Method to get the subject from the token
+     * @param token = the token
+     * @return the subject/userID
+     */
     public String verifySubUser(String token){
         DecodedJWT jwt = decodeJwt(token);
         System.out.println(jwt.getSubject());

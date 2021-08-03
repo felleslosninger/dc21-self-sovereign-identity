@@ -18,10 +18,18 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 
+
+/**
+ * Class that reads and writes userID's from file
+ */
 public class UserIdHandler {
     private Writer file;
 
-    //sjekke at ID finnes, les fra fil
+    /**
+     * Method that checks if userID exists in file
+     * @param id = the id we wish to find
+     * @return a boolean value for if the id exists or not
+     */
     private boolean getUserExists(String id) {
         try {
             File file = new File("src/main/resources/userID.json");
@@ -43,6 +51,10 @@ public class UserIdHandler {
         return false;
     }
 
+    /**
+     * Loads from file the userID and a corresponding boolean value for if the user was verified or not
+     * @return a hashmap mapping userIDs to a boolean value
+     */
     public HashMap<String, Boolean> loadFromFile() {
         try {
             InputStream inputStream = new FileInputStream("src/main/resources/userID.json");
@@ -62,8 +74,10 @@ public class UserIdHandler {
 
     }
 
-    //skrive  til fil
-
+    /**
+     * Saves to file a hashmap that maps userIDs to corresponding boolean values
+     * @param publicKeyMap = the map to save to file
+     */
     private void saveToFile(HashMap<String, Boolean> userIDMap) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -91,14 +105,22 @@ public class UserIdHandler {
         }
     }
 
-    //legg til bruker, userID: false
+    /**
+     * Adds a mapping of a userID with a corresponding boolean value
+     * @param id = the userID
+     * @param verified = boolean value for if the user is verified or not
+     */
     public void addUserId(String id, boolean verified) {
         HashMap<String, Boolean> map = loadFromFile();
         map.put(id, verified);
         saveToFile(map);
     }
 
-    //getIsUserVerified(id) return true/false, kalle i checkVerified
+    /**
+     * Method that checks if a userID is verified or not
+     * @param id = the userID
+     * @return a boolean value that tells if the given userID is verified or not
+     */
     public boolean getIsUserVerified(String id) {
         if (loadFromFile().get(id) == null) {
             return false;

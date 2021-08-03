@@ -35,14 +35,9 @@ public class VerifyController {
         return verifyService.sendVP(token);
     }
 
-    @GetMapping("/api/tester")
-    public String test(@RequestParam String token) {
-        JwtVerifier jwt = new JwtVerifier();
-        return jwt.verifySubUser(token);
-    }
-
     /**
-     * Route that gets if the sent jwt token was verified
+     * Route that gets if the given userID is verified
+     * @param id = userID
      * @return a boolean true if the token was verified, false if not
      */
     @GetMapping("/api/checkVerified")
@@ -50,6 +45,10 @@ public class VerifyController {
         return verifyService.checkVerify(id);
     }
 
+    /**
+     * Route that lets verifier post a userID
+     * @return a response entity which states that the user was added and HttpStatus.OK
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/sendUserID")
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
