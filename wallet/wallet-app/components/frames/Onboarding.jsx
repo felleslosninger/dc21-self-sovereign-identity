@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Platform, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Platform, Button, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { Text } from 'react-native-ui-lib';
+import SafeAreaView from 'react-native-safe-area-view';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { generateKeys } from '../../utils/sign';
 import Access from './Access';
@@ -52,12 +55,19 @@ export default function Onboarding() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {!scanned ? (
-                <View>
-                    <Text style={styles.instructionText}>1. Gå inn på grunnidportalen.no</Text>
-                    <Text style={styles.instructionText}>2. Logg inn med id-porten</Text>
-                    <Text style={styles.instructionText}>3. Skann deretter QR-koden</Text>
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'nowrap',
+                        marginTop: 25,
+                    }}>
+                    <Icon name="question-circle" size={25} color="rgb(30,46,60)" />
+                    <Text text60 style={{ marginLeft: 10 }}>
+                        Skann din QR-kode fra ID-porten
+                    </Text>
                 </View>
             ) : null}
             {!scanned && !verified ? (
@@ -82,19 +92,21 @@ export default function Onboarding() {
                     </TouchableOpacity>
                 </View>
             ) : null}
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     camera: {
         flex: 1,
-        marginTop: 80,
-        marginBottom: 80,
+        marginTop: 30,
+        marginBottom: 50,
         alignItems: 'center',
     },
     container: {
         flex: 1,
+        width: '80%',
+        alignSelf: 'center',
     },
     button: {
         borderRadius: 4,

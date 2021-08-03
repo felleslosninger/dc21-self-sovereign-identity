@@ -90,10 +90,10 @@ export default function ProofOverviewFrame() {
                 name="plus"
                 size={60}
                 color="rgb(30,46,60)"
-                onPress={() => navigation.navigate('Forespørsler')}
+                onPress={() => navigation.navigate('Hent bevis')}
             />
             <Text
-                onPress={() => navigation.navigate('Forespørsler')}
+                onPress={() => navigation.navigate('Hent bevis')}
                 text90
                 color="rgb(30,46,60)"
                 style={{ paddingVertical: 10 }}>

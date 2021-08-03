@@ -7,7 +7,6 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
-import { useNavigation } from '@react-navigation/native';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -17,7 +16,6 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
 
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('');
@@ -37,6 +35,7 @@ export default function RequestFrame() {
     useEffect(() => {
         async function fetchTypes() {
             const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
+            setVcType('');
             setIssuerTypes(types);
         }
         fetchTypes();
@@ -55,7 +54,9 @@ export default function RequestFrame() {
             dispatch(addCredential(retrievedCredential));
             if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
                 setFeedback(`hentet ${vcType} bevis`);
-                navigation.navigate('Oversikt');
+                setSelectedIssuer('');
+                setVcType('');
+                //  navigation.navigate('Oversikt');
             } else {
                 setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
             }
@@ -101,26 +102,26 @@ export default function RequestFrame() {
                     ))}
                 </Picker>
             </SafeAreaView>
-            {selectedIssuer ? (
-                <SafeAreaView style={styles.issuer}>
-                    <Picker
-                        placeholder="Velg type bevis"
-                        floatingPlaceholder
-                        value={{ value: vcType, label: vcType }}
-                        enableModalBlur={false}
-                        onChange={(item) => setVcType(item.value)}
-                        topBarProps={{ title: 'Type bevis' }}
-                        showSearch
-                        searchPlaceholder="Søk etter bevis"
-                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                        // onSearchChange={value => console.warn('value', value)}
-                    >
-                        {issuerTypes.length > 0
-                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
-                            : null}
-                    </Picker>
-                </SafeAreaView>
-            ) : null}
+
+            <SafeAreaView style={styles.issuer}>
+                <Picker
+                    placeholder="Velg type bevis"
+                    floatingPlaceholder
+                    value={{ value: vcType, label: vcType }}
+                    enableModalBlur={false}
+                    onChange={(item) => setVcType(item.value)}
+                    topBarProps={{ title: 'Type bevis' }}
+                    showSearch
+                    disabled={issuerTypes.length === 0}
+                    searchPlaceholder="Søk etter bevis"
+                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
+                    // onSearchChange={value => console.warn('value', value)}
+                >
+                    {issuerTypes.length > 0
+                        ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                        : null}
+                </Picker>
+            </SafeAreaView>
 
             <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
                 <Button
@@ -129,6 +130,7 @@ export default function RequestFrame() {
                     onPress={() => {
                         retrieveCredential();
                     }}
+                    disabled={vcType === ''}
                 />
             </View>
 
