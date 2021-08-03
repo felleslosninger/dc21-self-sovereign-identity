@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, Button, StyleSheet, Alert } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
 import { useNavigation } from '@react-navigation/native';
+import { Text } from 'react-native-ui-lib';
 import { addCredentialShare } from '../../redux/CredentialShareSlice';
 import { httpSendPresentation } from '../../utils/httpRequests';
 import createVerifiablePresentationJWT from '../../utils/sign';
-
 
 /**
  * A frame with a botton to send proof to a verifier if you choose to share
@@ -20,24 +20,25 @@ export default function ActivityFrame() {
     const [scanned, setScanned] = useState(false);
     const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
-   
+
     async function sendPresentation(creds, audience, user) {
         const jwtCreds = creds.map((c) => c.token);
         const token = await createVerifiablePresentationJWT(jwtCreds, audience, user);
         const verified = await httpSendPresentation(token);
         if (verified) {
-            alert("Bevis sendt");
+            alert('Bevis sendt');
             creds.map((c) =>
-            dispatch(
-                addCredentialShare({
-                    id: Math.random().toString(),
-                    credential_id: c.jti,
-                    verifier: audience,
-                })
-            )
-        ) } else {
-            alert("Bevis ble ikke sendt")
-        };
+                dispatch(
+                    addCredentialShare({
+                        id: Math.random().toString(),
+                        credential_id: c.jti,
+                        verifier: audience,
+                    })
+                )
+            );
+        } else {
+            alert('Bevis ble ikke sendt');
+        }
         setStatus(verified);
         return verified;
     }
@@ -55,14 +56,18 @@ export default function ActivityFrame() {
             }
         }
 
-        Alert.alert('TJENESTE SPØR OM BEVIS', `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`, [
-            {
-                text: 'Ikke godkjenn',
-                onPress: () => navigation.navigate('Oversikt'),
-                style: 'cancel',
-            },
-            { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) },
-        ]);
+        Alert.alert(
+            'TJENESTE SPØR OM BEVIS',
+            `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`,
+            [
+                {
+                    text: 'Ikke godkjenn',
+                    onPress: () => navigation.navigate('Oversikt'),
+                    style: 'cancel',
+                },
+                { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) },
+            ]
+        );
     };
 
     return (
@@ -82,9 +87,11 @@ export default function ActivityFrame() {
             ) : (
                 <Text>Du har ingen bevis</Text>
             )} */}
-            <View>
-                <Text style = {styles.instructionText}>Skann QR-koden til en tjeneste du ønsker å dele et bevis med:</Text>
-            </View>
+
+            <Text text90 style={{ paddingTop: 40 }}>
+                Skann QR-koden til en tjeneste du ønsker å dele et bevis med:
+            </Text>
+
             <View style={styles.camera}>
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -98,7 +105,6 @@ export default function ActivityFrame() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: '10%',
         width: '80%',
         alignSelf: 'center',
     },
@@ -120,8 +126,8 @@ const styles = StyleSheet.create({
     },
     camera: {
         flex: 1,
-        marginTop: 80,
-        marginBottom: 80,
+        marginTop: 30,
+        marginBottom: 50,
         alignItems: 'center',
     },
     instructionText: {

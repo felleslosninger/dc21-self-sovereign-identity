@@ -80,7 +80,7 @@ export default function RequestFrame() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text text40 style={{ paddingBottom: 30 }}>
+            <Text text40 style={{ paddingBottom: 30, paddingTop: 20 }}>
                 Forespør et nytt bevis
             </Text>
             <SafeAreaView>

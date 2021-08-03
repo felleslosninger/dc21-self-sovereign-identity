@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-alert */
 import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { Text } from 'react-native-ui-lib';
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { NavigationActions } from 'react-navigation';
 import { addCredential } from '../../redux/CredentialSlice';
 import Proof from '../views/ProofView';
 
@@ -15,6 +20,7 @@ import Proof from '../views/ProofView';
 export default function ProofOverviewFrame() {
     const dispatch = useDispatch(); // To call every reducer that we want. Using dispatch to communicate with state management
     const { cred } = useSelector((state) => state.credentials);
+    const navigation = useNavigation();
 
     const [proofs, setProofs] = useState([]);
     const [keys, setKeys] = useState([]);
@@ -73,7 +79,28 @@ export default function ProofOverviewFrame() {
         return Object.values(item.vc.credentialSubject)[0].name;
     }
 
-    return (
+    return cred.length === 0 ? (
+        <SafeAreaView style={styles.container}>
+            <Text text40 color="rgb(30,46,60)" style={{ paddingVertical: 10, paddingBottom: 230 }}>
+                Du har ingen bevis.
+            </Text>
+
+            <Icon
+                style={{ paddingTop: 8, alignItems: 'center', justifyContent: 'center' }}
+                name="plus"
+                size={60}
+                color="rgb(30,46,60)"
+                onPress={() => navigation.navigate('Forespørsler')}
+            />
+            <Text
+                onPress={() => navigation.navigate('Forespørsler')}
+                text90
+                color="rgb(30,46,60)"
+                style={{ paddingVertical: 10 }}>
+                Legg til bevis
+            </Text>
+        </SafeAreaView>
+    ) : (
         <SafeAreaView>
             <FlatList
                 marginTop={25}
@@ -95,10 +122,6 @@ export default function ProofOverviewFrame() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: '5%',
-    },
     theProofs: {
         backgroundColor: 'lightgrey',
         padding: 10,
@@ -121,5 +144,12 @@ const styles = StyleSheet.create({
         width: 75,
         alignSelf: 'flex-end',
         right: 5,
+    },
+    container: {
+        width: '80%',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 80,
     },
 });

@@ -44,10 +44,9 @@ export default function VerifierLogFrame({ route }) {
         <SafeAreaView>
             <Card style={{ margin: 25 }}>
                 <Card.Section
-                    content={[{ text: route.params.props.name, text50: true, grey10: true }]}
+                    content={[{ text: route.params.props.name, text40: true, grey10: true }]}
                     style={{ padding: 30, paddingBottom: 10 }}
                 />
-
                 <Card.Section
                     content={[
                         { text: `Utstedt av: ${route.params.props.issuer}`, text100: true, grey40: true },
@@ -63,21 +62,35 @@ export default function VerifierLogFrame({ route }) {
                     ]}
                     style={{ padding: 30, paddingTop: 0, paddingBottom: 0 }}
                 />
-
+                {shared.filter((share) => share.credential_id === route.params.props.id) ? (
+                    <Card.Section
+                        content={[
+                            {
+                                text: 'Beviset er ikke delt',
+                                text80: true,
+                                grey30: true,
+                            },
+                        ]}
+                        style={{ padding: 30, paddingTop: 10, paddingBottom: 0 }}
+                    />
+                ) : (
+                    <Card.Section
+                        content={[
+                            {
+                                text: `Beviset er delt med: ${shared
+                                    .filter((share) => share.credential_id === route.params.props.id)
+                                    .map((share) => share.verifier)}`,
+                                text80: true,
+                                grey30: true,
+                            },
+                        ]}
+                        style={{ padding: 30, paddingTop: 10, paddingBottom: 0 }}
+                    />
+                )}
                 <Card.Section
-                    content={[
-                        {
-                            text: `Beviset er delt med: ${shared
-                                .filter((share) => share.credential_id === route.params.props.id)
-                                .map((share) => share.verifier)}`,
-                            text100: true,
-                            grey40: true,
-                        },
-                        { text: 'Del beviset med QR-kode: ', text100: true, grey40: true },
-                    ]}
-                    style={{ padding: 30, paddingTop: 10 }}
+                    content={[{ text: 'Del beviset med QR-kode: ', text80: true, grey30: true }]}
+                    style={{ padding: 30, paddingTop: 10, paddingBottom: 5 }}
                 />
-
                 <View style={{ alignSelf: 'center', paddingBottom: 20 }}>
                     <CreateQR content={route.params.props.name} />
                     <Button
@@ -85,7 +98,7 @@ export default function VerifierLogFrame({ route }) {
                         color="rgb(194,19,44)"
                         backgroundColor="white"
                         size={Button.sizes.small}
-                        style={{ marginTop: 175 }}
+                        style={{ marginTop: 150 }}
                         onPress={() => {
                             // dispatch(removeCredential(props.id));
                             removeItemValue(route.params.props.id);
@@ -94,11 +107,9 @@ export default function VerifierLogFrame({ route }) {
                         text90
                     />
                 </View>
-
                 {/* 
            <CreateQR style={{ margin: 25 }} content={route.params.props.name} />
            */}
-
                 {/*  <Text style={styles.shared}>Du har delt beviset {route.params.props.name} med disse tjenestene.</Text>
             {shared
                 .filter((share) => share.credential_id === route.params.props.id)

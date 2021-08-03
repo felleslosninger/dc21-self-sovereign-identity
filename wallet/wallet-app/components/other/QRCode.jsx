@@ -13,7 +13,7 @@ export default function CreateQR(props) {
     return (
         <QRCode
             value={qrvalue || 'NA'} // content to the QR code
-            size={250}
+            size={260}
             color="#1e2b3c"
             backgroundColor="white"
             // eslint-disable-next-line global-require
