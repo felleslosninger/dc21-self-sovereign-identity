@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Platform, Button, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, Button, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +20,7 @@ export default function Onboarding() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [verified, setVerified] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -30,6 +31,7 @@ export default function Onboarding() {
     }, []);
 
     const handleBarCodeScanned = async ({ type, data }) => {
+        setLoading(true);
         setScanned(true);
         // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
 
@@ -41,6 +43,7 @@ export default function Onboarding() {
             generateKeys();
             setVerified(true);
         }
+        setLoading(false);
     };
 
     if (hasPermission === null) {
@@ -51,7 +54,15 @@ export default function Onboarding() {
         return <Access />;
     }
 
-    return (
+    return loading ? (
+        <View
+            style={{
+                flex: 1,
+                justifyContent: 'center',
+            }}>
+            <ActivityIndicator size="large" color="rgb(0,98,184)" />
+        </View>
+    ) : (
         <View style={styles.container}>
             {!scanned ? (
                 <View>
@@ -66,7 +77,7 @@ export default function Onboarding() {
                         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                         style={StyleSheet.absoluteFillObject}
                     />
-                    {scanned && <Button title="Tap to Scan Again" onPress={() => setScanned(false)} />}
+                    {scanned && <Button title="Trykk for å skanne igjen" onPress={() => setScanned(false)} />}
                 </View>
             ) : null}
 
