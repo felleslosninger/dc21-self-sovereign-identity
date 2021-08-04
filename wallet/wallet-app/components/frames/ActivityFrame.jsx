@@ -16,8 +16,9 @@ import createVerifiablePresentationJWT from '../../utils/sign';
  */
 export default function ActivityFrame() {
     const [status, setStatus] = useState(false);
-    const dispatch = useDispatch();
     const [scanned, setScanned] = useState(false);
+
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
 
@@ -48,27 +49,45 @@ export default function ActivityFrame() {
         setScanned(true);
         const verifier = data.split('|')[0];
         const vc = data.split('|')[1];
+
         const userID = data.split('|')[2];
         console.log(userID);
         let proof = '';
         for (let i = 0; i < cred.length; i++) {
-            if (cred[i].vc.credentialSubject.age.type === vc) {
-                proof = cred[i];
+            try {
+                if (cred[i].vc.credentialSubject.age.type === vc) {
+                    proof = cred[i];
+                    break;
+                }
+            } catch (error) {
+                proof = '';
             }
         }
 
-        Alert.alert(
-            'TJENESTE SPØR OM BEVIS',
-            `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`,
-            [
+        if (proof === '') {
+            Alert.alert('Mangler bevis', `Du har ikke beviset som tjenesten spør om: ${vc}`, [
                 {
-                    text: 'Ikke godkjenn',
-                    onPress: () => navigation.navigate('Oversikt') && setScanned(false),
-                    style: 'cancel',
+                    text: 'Ok',
+                    onPress: () => setScanned(false),
                 },
-                { text: 'Godkjenn', onPress: () => sendPresentation([proof], verifier, userID) && setScanned(false) },
-            ]
-        );
+            ]);
+        } else {
+            Alert.alert(
+                'TJENESTE SPØR OM BEVIS',
+                `Vil du godkjenne at beviset ${vc} blir sendt til tjeneste ${verifier}?`,
+                [
+                    {
+                        text: 'Ikke godkjenn',
+                        onPress: () => setScanned(false),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Godkjenn',
+                        onPress: () => sendPresentation([proof], verifier, userID) && setScanned(false),
+                    },
+                ]
+            );
+        }
     };
 
     return (
