@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, Vibration } from 'react-native';
+import { SafeAreaView, StatusBar, Text, Vibration } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,7 +22,6 @@ export default function Access() {
     const [text, setText] = useState('');
 
     const dispatch = useDispatch();
-    // const { signedIn } = useSelector((state) => state.signedInStatus);
 
     const isFocused = useIsFocused();
 
@@ -159,22 +158,6 @@ export default function Access() {
                     }
                 />
             </SafeAreaView>
-            {/*
-             <TouchableOpacity
-                style={{
-                    borderRadius: 4,
-                    backgroundColor: 'rgb(30,46,60)',
-                    alignItems: 'center',
-                    width: 150,
-                    marginBottom: 10,
-                    marginLeft: 10,
-                }}
-                onPress={() => AsyncStorage.removeItem('pin') && checkHasPin() && alert('Personlig kode slettet')}>
-                <Text style={{ color: 'white' }}>Slett personlig kode</Text>
-            </TouchableOpacity>
-            */}
         </>
     );
 }
-
-// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE VI GLEMMER KODEN VÅR, ELLER NOE LIGNENDE

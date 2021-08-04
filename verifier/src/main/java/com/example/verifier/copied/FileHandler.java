@@ -137,13 +137,6 @@ public class FileHandler {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         KeyPairGenerator kpg1 = KeyPairGenerator.getInstance("RSA");
-        /*
-        HashMap<String, PublicKey> map = new HashMap<>();
-        map.put("id1", kpg1.generateKeyPair().getPublic());
-        map.put("id2", kpg1.generateKeyPair().getPublic());
-
-         */
-
         FileHandler fh = new FileHandler();
         HashMap<String, PublicKey> map;
         map =  fh.loadFromFile();

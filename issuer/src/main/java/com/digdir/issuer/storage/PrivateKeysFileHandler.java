@@ -58,7 +58,6 @@ public class PrivateKeysFileHandler {
 
         HashMap<String, String> map = new HashMap<>();
         privateKeyHashMap.forEach((key, value) -> map.put(key, Base64.getEncoder().encodeToString(value.getEncoded())));
-        //publicKeyMap.forEach((key, value) -> map.put(key, value.getEncoded()));
 
         String javaObjectString = gson.toJson(map); // converts to json
 
@@ -95,7 +94,6 @@ public class PrivateKeysFileHandler {
             HashMap<String, PrivateKey> privateKeyMap = new HashMap<>();
             mapFromFile.forEach((key, value) -> {
                 try {
-                    //publicKeyMap.put(key, KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(value.getBytes(StandardCharsets.UTF_8))));
                     privateKeyMap.put(key, KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec((Base64.getDecoder().decode(value)))));
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
                     System.out.println("Problem in Filehandler. Cant load from file. ");

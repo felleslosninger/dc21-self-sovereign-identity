@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import { Button, Text } from 'react-native-ui-lib';
-import { func } from 'prop-types';
 import { signIn } from '../../redux/SignedInSlice';
 import { getWalletID } from '../../utils/sign';
 
@@ -65,13 +64,6 @@ export default function ProfileMenuSlide() {
             ]);
         } else {
             alert('VARSEL: Brukeren din vil nå bli slettet!');
-            /*
-            const attemptedPin = prompt('Oppgi PIN-kode for å slette bruker:');
-            const actualPin = await AsyncStorage.getItem('pin');
-            if (attemptedPin === actualPin) {
-                deleteUserPressed();
-            }
-            */
             deleteUserPressed();
         }
     };
