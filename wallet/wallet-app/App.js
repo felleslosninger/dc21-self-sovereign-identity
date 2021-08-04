@@ -1,29 +1,15 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { Colors } from 'react-native-ui-lib';
+import { Provider, useSelector } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 import store from './redux/configureStore';
 import AppWrapper from './AppWrapper';
 
-Colors.loadSchemes({
-    light: {
-        screenBG: 'transparent',
-        textColor: Colors.yellow10,
-        moonOrSun: Colors.yellow30,
-        mountainForeground: Colors.green30,
-        mountainBackground: Colors.green50,
-    },
-    dark: {
-        screenBG: Colors.grey10,
-        textColor: Colors.yellow10,
-        moonOrSun: Colors.grey80,
-        mountainForeground: Colors.violet10,
-        mountainBackground: Colors.violet20,
-    },
-});
-
 export default function App() {
+    const { active } = useSelector((state) => state.spinnerStatus);
+
     return (
         <Provider store={store}>
+            <Spinner visible={active} textContent="Vent litt..." textStyle={{ color: '#FFF' }} />
             <AppWrapper />
         </Provider>
     );

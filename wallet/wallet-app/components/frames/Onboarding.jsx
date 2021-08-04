@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-ui-lib';
 import SafeAreaView from 'react-native-safe-area-view';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useDispatch } from 'react-redux';
 import { generateKeys } from '../../utils/sign';
 import Access from './Access';
+import { activateSpinner, deactivateSpinner } from '../../redux/SpinnerSlice';
 
 export async function skipOnboarding() {
     const exampleBaseVc =
@@ -23,8 +24,8 @@ export default function Onboarding() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [verified, setVerified] = useState(false);
-    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
@@ -34,7 +35,7 @@ export default function Onboarding() {
     }, []);
 
     const handleBarCodeScanned = async ({ type, data }) => {
-        setLoading(true);
+        dispatch(activateSpinner(true));
         setScanned(true);
         // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
 
@@ -46,7 +47,7 @@ export default function Onboarding() {
             generateKeys();
             setVerified(true);
         }
-        setLoading(false);
+        dispatch(deactivateSpinner(true));
     };
 
     if (hasPermission === null) {
@@ -57,15 +58,7 @@ export default function Onboarding() {
         return <Access />;
     }
 
-    return loading ? (
-        <View
-            style={{
-                flex: 1,
-                justifyContent: 'center',
-            }}>
-            <ActivityIndicator size="large" color="rgb(0,98,184)" />
-        </View>
-    ) : (
+    return (
         <SafeAreaView style={styles.container}>
             {!scanned ? (
                 <View
