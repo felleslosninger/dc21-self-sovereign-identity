@@ -16,7 +16,6 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-    // const [enabled, setEnabled] = useState(false);
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('hentet bevis');
     const [vcType, setVcType] = useState('');
@@ -57,7 +56,6 @@ export default function RequestFrame() {
                 setFeedback(`hentet bevis`);
                 setSelectedIssuer('');
                 setVcType('');
-                //  navigation.navigate('Oversikt');
             } else {
                 setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
             }
@@ -107,10 +105,7 @@ export default function RequestFrame() {
                     topBarProps={{ title: 'Utstedere' }}
                     showSearch
                     searchPlaceholder="Søk etter utsteder"
-                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-
-                    // onSearchChange={value => console.warn('value', value)}
-                >
+                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
                     {availableIssuers.map((i) => (
                         <Picker.Item key={i} label={i} value={i} />
                     ))}
@@ -128,9 +123,7 @@ export default function RequestFrame() {
                         topBarProps={{ title: 'Type bevis' }}
                         showSearch
                         searchPlaceholder="Søk etter bevis"
-                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                        // onSearchChange={value => console.warn('value', value)}
-                    >
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
                         {issuerTypes.length > 0
                             ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
                             : null}
@@ -147,9 +140,7 @@ export default function RequestFrame() {
                         topBarProps={{ title: 'Type bevis' }}
                         showSearch
                         searchPlaceholder="Søk etter bevis"
-                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                        // onSearchChange={value => console.warn('value', value)}
-                    >
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
                         {issuerTypes.length > 0
                             ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
                             : null}
@@ -167,12 +158,6 @@ export default function RequestFrame() {
                     disabled={vcType === ''}
                 />
             </View>
-
-            {/** <SafeAreaView style={styles.credential}>
-                <Text style={styles.buttonText}>{feedback}</Text>
-            </SafeAreaView>
-          * 
-         */}
         </ScrollView>
     );
 }

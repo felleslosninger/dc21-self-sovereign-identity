@@ -19,7 +19,6 @@ export async function generateKeys() {
 
 export async function getWalletID() {
     const id = await AsyncStorage.getItem('walletID');
-    console.log(id);
     return id;
 }
 /**
@@ -47,7 +46,6 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
         alg: 'RS256',
         typ: 'JWT',
     };
-    
 
     // Create the payload using the provided parameters
     const payload = {
