@@ -13,7 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import RequestFrame from './components/frames/RequestFrame';
-import ActivityFrame from './components/frames/ActivityFrame';
+import VerifyFrame from './components/frames/VerifyFrame';
 import ProofOverviewFrame from './components/frames/ProofOverviewFrame';
 import VerifierLogFrame from './components/frames/VerifierLogFrame';
 import Access from './components/frames/Access';
@@ -89,7 +89,7 @@ export default function AppWrapper() {
                         }}>
                         <Tab.Screen style={styles.textNavBar} name="Oversikt" component={OverviewStackScreen} />
                         <Tab.Screen name="Hent bevis" component={RequestFrame} />
-                        <Tab.Screen name="Skann QR" component={ActivityFrame} />
+                        <Tab.Screen name="Skann QR" component={VerifyFrame} />
                         <Tab.Screen name="Profil" component={ProfileMenuSlide} />
                     </Tab.Navigator>
                 </>

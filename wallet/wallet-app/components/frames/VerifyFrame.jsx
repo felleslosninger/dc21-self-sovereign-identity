@@ -14,7 +14,7 @@ import createVerifiablePresentationJWT from '../../utils/sign';
  * A frame with a botton to send proof to a verifier if you choose to share
  * @returns A frame, sending the proof
  */
-export default function ActivityFrame() {
+export default function VerifyFrame() {
     const [status, setStatus] = useState(false);
     const dispatch = useDispatch();
     const [scanned, setScanned] = useState(false);
