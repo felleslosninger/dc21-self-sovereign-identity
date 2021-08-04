@@ -58,13 +58,22 @@ export default function VerifierLogFrame({ route }) {
                     ]}
                     style={{ padding: 30, paddingTop: 0, paddingBottom: 0 }}
                 />
+
+                <Card.Section
+                    content={[{ text: 'Del med QR-kode: ', text70: true, grey40: true }]}
+                    style={{ padding: 30, paddingTop: 50, paddingBottom: 10 }}
+                />
+                <Card style={{ alignSelf: 'center', marginBottom: 20 }}>
+                    <CreateQR content={route.params.props.name} />
+                </Card>
+
                 {shared.filter((share) => share.credential_id === route.params.props.id) ? (
                     <Card.Section
                         content={[
                             {
                                 text: 'Beviset er ikke delt',
-                                text80: true,
-                                grey30: true,
+                                text100: true,
+                                grey40: true,
                             },
                         ]}
                         style={{ padding: 30, paddingTop: 10, paddingBottom: 0 }}
@@ -76,32 +85,27 @@ export default function VerifierLogFrame({ route }) {
                                 text: `Beviset er delt med: ${shared
                                     .filter((share) => share.credential_id === route.params.props.id)
                                     .map((share) => share.verifier)}`,
-                                text80: true,
-                                grey30: true,
+                                text100: true,
+                                grey40: true,
                             },
                         ]}
                         style={{ padding: 30, paddingTop: 10, paddingBottom: 0 }}
                     />
                 )}
-                <Card.Section
-                    content={[{ text: 'Del beviset med QR-kode: ', text80: true, grey30: true }]}
-                    style={{ padding: 30, paddingTop: 10, paddingBottom: 5 }}
+
+                <Button
+                    label="Slett bevis"
+                    color="rgb(194,19,44)"
+                    backgroundColor="white"
+                    size={Button.sizes.small}
+                    style={{ marginTop: 100, marginBottom: 15 }}
+                    onPress={() => {
+                        // dispatch(removeCredential(props.id));
+                        removeItemValue(route.params.props.id);
+                        navigation.navigate('Oversikt');
+                    }}
+                    text90
                 />
-                <View style={{ alignSelf: 'center', paddingBottom: 20 }}>
-                    <CreateQR content={route.params.props.name} />
-                    <Button
-                        label="Slett bevis"
-                        color="rgb(194,19,44)"
-                        backgroundColor="white"
-                        size={Button.sizes.small}
-                        style={{ marginTop: 150 }}
-                        onPress={() => {
-                            removeItemValue(route.params.props.id);
-                            navigation.navigate('Oversikt');
-                        }}
-                        text90
-                    />
-                </View>
             </Card>
         </SafeAreaView>
     );
