@@ -11,16 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class SpringbootVerifierApp {
 
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootVerifierApp.class, args);
 	}
-
-
-
-
-
 
 }
             

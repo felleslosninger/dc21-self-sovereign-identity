@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 const host = '192.168.137.191';
 
 const issuerUrl = `http://${host}:8083/`;
@@ -6,34 +7,11 @@ const vdrUrl = `http://${host}:8083/vdr`;
 
 export async function httpGetCredential(vcType, baseVC, issuer) {
     const url = `${issuerUrl}api/getVC/`;
-    const response = await fetch(`${url}?type=${vcType}&baseVC=${baseVC}&issuer=${issuer}`); // , requestOptions);
+    const response = await fetch(`${url}?type=${vcType}&baseVC=${baseVC}&issuer=${issuer}`);
     const payload = await response.text();
 
     return payload;
 }
-
-// Utdatert
-/*
-export async function httpSendCredential(token) {
-    const url = `${verifierUrl}/sendCredential`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: token,
-        });
-        if (response.ok) {
-            return true;
-        }
-        return false;
-    } catch (error) {
-        // eslint-disable-next-line no-alert
-        alert('Noe gikk galt...');
-        return false;
-    }
-}
-*/
-
 
 export async function httpSendPresentation(token) {
     const url = `${verifierUrl}sendVP`;
@@ -48,7 +26,6 @@ export async function httpSendPresentation(token) {
         }
         return false;
     } catch (error) {
-        // eslint-disable-next-line no-alert
         alert('Noe gikk galt med presentation');
         return false;
     }
@@ -82,7 +59,6 @@ export async function httpPostPublicKey(id, key) {
         }
         return false;
     } catch (error) {
-        // eslint-disable-next-line no-alert
         alert('Noe gikk galt med public key');
         return false;
     }

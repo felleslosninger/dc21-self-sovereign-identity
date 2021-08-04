@@ -1,11 +1,6 @@
 package com.digdir.issuer.controller;
 
 import com.digdir.issuer.service.VcService;
-import net.glxn.qrgen.core.image.ImageType;
-import net.glxn.qrgen.javase.QRCode;
-import org.apache.commons.io.IOUtils;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,15 +8,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 
 /**
  * Controller for BaseVC-operations
@@ -47,12 +35,6 @@ public class BaseIDController {
         String QR_TEXT = vcService.getBaseVC(principal);
         byte[] qrImage = vcService.generateByteArray(QR_TEXT);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrImage);
-  /*
-    public String getProtectedPage(@AuthenticationPrincipal OidcUser principal, Model model) throws Exception {
-        System.out.println(principal.getIdToken().getTokenValue());
-        return vcService.getBaseVC(principal);
-    }
-    */
     }
 
 }

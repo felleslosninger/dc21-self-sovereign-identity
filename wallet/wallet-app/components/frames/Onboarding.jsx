@@ -33,11 +33,9 @@ export default function Onboarding() {
         })();
     }, []);
 
-    const handleBarCodeScanned = async ({ type, data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         setLoading(true);
         setScanned(true);
-        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-
         const baseId = jwtDecode(data);
         const types = baseId.vc.type;
 

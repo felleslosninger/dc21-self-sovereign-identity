@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, Button, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import jwtDecode from 'jwt-decode';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -45,7 +44,7 @@ export default function ActivityFrame() {
         return verified;
     }
 
-    const handleBarCodeScanned = async ({ type, data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         setScanned(true);
         const verifier = data.split('|')[0];
         const vc = data.split('|')[1];
@@ -74,21 +73,6 @@ export default function ActivityFrame() {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* {cred.length > 0 ? (
-                cred.map((credential) => (
-                    <View>
-                        <Button
-                            title={`Send bevis ${credential.type} til tjeneste X`}
-                            color="#f1940f"
-                            onPress={() => sendPresentation([credential], verifier, userID)}
-                        />
-
-                        <Text>Du har {status ? 'nå' : 'ikke'} delt beviset</Text>
-                    </View>
-                ))
-            ) : (
-                <Text>Du har ingen bevis</Text>
-            )} */}
             <View
                 style={{
                     display: 'flex',
@@ -99,7 +83,6 @@ export default function ActivityFrame() {
                 <Icon name="question-circle" size={25} color="rgb(30,46,60)" />
                 <Text text60 style={{ marginLeft: 10 }}>
                     Skann QR-kode til tjeneste
-
                 </Text>
             </View>
 
