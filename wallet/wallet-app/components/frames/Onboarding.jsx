@@ -7,10 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-ui-lib';
 import SafeAreaView from 'react-native-safe-area-view';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { generateKeys } from '../../utils/sign';
 import Access from './Access';
-import { activateSpinner, deactivateSpinner } from '../../redux/SpinnerSlice';
+import { activateSpinner } from '../../redux/SpinnerSlice';
 
 export async function skipOnboarding() {
     const exampleBaseVc =
@@ -26,6 +27,8 @@ export default function Onboarding() {
     const [verified, setVerified] = useState(false);
     const navigation = useNavigation();
     const dispatch = useDispatch();
+
+    const { active } = useSelector((state) => state.spinnerStatus);
 
     useEffect(() => {
         (async () => {
@@ -44,10 +47,10 @@ export default function Onboarding() {
 
         if (types.includes('BaseCredential')) {
             await AsyncStorage.setItem('baseId', data);
-            generateKeys();
+            await generateKeys();
             setVerified(true);
         }
-        dispatch(deactivateSpinner(true));
+        dispatch(activateSpinner(false));
     };
 
     if (hasPermission === null) {
@@ -60,6 +63,13 @@ export default function Onboarding() {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={active}
+                textContent="Vent litt..."
+                textStyle={{ color: 'rgb(30,46,60)' }}
+                color="rgb(0,98, 184)"
+                overlayColor="rgba(0,0,0,0.1)"
+            />
             {!scanned ? (
                 <View
                     style={{
@@ -84,18 +94,7 @@ export default function Onboarding() {
                 </View>
             ) : null}
 
-            {scanned && verified ? (
-                <View style={styles.done}>
-                    <Text style={styles.verifiedText}>
-                        Grunnidentitet verifisert
-                        <Icon name="check" size={25} color="rgb(0,98,184)" />
-                    </Text>
-
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
-                        <Text style={styles.text}>Fortsett registrering</Text>
-                    </TouchableOpacity>
-                </View>
-            ) : null}
+            {scanned && verified ? navigation.navigate('Adgangskontroll') : null}
         </SafeAreaView>
     );
 }

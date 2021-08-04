@@ -7,7 +7,6 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
-import { useNavigation } from '@react-navigation/native';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -17,13 +16,13 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     // const [enabled, setEnabled] = useState(false);
     const [selectedIssuer, setSelectedIssuer] = useState('');
     const [feedback, setFeedback] = useState('hentet bevis');
     const [vcType, setVcType] = useState('');
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
+    // const { active } = useSelector((state) => state.spinnerStatus);
 
     async function getAllIssuers() {
         setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
@@ -48,7 +47,7 @@ export default function RequestFrame() {
      */
     async function retrieveCredential() {
         const baseVC = await AsyncStorage.getItem('baseId');
-
+        //   dispatch(activateSpinner(true));
         const response = await httpGetCredential(vcType, baseVC, selectedIssuer);
         try {
             const decode = jwtDecode(response);
@@ -68,6 +67,7 @@ export default function RequestFrame() {
             setFeedback(response);
         } finally {
             alert(feedback);
+            //     dispatch(activateSpinner(false));
         }
     }
 
@@ -85,6 +85,15 @@ export default function RequestFrame() {
 
     return (
         <ScrollView style={styles.container}>
+            {/*
+          <Spinner
+                visible={active}
+                textContent="Vent litt..."
+                textStyle={{ color: 'rgb(30,46,60)' }}
+                color="rgb(0,98, 184)"
+                overlayColor="rgba(0,0,0,0.1)"
+            />
+          */}
             <Text text40 style={{ paddingBottom: 30, paddingTop: 20 }}>
                 Forespør et nytt bevis
             </Text>

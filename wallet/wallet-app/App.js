@@ -1,15 +1,13 @@
 import React from 'react';
-import { Provider, useSelector } from 'react-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
+import { Provider } from 'react-redux';
+import { LogBox } from 'react-native';
 import store from './redux/configureStore';
 import AppWrapper from './AppWrapper';
 
 export default function App() {
-    const { active } = useSelector((state) => state.spinnerStatus);
-
+    LogBox.ignoreAllLogs(true);
     return (
         <Provider store={store}>
-            <Spinner visible={active} textContent="Vent litt..." textStyle={{ color: '#FFF' }} />
             <AppWrapper />
         </Provider>
     );
