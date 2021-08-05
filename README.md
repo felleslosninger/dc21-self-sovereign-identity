@@ -65,15 +65,16 @@ cd verifier
 mvn spring-boot:run
 ```
 
-#### Protected page problems
-After going to protectedpage, you will be redirected to a https site, wich we don't have support for.
-After landing at a "Site doen't support secured connections", remove the 's' in 'https' to continue.
-
 ## Flow
 1. Log in with id-porten, using the localhost:8083/protectedpage url.
 2. Scan the qr code with the react native application.
 3. Go to verifier frontend(whith the verifier spring-boot running).
 4. Scan the qr code there with the react native application, then check if you are verified if you had the correct VC.
+
+#### Protected page problems
+After going to protectedpage, you will be redirected to a https site, wich we don't have support for.
+After landing at a "Site doesn't support secured connections", remove the 's' in 'https' to continue.
+
 
 ## Acknowledgements 
 - Jon Ramvi and Robin Pedersen at Symfoni AS
