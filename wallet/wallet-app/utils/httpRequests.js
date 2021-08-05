@@ -21,9 +21,9 @@ export async function httpGetCredential(vcType, baseVC, issuer) {
 }
 
 /**
- * Sends a verifiable presnetation to a verifier using HTTP POST.
+ * Sends a verifiable presentation to a verifier using HTTP POST.
  *
- * @param {token} token A JWT-encoded Verifiable Presentation
+ * @param {string} token A JWT-encoded verifiable presentation
  * @returns {boolean} True if the request was succesful, false if not
  */
 export async function httpSendPresentation(token) {
@@ -53,7 +53,7 @@ export async function httpSendPresentation(token) {
 export async function httpGetTypesFromIssuer(issuer) {
     const url = `${vdrUrl}/getTypes/${issuer}`;
     const response = await fetch(url);
-    const payload = JSON.parse(await response.text());
+    const payload = await response.text();
     return payload;
 }
 
