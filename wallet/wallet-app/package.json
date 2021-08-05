@@ -5,7 +5,8 @@
         "android": "expo start --android",
         "ios": "expo start --ios",
         "web": "expo start --web",
-        "eject": "expo eject"
+        "eject": "expo eject",
+        "doc": "react-doc-generator ./src -o DOCUMENTATION.md"
     },
     "dependencies": {
         "@ant-design/icons": "^4.6.2",

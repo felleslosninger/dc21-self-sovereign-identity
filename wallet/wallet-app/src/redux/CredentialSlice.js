@@ -1,16 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/*
-const credentialsReducer = createReducer([], (builder) => {
-  builder
-    .addCase('ADD_CREDENTIAL', (state, action) => {
-      state.push(action.payload);
-    })
-    .addCase('REMOVE_CREDENTIAL', (state, action) => {
-      return filter((credential, i) => i !== action.payload.index);
-    });
-});
-*/
 export const credentialSlice = createSlice({
     name: 'credentials',
     initialState: {
