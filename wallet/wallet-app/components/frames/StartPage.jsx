@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
-import { TouchableOpacity, SafeAreaView, Text, StyleSheet, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-ui-lib';
 
 /**
  * The intro page to the app, choose between log in or create a user
@@ -31,13 +32,15 @@ export default function StartPage() {
     return (
         <SafeAreaView style={styles.container}>
             {onboarded ? (
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adgangskontroll')}>
-                    <Text style={styles.text}>Logg inn i lommeboka</Text>
-                </TouchableOpacity>
+                navigation.navigate('Adgangskontroll')
             ) : (
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Opprett bruker')}>
-                    <Text style={styles.text}>Opprett bruker</Text>
-                </TouchableOpacity>
+                <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
+                    <Button
+                        label="Opprett bruker"
+                        backgroundColor="rgb(0,98,184)"
+                        onPress={() => navigation.navigate('Opprett bruker')}
+                    />
+                </View>
             )}
         </SafeAreaView>
     );

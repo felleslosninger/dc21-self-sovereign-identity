@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 // eslint-disable-next-line no-unused-vars
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, Colors, Picker } from 'react-native-ui-lib';
+import { Text, Colors, Picker, Button } from 'react-native-ui-lib';
 import { httpGetAllIssuers, httpGetCredential, httpGetTypesFromIssuer } from '../../utils/httpRequests';
 import { addCredential } from '../../redux/CredentialSlice';
 
@@ -16,12 +16,12 @@ import { addCredential } from '../../redux/CredentialSlice';
  */
 export default function RequestFrame() {
     const dispatch = useDispatch();
-
     const [selectedIssuer, setSelectedIssuer] = useState('');
-    const [feedback, setFeedback] = useState('');
+    const [feedback, setFeedback] = useState('hentet bevis');
     const [vcType, setVcType] = useState('');
     const [issuerTypes, setIssuerTypes] = useState([]);
     const [availableIssuers, setAvailableIssuers] = useState([]);
+    // const { active } = useSelector((state) => state.spinnerStatus);
 
     async function getAllIssuers() {
         setAvailableIssuers(JSON.parse(await httpGetAllIssuers()));
@@ -35,6 +35,7 @@ export default function RequestFrame() {
     useEffect(() => {
         async function fetchTypes() {
             const types = JSON.parse(await httpGetTypesFromIssuer(selectedIssuer));
+            setVcType('');
             setIssuerTypes(types);
         }
         fetchTypes();
@@ -45,14 +46,16 @@ export default function RequestFrame() {
      */
     async function retrieveCredential() {
         const baseVC = await AsyncStorage.getItem('baseId');
-
+        //   dispatch(activateSpinner(true));
         const response = await httpGetCredential(vcType, baseVC, selectedIssuer);
         try {
             const decode = jwtDecode(response);
             const retrievedCredential = { ...decode, token: response, type: vcType };
             dispatch(addCredential(retrievedCredential));
             if (selectedIssuer === decode.iss.substring(0, decode.iss.length - 36)) {
-                setFeedback(`hentet ${vcType} bevis`);
+                setFeedback(`hentet bevis`);
+                setSelectedIssuer('');
+                setVcType('');
             } else {
                 setFeedback('Utsteder stemmer ikke med det du har etterspurt. Prøv igjen.');
             }
@@ -60,6 +63,9 @@ export default function RequestFrame() {
             // await saveProof(retrievedCredential);
         } catch (error) {
             setFeedback(response);
+        } finally {
+            alert(feedback);
+            //     dispatch(activateSpinner(false));
         }
     }
 
@@ -77,8 +83,18 @@ export default function RequestFrame() {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Forespørsel om nytt bevis </Text>
-
+            {/*
+          <Spinner
+                visible={active}
+                textContent="Vent litt..."
+                textStyle={{ color: 'rgb(30,46,60)' }}
+                color="rgb(0,98, 184)"
+                overlayColor="rgba(0,0,0,0.1)"
+            />
+          */}
+            <Text text40 style={{ paddingBottom: 30, paddingTop: 20 }}>
+                Forespør et nytt bevis
+            </Text>
             <SafeAreaView>
                 <Picker
                     placeholder="Velg utsteder"
@@ -89,16 +105,15 @@ export default function RequestFrame() {
                     topBarProps={{ title: 'Utstedere' }}
                     showSearch
                     searchPlaceholder="Søk etter utsteder"
-                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                    // onSearchChange={value => console.warn('value', value)}
-                >
+                    searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
                     {availableIssuers.map((i) => (
                         <Picker.Item key={i} label={i} value={i} />
                     ))}
                 </Picker>
             </SafeAreaView>
-            {selectedIssuer ? (
-                <SafeAreaView style={styles.issuer}>
+
+            {selectedIssuer === '' ? (
+                <SafeAreaView style={{ opacity: 0 }}>
                     <Picker
                         placeholder="Velg type bevis"
                         floatingPlaceholder
@@ -108,24 +123,41 @@ export default function RequestFrame() {
                         topBarProps={{ title: 'Type bevis' }}
                         showSearch
                         searchPlaceholder="Søk etter bevis"
-                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}
-                        // onSearchChange={value => console.warn('value', value)}
-                    >
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
                         {issuerTypes.length > 0
                             ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
                             : null}
                     </Picker>
                 </SafeAreaView>
-            ) : null}
-
-            <TouchableOpacity onPress={() => retrieveCredential()}>
-                <SafeAreaView style={styles.button}>
-                    <Text style={styles.buttonText}>Send forespørsel</Text>
+            ) : (
+                <SafeAreaView>
+                    <Picker
+                        placeholder="Velg type bevis"
+                        floatingPlaceholder
+                        value={{ value: vcType, label: vcType }}
+                        enableModalBlur={false}
+                        onChange={(item) => setVcType(item.value)}
+                        topBarProps={{ title: 'Type bevis' }}
+                        showSearch
+                        searchPlaceholder="Søk etter bevis"
+                        searchStyle={{ color: 'rgb(0,98,184)', placeholderTextColor: Colors.dark50 }}>
+                        {issuerTypes.length > 0
+                            ? issuerTypes.map((i) => <Picker.Item key={i} label={i} value={i} />)
+                            : null}
+                    </Picker>
                 </SafeAreaView>
-            </TouchableOpacity>
-            <SafeAreaView style={styles.credential}>
-                <Text style={styles.buttonText}>{feedback}</Text>
-            </SafeAreaView>
+            )}
+
+            <View style={{ alignItems: 'flex-end', alignSelf: 'center', paddingBottom: 20 }}>
+                <Button
+                    label="Hent bevis"
+                    backgroundColor="rgb(0,98,184)"
+                    onPress={() => {
+                        retrieveCredential();
+                    }}
+                    disabled={vcType === ''}
+                />
+            </View>
         </ScrollView>
     );
 }

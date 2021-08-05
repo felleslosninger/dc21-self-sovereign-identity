@@ -1,7 +1,5 @@
 package com.digdir.issuer.credentials;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 

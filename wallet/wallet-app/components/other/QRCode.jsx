@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 /**
@@ -12,29 +11,14 @@ import QRCode from 'react-native-qrcode-svg';
 export default function CreateQR(props) {
     const [qrvalue] = useState(props.content); // content=a string with information(jwt) or url ++
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <QRCode
-                    value={qrvalue || 'NA'} // content to the QR code
-                    size={250}
-                    color="#1e2b3c"
-                    backgroundColor="white"
-                    // eslint-disable-next-line global-require
-                    logo={require('../../assets/digdir-logo.jpg')} // digdir logo in the middle :)
-                    logoSize={50} // 32 is also good
-                />
-            </View>
-        </SafeAreaView>
+        <QRCode
+            value={qrvalue || 'NA'} // content to the QR code
+            size={260}
+            color="#1e2b3c"
+            backgroundColor="white"
+            // eslint-disable-next-line global-require
+            logo={require('../../assets/digdir-logo.jpg')} // digdir logo in the middle :)
+            logoSize={30} // 32 is also good
+        />
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: 10,
-    },
-});

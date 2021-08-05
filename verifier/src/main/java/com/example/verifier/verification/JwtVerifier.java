@@ -41,8 +41,13 @@ public class JwtVerifier {
     }
 
     //Method for checking Audience
+    /**
+     * Method that checks if audience matches verifier
+     * @param token = the token to verify
+     * @return 
+     */
     private boolean checkAud(String token){
-        String audience = "verifier123";
+        String audience = "127.0.0.1:3000/api/sendVP";
         DecodedJWT jwt = decodeJwt(token);
         return jwt.getAudience().contains(audience);
 
@@ -57,7 +62,6 @@ public class JwtVerifier {
     public boolean verifyToken(String token) {
         try {
             DecodedJWT jwt = decodeJwt(token);
-            System.out.println(jwt.getIssuer());
             Requester r = new Requester("http://localhost:8083/vdr/key/");
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) r.getKeyByID(jwt.getIssuer()), null);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -72,6 +76,8 @@ public class JwtVerifier {
             return false;
         }
     }
+
+
 
     /**
      * Method that verifies a VC, including the type of the VC
@@ -96,6 +102,19 @@ public class JwtVerifier {
         DecodedJWT jwt = decodeJwt(token);
         ArrayList<String> typeList = (ArrayList<String>) jwt.getClaim("vc").as(HashMap.class).get("type");
         return typeList.contains(jth.getVcType(type));
+    }
+
+    /**
+     * Method to get the subject from the token
+     * @param token = the token
+     * @return the subject/userID
+     */
+    public String verifySubUser(String token){
+        DecodedJWT jwt = decodeJwt(token);
+        System.out.println(jwt.getSubject());
+        return jwt.getSubject();
+
+
     }
 
 
@@ -135,9 +154,11 @@ public class JwtVerifier {
 
             //verifies the VP token
             verifyToken(token);
+            System.out.println(token);
 
             //verifies the VCs in the VP
             String[] VCs = jwt.getClaim("cred").asArray(String.class);
+            
 
             boolean allTypesFound = true;
             for (String type : types) {

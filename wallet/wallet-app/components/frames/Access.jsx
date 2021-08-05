@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, Vibration } from 'react-native';
+import { SafeAreaView, StatusBar, Text, Vibration } from 'react-native';
 import ReactNativePinView from 'react-native-pin-view';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,7 +22,6 @@ export default function Access() {
     const [text, setText] = useState('');
 
     const dispatch = useDispatch();
-    // const { signedIn } = useSelector((state) => state.signedInStatus);
 
     const isFocused = useIsFocused();
 
@@ -56,9 +55,6 @@ export default function Access() {
 
     const changeText = () => {
         check ? setText('Skriv inn personlig kode') : setText('Opprett personlig kode');
-        // if (check === true) {
-        //     setText('Skriv inn personlig kode');
-        // } else setText('Opprett personlig kode');
     };
 
     isFocused ? checkHasPin() : null;
@@ -104,25 +100,27 @@ export default function Access() {
                 }}>
                 <Text
                     style={{
-                        paddingTop: 24,
+                        paddingTop: 10,
                         paddingBottom: 20,
-                        color: '#7B7676',
+                        color: 'rgb(30,46,60)',
                         fontSize: 30,
                     }}>
                     {text}
                 </Text>
 
                 <ReactNativePinView
-                    inputSize={32}
+                    inputSize={10}
                     ref={pinView}
                     pinLength={4}
                     buttonSize={60}
                     onValueChange={(value) => setEnteredPin(value)}
                     buttonAreaStyle={{
-                        marginTop: 24,
+                        marginTop: 10,
+
+                        marginHorizontal: 40,
                     }}
                     inputAreaStyle={{
-                        marginBottom: 15,
+                        marginBottom: 10,
                     }}
                     inputViewEmptyStyle={{
                         backgroundColor: 'transparent',
@@ -135,7 +133,7 @@ export default function Access() {
                     buttonViewStyle={{
                         borderWidth: 1,
                         borderColor: 'rgb(30,46,60)',
-                        backgroundColor: 'rgb(242, 242, 242)',
+                        backgroundColor: 'transparent',
                     }}
                     buttonTextStyle={{
                         color: 'rgb(30,46,60)',
@@ -160,20 +158,6 @@ export default function Access() {
                     }
                 />
             </SafeAreaView>
-            <TouchableOpacity
-                style={{
-                    borderRadius: 4,
-                    backgroundColor: 'rgb(30,46,60)',
-                    alignItems: 'center',
-                    width: 150,
-                    marginBottom: 10,
-                    marginLeft: 10,
-                }}
-                onPress={() => AsyncStorage.removeItem('pin') && checkHasPin() && alert('Personlig kode slettet')}>
-                <Text style={{ color: 'white' }}>Slett personlig kode</Text>
-            </TouchableOpacity>
         </>
     );
 }
-
-// "SLETT PERSONLIG KODE" SKAL IKKE MED TIL SLUTT, DEN ER DER BARE I TILFELLE VI GLEMMER KODEN VÅR, ELLER NOE LIGNENDE
