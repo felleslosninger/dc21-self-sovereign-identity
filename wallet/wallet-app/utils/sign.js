@@ -20,9 +20,9 @@ export async function generateKeys() {
 
 export async function getWalletID() {
     const id = await AsyncStorage.getItem('walletID');
-    console.log(id);
     return id;
 }
+
 /**
  * Creates a RS256 JWT token for a verifiable presentation.
  *
@@ -73,7 +73,7 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     // Create JTI as base64 encoded hash of the payload
     const tempStrPayload = JSON.stringify(tempPayload);
     const tempPayload64 = encodeB64(tempStrPayload);
-    const hashedJTI = forge.md.sha256.create().update(tempPayload64, 'utf8');
+    const hashedJTI = forge.md.sha256.create().update(tempPayload64, 'utf8').digest().toHex();
     const hashedJTI64 = encodeB64(hashedJTI);
 
     // Add the JTI to the payload
@@ -81,8 +81,6 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
         ...tempPayload,
         jti: hashedJTI64,
     };
-
-    alert(hashedJTI64);
 
     const strPayload = JSON.stringify(payload);
     const payload64 = encodeB64(strPayload);
