@@ -17,6 +17,7 @@ export default function ProfileMenuSlide() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [baseIdIssuer, setBaseIdIssuer] = useState('');
+    const [walletID, setWalletID] = useState('');
 
     const getBaseIdIssuer = async () => {
         const baseIdToken = await AsyncStorage.getItem('baseId');
@@ -25,6 +26,14 @@ export default function ProfileMenuSlide() {
     };
 
     getBaseIdIssuer();
+
+    const getWalletId = async () => {
+        const walletId = await AsyncStorage.getItem('walletID');
+        console.log(walletId);
+        setWalletID(walletId);
+    };
+
+    getWalletId();
 
     const clearAllData = async () => {
         const keys = await AsyncStorage.getAllKeys();
@@ -79,30 +88,31 @@ export default function ProfileMenuSlide() {
                     text90
                 />
             </View>
-            <View style={styles.container} marginTop={100}>
+            <View style={styles.container} marginTop={80}>
                 <Icon name="user-circle" size={220} color="rgb(30,46,60)" />
             </View>
             <View>
                 <Text style={styles.textstyle}>Kari Nordman</Text>
             </View>
-
-            <Text text90 style={{ marginLeft: 10, alignSelf: 'center', marginTop: 140 }}>
-                ID: {baseIdIssuer.substring(baseIdIssuer.length - 36)}
-            </Text>
             <View
                 style={{
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'nowrap',
-                    marginTop: 1,
+                    marginTop: 5,
                     alignSelf: 'center',
                 }}>
-                <Icon name="check" size={10} color="rgb(30,46,60)" />
+                <Icon name="check" size={10} color="#a9a9a9" />
 
-                <Text text100 style={{ marginLeft: 4, marginTop: -3 }}>
-                    Utstedt av: {baseIdIssuer.substring(0, baseIdIssuer.length - 36)}
+                <Text text100 grey40 style={{ marginLeft: 4, marginTop: -3 }}>
+                    Godkjent av {baseIdIssuer.substring(0, baseIdIssuer.length - 36)}
                 </Text>
             </View>
+
+            <Text text90 style={{ marginLeft: 10, alignSelf: 'center', marginTop: 130 }}>
+                ID: {walletID.substring(walletID.length - 36)}
+            </Text>
+
             {/**
              *  Du har grunnidentitet utstedt fra: {baseIdIssuer}
              */}
@@ -111,7 +121,7 @@ export default function ProfileMenuSlide() {
                     label="Slett bruker"
                     color="rgb(194,19,44)"
                     backgroundColor="transparent"
-                    style={{ marginTop: 20 }}
+                    style={{ marginTop: 10 }}
                     size={Button.sizes.small}
                     onPress={buttonAlert}
                     text90
@@ -128,9 +138,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     textstyle: {
-        fontSize: 30,
+        fontSize: 40,
         paddingHorizontal: 20,
         marginTop: 20,
+        marginBottom: 5,
         alignSelf: 'center',
         color: 'rgb(30,46,60)',
     },

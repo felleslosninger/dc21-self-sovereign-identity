@@ -67,7 +67,7 @@ export default function VerifierLogFrame({ route }) {
                     <CreateQR content={route.params.props.name} />
                 </Card>
 
-                {shared.filter((share) => share.credential_id === route.params.props.id) ? (
+                {shared.filter((share) => share.credential_id === route.params.props.id).length === 0 ? (
                     <Card.Section
                         content={[
                             {
