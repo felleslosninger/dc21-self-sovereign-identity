@@ -17,7 +17,7 @@ export default function CreateQR(props) {
             color="#1e2b3c"
             backgroundColor="white"
             // eslint-disable-next-line global-require
-            logo={require('../../assets/digdir-logo.jpg')} // digdir logo in the middle :)
+            logo={require('../../../assets/digdir-logo.jpg')} // digdir logo in the middle :)
             logoSize={30} // 32 is also good
         />
     );

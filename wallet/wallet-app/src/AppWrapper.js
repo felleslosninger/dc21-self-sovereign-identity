@@ -1,13 +1,7 @@
 /* eslint-disable react/prop-types */
-// import 'react-native-gesture-handler';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-// import Test from './components/test'
-// import { generateKeyPair, signing } from './utils/signing';
-// import {sign} from './utils.sign';
-// import { signDemo } from './utils/sign' ;
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

@@ -1,12 +1,10 @@
 import forge from 'node-forge';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
-import { exampleCredentialToken, httpPostPublicKey } from './httpRequests';
+import { httpPostPublicKey } from './httpRequests';
 
 export async function generateKeys() {
     // Generates a RSA keypair, should perhaps be moved to global state
-    console.log('keys generating...');
     const walletID = `wallet-id${uuid.v4()}`;
     await AsyncStorage.setItem('walletID', walletID);
     const keys = forge.pki.rsa.generateKeyPair(1024);

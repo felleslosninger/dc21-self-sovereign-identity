@@ -1,9 +1,10 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { addCredentialShare } from '../../redux/CredentialShareSlice';
@@ -15,11 +16,9 @@ import createVerifiablePresentationJWT from '../../utils/sign';
  * @returns A frame, sending the proof
  */
 export default function VerifyFrame() {
-    const [status, setStatus] = useState(false);
     const [scanned, setScanned] = useState(false);
 
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const { cred } = useSelector((state) => state.credentials);
 
     async function sendPresentation(creds, audience, user) {
@@ -41,7 +40,6 @@ export default function VerifyFrame() {
         } else {
             alert('Bevis ble ikke sendt');
         }
-        setStatus(verified);
         return verified;
     }
 
@@ -51,7 +49,6 @@ export default function VerifyFrame() {
         const vc = data.split('|')[1];
 
         const userID = data.split('|')[2];
-        console.log(userID);
         let proof = '';
         for (let i = 0; i < cred.length; i++) {
             try {

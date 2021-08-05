@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView, View, StyleSheet, Alert, Platform } from 'react-native';
@@ -7,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import { Button, Text } from 'react-native-ui-lib';
 import { signIn } from '../../redux/SignedInSlice';
-import { getWalletID } from '../../utils/sign';
 
 /**
  * A profile site for administrativ changes on the profile
@@ -29,7 +29,6 @@ export default function ProfileMenuSlide() {
 
     const getWalletId = async () => {
         const walletId = await AsyncStorage.getItem('walletID');
-        console.log(walletId);
         setWalletID(walletId);
     };
 
