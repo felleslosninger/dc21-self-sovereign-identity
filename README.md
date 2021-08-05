@@ -12,6 +12,24 @@ Self-Sovereign Identity (SSI) gives individuals control of their digital identit
 
 ![image](https://www.w3.org/TR/vc-data-model/diagrams/ecosystem.svg)
 
+## Use case
+The following sequence diagrams shows the series of events from initializing a wallet to retrieving a proof and sending it to a service for verification.
+
+#### 1. Onboard user to the wallet
+![onboarding](figures/onboarding.PNG)
+
+
+#### 2. Get a proof from issuer
+*Requires onboarding (1).*
+
+![issuer](figures/issuer.PNG)
+
+#### 3. Verify against service
+*Requires a proof (2).*
+
+![verifier](figures/verifier.PNG)
+
+
 ## Installation 
 This project requires
 - [Node.js](https://nodejs.org/en/download/)
@@ -27,11 +45,14 @@ git clone https://github.com/felleslosninger/digdir-camp-2021-VC.git
 ```
 
 #### Issuer
-
+```
+cd issuer
+```
 ```
 mvn spring-boot:run
 ```
- 
+If there are problems with saving to file, change the PATH in the java classes in storage package.
+
 #### Wallet
 ```
 cd wallet/wallet-app
@@ -57,10 +78,23 @@ npm start
 ```
 
 ##### Backend
-
+```
+cd verifier
+```
 ```
 mvn spring-boot:run
 ```
+
+## Flow
+1. Log in with ID-porten, using the localhost:8083/protectedpage url (issuer spring-boot).
+2. Scan the QR code with the react native application (wallet react-native app).
+3. Go to verifier frontend (verifier react app whith the verifier spring-boot running).
+4. Scan the QR code there with the react native-app (wallet), then check if you are verified. You need to fetch the correct VC to be able to be verified.
+
+#### Protected page problems
+After going to protectedpage, you will be redirected to a https site, wich we don't have support for.
+After landing at a "Site doesn't support secured connections", remove the 's' in 'https' to continue.
+
 
 ## Acknowledgements 
 - Jon Ramvi and Robin Pedersen at Symfoni AS

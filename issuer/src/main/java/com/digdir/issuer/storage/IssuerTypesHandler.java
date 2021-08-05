@@ -16,11 +16,9 @@ import java.util.List;
  * Class that reads from file the available issuers and their available VC-types
  */
 public class IssuerTypesHandler {
-
-    private static String path = "src/main/resources/IssuerTypes.json";
-
-
-
+  
+    private static String path = "src/main/resources/IssuerTypes.json";  //change this path to issuer/src/main/resources/IssuerTypes.json if there is a problem with the path.
+  
     public static void main(String[] args) {
         IssuerTypesHandler ith = new IssuerTypesHandler();
         System.out.println(ith.getAllIssuers());

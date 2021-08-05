@@ -18,7 +18,7 @@ import java.util.Objects;
 
 
 public class PrivateKeysFileHandler {
-    private String path = "src/main/resources/PrivateKeys.json";
+    private String path = "src/main/resources/PrivateKeys.json"; //change this path to issuer/src/main/resources/PrivateKeys.json if there is a problem with the path.
     private Writer file;
 
     /**
