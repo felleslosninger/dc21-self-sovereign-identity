@@ -29,6 +29,12 @@ public class VerifyService {
         return uih.getIsUserVerified(id);
     }
 
+    public ResponseEntity<String> sendUserID(String id) {
+        UserIdHandler idH = new UserIdHandler();
+        idH.addUserId(id, false);
+        return new ResponseEntity<>("user added", HttpStatus.OK);
+    }
+
 
 
 

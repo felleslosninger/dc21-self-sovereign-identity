@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Class as Repository for handle operations with files.
+ * Class as Repository for handling public keys in file.
  */
 @Repository
 public class FileHandler {

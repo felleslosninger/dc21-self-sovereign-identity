@@ -42,12 +42,17 @@ public class VDRController {
         }
     }
 
+
+    /**
+     * Route that receives a public key of a given user
+     * @param body = the public key as a PEM string
+     * @param userID = the ID of the user as a string
+     * @return a response entity that the key was added, abd a HttpStatus.OK
+     */
     @PostMapping(value = "vdr/postKey")
     ResponseEntity<String> postKeyToVDR(@RequestBody String body, @RequestParam(value="userID")String userID) {
-        System.out.println("something is working");
-        System.out.println(body);
         fileHandler.addPublicKey(userID, vdrService.PEMtoRSAConverter(body));
-        return new ResponseEntity<>("Hello overlord", HttpStatus.OK);
+        return new ResponseEntity<>("public key received", HttpStatus.OK);
     }
 
     @GetMapping("/vdr/getTypes/{issuer}")

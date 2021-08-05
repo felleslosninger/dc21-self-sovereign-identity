@@ -26,7 +26,7 @@ public class PrivateKeysFileHandler {
      * Retrives existing map of PK's in file and appends PK.
      *
      * @param id id for identifying a public key to it's owner in VDR.
-     * @param pk Public key to be saved to VDR.
+     * @param pk Private key to be saved to VDR.
      */
     public void addPrivateKey(String id, PrivateKey pk){
         HashMap<String, PrivateKey> map = loadFromFile();
@@ -37,11 +37,11 @@ public class PrivateKeysFileHandler {
     }
 
     /**
-     * Method for retrieving a public key from VDR(PublicKeyFile.json)
+     * Method for retrieving a public key from PrivateKeys.json
      * @param id id for public key to retrive
      * @return Public Key with id as specified, if existing.
      */
-    public PrivateKey getPublicKey(String id){
+    public PrivateKey getPrivateKey(String id){
         if (!Objects.requireNonNull(loadFromFile()).containsKey(id)) {
             throw new IllegalArgumentException("No such id");
         }
@@ -50,7 +50,7 @@ public class PrivateKeysFileHandler {
 
 
     /**
-     * Method for saving HashMap of id and PublicKey to file.
+     * Method for saving HashMap of id and private key to file.
      * @param privateKeyHashMap HashMap to save.
      */
     private void saveToFile(HashMap<String, PrivateKey> privateKeyHashMap) {
@@ -82,8 +82,8 @@ public class PrivateKeysFileHandler {
 
 
     /**
-     * Loads existing HashMap of id and PublicKey from PublicKeyFile.json
-     * @return HashMap of id and PublicKey
+     * Loads existing HashMap of id and private key from PrivateKeys.json
+     * @return HashMap of id and private key
      */
     private HashMap<String, PrivateKey> loadFromFile() {
         try {
@@ -96,7 +96,7 @@ public class PrivateKeysFileHandler {
                 try {
                     privateKeyMap.put(key, KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec((Base64.getDecoder().decode(value)))));
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException invalidKeySpecException) {
-                    System.out.println("Problem in Filehandler. Cant load from file. ");
+                    System.out.println("Cant load from file. ");
                 }
             });
             return privateKeyMap;
@@ -109,8 +109,8 @@ public class PrivateKeysFileHandler {
     }
 
     /**
-     * Method for removing a public key from VDR(PublicKeyFile.json) with specific id.
-     * @param id id for publuc key to remove
+     * Method for removing a private key from PrivateKeys.json with specific id.
+     * @param id id for public key to remove
      */
     public void removeKeyByID(String id) {
         if(!loadFromFile().containsKey(id)) {
@@ -131,13 +131,7 @@ public class PrivateKeysFileHandler {
         fileHandler.addPublicKey("BasePublic", keyGenerator.getPublicKey());
     }
 
-    // Used in test: -----------------------------------------------------------------------
-    public String getPublicKeyAsString(String id){
-        PrivateKey pk = getPublicKey(id);
-        byte[] jsonPk = pk.getEncoded();
-        Gson gson = new Gson();
-        return gson.toJson(jsonPk);
-    }
+
     public void setPath(String path){
         this.path = path;
     }

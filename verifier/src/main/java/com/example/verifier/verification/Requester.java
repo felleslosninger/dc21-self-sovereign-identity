@@ -101,32 +101,8 @@ public class Requester {
     public static void main(String[] args) throws Exception {
 
 
-      //  Requester r = new Requester("http://localhost:8083/api/key/");
         Requester r2 = new Requester("http://localhost:8083/vdr/key/");
         System.out.println(r2.getKeyByID("GrunnID-portalen.no063b9967-fa86-4168-a142-67beeb0f539e"));
-
-       // System.out.println(r.getKeyByID("testIss2575273c-c1ff-446c-9d8c-6504af46bd14"));
-/*
-
-        VCJson vcJson = r2.getCredentialFromIssuer();
-
-
-        System.out.println(vcJson.getIssuerID());
-
-        PublicKey key = r.getKeyByID(vcJson.getIssuerID());
-        System.out.println(key);
-
-        SignatureVerifier sv = new SignatureVerifier();
-        Gson gson = new Gson();
-        byte[] bytes = gson.fromJson(vcJson.getSignature(), byte[].class);
-        System.out.println(bytes);
-
-        boolean verify = sv.verifySignature(vcJson.getPayload(), bytes, key);
-         System.out.println(verify);
-*/
-
-
-        // System.out.println(sv.decryptSignature((byte[]) list.get(2), new KeyGenerator().getPublicKey(), credential));
 
     }
 
