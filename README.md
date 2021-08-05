@@ -12,6 +12,24 @@ Self-Sovereign Identity (SSI) gives individuals control of their digital identit
 
 ![image](https://www.w3.org/TR/vc-data-model/diagrams/ecosystem.svg)
 
+## Use case
+The following sequence diagrams shows the series of events from initializing a wallet to retrieving a proof and sending it to a service for verification.
+
+#### 1. Onboard user to the wallet
+![onboarding](figures/onboarding.PNG)
+
+
+#### 2. Get a proof from issuer
+*Requires onboarding (1).*
+
+![issuer](figures/issuer.PNG)
+
+#### 3. Verify against service
+*Requires a proof (2).*
+
+![verifier](figures/verifier.PNG)
+
+
 ## Installation 
 This project requires
 - [Node.js](https://nodejs.org/en/download/)
