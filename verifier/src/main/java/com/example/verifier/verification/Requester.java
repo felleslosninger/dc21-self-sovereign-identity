@@ -1,6 +1,5 @@
 package com.example.verifier.verification;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -67,10 +66,7 @@ public class Requester {
             final HttpResponse<String> response = HttpClient.newBuilder().build().send(request,
                     HttpResponse.BodyHandlers.ofString());
             final String responseString = response.body();
-          System.out.println("getKeyByID() response: " + responseString);
-//            Gson gson = new Gson();
-//            byte[] bytes = gson.fromJson(responseString, byte[].class);
-
+            System.out.println("getKeyByID() response: " + responseString);
 
             publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(responseString)));
             System.out.println(Base64.getEncoder().encodeToString(publicKey.getEncoded()));

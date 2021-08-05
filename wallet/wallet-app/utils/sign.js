@@ -19,7 +19,6 @@ export async function generateKeys() {
 
 export async function getWalletID() {
     const id = await AsyncStorage.getItem('walletID');
-    console.log(id);
     return id;
 }
 /**
@@ -29,7 +28,7 @@ export async function getWalletID() {
  * @param {string} audience The intended receiver of the verifiable presentation.
  * @returns A verifiable presentation JWT signed with RS256.
  */
-export default async function createVerifiablePresentationJWT(jwtCredentialsList, audience = 'testVerifier') {
+export default async function createVerifiablePresentationJWT(jwtCredentialsList, audience, user) {
     // Convert encode with base64 and sign using RSA SHA256.
     // Taken from 'react-native-jwt-rsa', https://github.com/alvarorece/react-native-jwt-rsa/blob/master/index.js
 
@@ -52,7 +51,7 @@ export default async function createVerifiablePresentationJWT(jwtCredentialsList
     const payload = {
         // TODO: Assign proper subject
         iss: await getWalletID(),
-        sub: 'testSub',
+        sub: user,
         aud: audience,
         // Will expire in 5 minutes
         exp: time + 300,

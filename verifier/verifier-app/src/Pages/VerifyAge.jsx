@@ -1,31 +1,73 @@
-import React from "react";
-import {Link, useHistory} from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import QRCode from "react-qr-code";
+import localIpUrl from 'local-ip-url';
+import { useInterval } from "../hooks/useInterval";
 
-function VerifyAge() {
+export default function VerifyAge() {
 
-    let history = useHistory()
+    const path = localIpUrl() + ':3000/api/sendVP'
+    const VERIFY_REFRESH_INTERVAL = 2000;
 
-    async function checkAge() {
-        let response = await fetch('/api/checkVerified')
-            .then(response => response.json())
+    const [userID, setUserID] = useState();
+    const [verified, setVerified] = useState(false);
+
+    function generateUserID() {
+        const id = Math.floor((Math.random() * 100000));
+        console.log("Generated userID: " + id);
+        return id;
+    }
+
+    async function httpGetVerifiedAge(id) {
+        let response = await fetch('/api/checkVerified?id='+ id)
+            .then(response => response.json());
             //.catch(err => console.log('There was an error:' + err))
-        console.log(response)
-
-        if (response === false) {
-            console.log(response)
-            history.push('/notVerified')
-        } else {
-            history.push('/verified')
-            console.log(response)
+        console.log("GET verified: " + response);
+        return response;
+    }
+    
+    async function httpSendUserId(id) {
+        console.log("POST userID argument: " + id)
+        try {
+            const response = await fetch("/api/sendUserID", {
+                method: "POST",
+                body: JSON.stringify(id)
+            })
+            console.log("POST userID response: " + response.text())
+            if (response.ok) {
+                return true;
+            }
+            return false;
+        }
+        catch (error) {
+            console.log("feil under sending av userID");
+            return false;
         }
     }
 
+    // Called only once when page is loaded
+    useEffect(() => {
+        const generated = generateUserID();
+        setUserID(generated);
+    }, []);
+
+    // Called when userID is changed
+    useEffect(() => {
+        httpSendUserId(userID)
+    }, [userID]);
+
+    // Called continuously with the specified interval delay
+    useInterval(async () => {
+        const verified = await httpGetVerifiedAge(userID);
+        setVerified(verified);
+    }, VERIFY_REFRESH_INTERVAL);
+
     return (
         <div className="VerifyAge">
-            <p>You must be over 18 to continue</p>
-            <Link className="btn" to={history} onClick={checkAge}>Verify age</Link>
+            <p>Verifiser at du er over 18.</p>
+            <QRCode value={path + '|over-18|' + userID}/>
+            <br/>
+            <br/>
+            <p style={{color: verified ? "green" : "black"}}>Du er {!verified && "enda ikke"} verifisert.</p>
         </div>
     );
 }
-
-export default VerifyAge;

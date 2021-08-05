@@ -42,11 +42,12 @@ Example-baseID:
 
 ```json
 
-{
+
   "sub": "08089409382",
-  "iss": "GrunnID-portalen.noa0df24b7-40b5-498a-bdd3-f8e346cab718",
-  "exp": 1628671445,
-  "iat": 1627461845,
+  "nbf": 1627889142,
+  "iss": "GrunnID-portalen.no77eeb28f-b90d-4e51-825c-af5f61f63329",
+  "exp": 1629098741,
+  "iat": 1627889141,
   "vc": {
     "credentialSubject": {
       "baseid": {
@@ -62,7 +63,8 @@ Example-baseID:
       "https://www.w3.org/2018/credentials/v1"
     ]
   },
-  "jti": "http://localhost:8083/credentials/1"
+  "nonce": "39bf9823-3d63-44b",
+  "jti": "MgFTUClXTMpGUehl5pXy05QQT24GcE3W4+t4t04F45s="
 }
 
 ```
@@ -83,9 +85,10 @@ Example-VC:
 
 {
   "sub": "08089409382",
-  "iss": "folkeregisteret699296c6-c2b3-4b64-ba8e-3c394e8c00ea",
-  "exp": 1628838216,
-  "iat": 1627628616,
+  "nbf": 1627893505,
+  "iss": "folkeregisteret4283afdc-9f54-45b7-a7e2-5ee965b18f9c",
+  "exp": 1629103105,
+  "iat": 1627893505,
   "vc": {
     "credentialSubject": {
       "age": {
@@ -101,7 +104,8 @@ Example-VC:
       "https://www.w3.org/2018/credentials/v1"
     ]
   },
-  "jti": "http://localhost:8083/credentials/1"
+  "nonce": "b433ab30-0977-450",
+  "jti": "WMuTzBzx401m24pHWZUsna9Ov531FcArrGpO6o/ZN+Y="
 }
 
 ```
