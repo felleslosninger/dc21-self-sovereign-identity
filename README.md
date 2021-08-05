@@ -66,10 +66,10 @@ mvn spring-boot:run
 ```
 
 ## Flow
-1. Log in with ID-porten, using the localhost:8083/protectedpage url(issuer spring-boot).
-2. Scan the qr code with the react native application (wallet react-native app).
-3. Go to verifier frontend(verifier react app whith the verifier spring-boot running).
-4. Scan the qr code there with the react native-app(wallet), then check if you are verified. You need to fetch the correct VC to be able to be verified.
+1. Log in with ID-porten, using the localhost:8083/protectedpage url (issuer spring-boot).
+2. Scan the QR code with the react native application (wallet react-native app).
+3. Go to verifier frontend (verifier react app whith the verifier spring-boot running).
+4. Scan the QR code there with the react native-app (wallet), then check if you are verified. You need to fetch the correct VC to be able to be verified.
 
 #### Protected page problems
 After going to protectedpage, you will be redirected to a https site, wich we don't have support for.
