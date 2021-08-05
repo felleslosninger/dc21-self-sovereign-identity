@@ -45,9 +45,10 @@ git clone https://github.com/felleslosninger/digdir-camp-2021-VC.git
 ```
 
 #### Issuer
-
 ```
 cd issuer
+```
+```
 mvn spring-boot:run
 ```
 If there are problems with saving to file, change the PATH in the java classes in storage package.
@@ -77,9 +78,10 @@ npm start
 ```
 
 ##### Backend
-
 ```
 cd verifier
+```
+```
 mvn spring-boot:run
 ```
 
