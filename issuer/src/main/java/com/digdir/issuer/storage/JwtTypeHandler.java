@@ -25,7 +25,7 @@ import java.util.*;
 public class JwtTypeHandler {
 
 
-    private final String path = "src/main/resources/JwtTypes.txt";
+    private final String path = "src/main/resources/JwtTypes.txt";  //change this path to issuer/src/main/resources/JwtTypes.txt if there is a problem with the path.
 
 
     /**
