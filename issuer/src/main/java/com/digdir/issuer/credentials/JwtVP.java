@@ -3,7 +3,7 @@ package com.digdir.issuer.credentials;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.digdir.issuer.storage.FileHandler;
-import com.digdir.issuer.util.KeyGenerator;
+import com.digdir.issuer.util.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
@@ -68,10 +68,6 @@ public class JwtVP {
                 .withClaim("cred", Arrays.asList(this.VCs))
                 .sign(algorithm);
 
-    }
-
-    public String getToken() {
-        return this.token;
     }
 
     public String[] getVCs() {

@@ -14,11 +14,6 @@ public class VerifyController {
     private final VerifyService verifyService = new VerifyService();
 
 
-    @GetMapping("/api/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
-    }
-
     /**
      * Route that receives and verifies a jwt token
      * @param token = the jwt token to send
@@ -46,9 +41,7 @@ public class VerifyController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/sendUserID")
     public ResponseEntity<String> sendUserID(@RequestBody String id) {
-        UserIdHandler idH = new UserIdHandler();
-        idH.addUserId(id, false);
-        return new ResponseEntity<>("user added", HttpStatus.OK);
+        return verifyService.sendUserID(id);
     }
 
 }

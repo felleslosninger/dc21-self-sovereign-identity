@@ -12,19 +12,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * Class that reads from file the available issuers and their available VC-types
+ */
 public class IssuerTypesHandler {
+
     private static String path = "src/main/resources/IssuerTypes.json";
 
 
-    public IssuerTypesHandler() {
-    }
 
     public static void main(String[] args) {
         IssuerTypesHandler ith = new IssuerTypesHandler();
         System.out.println(ith.getAllIssuers());
     }
 
+    /**
+     * Loads from file the VC types that the given issuer can construct
+     * @param issuer = the issuer
+     * @return a list of the VC types
+     */
     public List<String> getTypesWithIssuer(String issuer){
         try {
             InputStream inputStream = new FileInputStream(path);
@@ -41,6 +47,11 @@ public class IssuerTypesHandler {
         }
     }
 
+
+    /**
+     * Loads from file all the available issuers
+     * @return a list of the issuers
+     */
     public List<String> getAllIssuers(){
         List<String> allIssuers = new ArrayList<>();
         try {

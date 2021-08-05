@@ -24,7 +24,7 @@ public class VC {
     }
 
     /**
-     * Construct VC-object with already known type.
+     * Construct VC-object of type "VerifiableCredential.
      * @param credentialSubject Subject of the VC
      */
     public VC(Map<String, Object> credentialSubject){
@@ -35,7 +35,7 @@ public class VC {
     }
 
     /**
-     * Method creates VC as Map and put's context, type and credentialsubject into VC-Map.
+     * Method creates VC as Map and put's context, type and credentialSubject into VC-Map.
      * @return VC as Map
      */
     public Map<String, Object> getVCMap(){
