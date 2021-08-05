@@ -27,7 +27,7 @@ public class FileHandler {
 
 
     //private String path = "issuer/src/main/resources/PublicKeyFile.json";
-    private Path path = Paths.get("issuer/src/main/resources/PublicKeyFile.json");
+    private Path path = Paths.get("src/main/resources/PublicKeyFile.json");
     private Writer file;
 
     /**
