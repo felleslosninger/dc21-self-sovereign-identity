@@ -65,7 +65,7 @@ cd verifier
 mvn spring-boot:run
 ```
 
-#### Running and Issues
+#### Protected page problems
 After going to protectedpage, you will be redirected to a https site, wich we don't have support for.
 After landing at a "Site doen't support secured connections", remove the 's' in 'https' to continue.
 
