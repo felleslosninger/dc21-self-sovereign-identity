@@ -21,7 +21,7 @@ Communication with issuer and verifier requires that these servers are running. 
 ### Run on mobile
 
 1. Execute the steps from 'Starting the application'
-2. Last ned appen Expo Go på mobilen
+2. Download the Expo Go app on your phone
 3. Check that the computer and phone is connected to the same LAN
 4. Check that 'LAN' is selected in the Expo user interface
 5. Scan the QR-code with the phone camera. Close app on phone and try scanning again if the app doesn't load correctly.
