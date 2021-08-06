@@ -13,12 +13,12 @@ export default function CreateQR(props) {
     return (
         <QRCode
             value={qrvalue || 'NA'} // content to the QR code
-            size={260}
+            size={252}
             color="#1e2b3c"
             backgroundColor="white"
             // eslint-disable-next-line global-require
             logo={require('../../../assets/digdir-logo.jpg')} // digdir logo in the middle :)
-            logoSize={30} // 32 is also good
+            logoSize={36} // 32 is also good
         />
     );
 }
